@@ -1,7 +1,7 @@
 #!/bin/bash
 
-dev="-r testpypi"
-# dev=""
+# dev="-r testpypi"
+dev=""
 
 rm -f dist/*
 python3.6 setup.py sdist
@@ -11,5 +11,6 @@ twine register dist/$version $dev
 twine upload dist/$version $dev
 
 # git add MANIFEST
-# git commit -m "releasing $version"
-# git push
+git add *
+git commit -m "releasing $version"
+git push
