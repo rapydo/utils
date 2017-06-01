@@ -9,10 +9,13 @@ http://plumbum.readthedocs.org/en/latest/index.html#
 
 """
 
-from plumbum.commands.processes import ProcessExecutionError
-
 from rapydo.utils.logs import get_logger
 log = get_logger(__name__)
+
+try:
+    from plumbum.commands.processes import ProcessExecutionError
+except ImportError as e:
+    log.critical_exit("\nThis module requires an extra package:\n%s" % e)
 
 
 class BashCommands(object):

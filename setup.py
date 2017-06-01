@@ -17,9 +17,11 @@ Links
 * `github <http://github.com/rapydo>`_
 """
 
-from setuptools import setup
-# from distutils.core import setup
 from rapydo.utils import __version__
+
+# BUG https://stackoverflow.com/a/14220893
+# from setuptools import setup
+from distutils.core import setup
 
 setup(
     name='rapydo_utils',
@@ -30,7 +32,6 @@ setup(
     url='https://github.com/rapydo/utils',
     license='MIT',
     packages=[
-        # 'rapydo',
         'rapydo.utils'
     ],
     package_data={
@@ -39,15 +40,14 @@ setup(
         ]
     },
     python_requires='>=3.4',
-    # entry_points={
-    #     'console_scripts': [
-    #         'rapydo=rapydo.do.__main__:main',
-    #     ],
-    # },
     install_requires=[
+        # NOTE: install_requires specify what a project
+        # minimally needs to run correctly
         "beeprint",
-        # "better_exceptions",
-        "pytz"
+        "PyYAML",
+        "pytz",
+        # NOTE: Requirements files are often used to define
+        # the requirements for a complete python environment.
     ],
     classifiers=[
         'Programming Language :: Python',

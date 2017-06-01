@@ -6,10 +6,7 @@ Using x509 certificates
 
 import os
 import re
-from OpenSSL import crypto
-from plumbum import local
 import pytz
-import dateutil.parser
 from datetime import datetime, timedelta
 
 from rapydo.utils.basher import BashCommands
@@ -18,6 +15,13 @@ from rapydo.utils.uuid import getUUID
 from rapydo.utils.logs import get_logger
 
 log = get_logger(__name__)
+
+try:
+    from OpenSSL import crypto
+    from plumbum import local
+    import dateutil.parser
+except ImportError as e:
+    log.critical_exit("\nThis module requires an extra package:\n%s" % e)
 
 
 class Certificates(object):
@@ -176,8 +180,13 @@ class Certificates(object):
             if irods_env is not None:
                 myproxy = myproxy.with_env(**irods_env)
 
-            # output = (myproxy["-s", myproxy_host, "-l", irods_user, "-k", myproxy_cert_name, "-t", str(duration), "-o", proxy_cert_file, "-S"] << irods_cert_pwd)()
-            # log.critical(output)
+            # output = (myproxy[
+            #     "-s", myproxy_host,
+            #     "-l", irods_user,
+            #     "-k", myproxy_cert_name,
+            #     "-t", str(duration),
+            #     "-o", proxy_cert_file, "-S"] << irods_cert_pwd)()
+            # # log.critical(output)
             (
                 myproxy[
                     "-s", myproxy_host,

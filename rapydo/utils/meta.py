@@ -10,11 +10,16 @@ http://python-3-patterns-idioms-test.readthedocs.org/en/latest/Metaprogramming.h
 import pkgutil
 import inspect
 from importlib import import_module
-# TO FIX: remove
-from rapydo.confs import BACKEND_PACKAGE, CUSTOM_PACKAGE
 from rapydo.utils.logs import get_logger
 
 log = get_logger(__name__)
+
+try:
+    from rapydo.confs import BACKEND_PACKAGE, CUSTOM_PACKAGE
+except ImportError:
+    log.warning("Notice: it looks like currently not using a rapydo project")
+    BACKEND_PACKAGE = 'backend'
+    CUSTOM_PACKAGE = 'custom'
 
 
 ################################
