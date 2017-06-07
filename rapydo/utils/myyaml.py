@@ -25,7 +25,9 @@ def load_yaml_file(file, path=None,
     if path is None:
         filepath = file
     else:
-        filepath = os.path.join(path, file + "." + extension)
+        if extension is not None:
+            file += '.' + extension
+        filepath = os.path.join(path, file)
 
     if not return_path and logger:
         # TODO: add CHECKED
