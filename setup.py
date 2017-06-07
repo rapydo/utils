@@ -1,22 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-RAPyDo utils
------
-
-Welcome to our new RAPyDo framework.
-
-Utilities
-````````````
-
-This is just a set of python utilities used
-across all rapydo projects.
-
-Links
-`````
-* `github <http://github.com/rapydo>`_
-"""
-
 from rapydo.utils import __version__
 
 # BUG https://stackoverflow.com/a/14220893
@@ -25,7 +8,7 @@ from distutils.core import setup
 
 setup(
     name='rapydo_utils',
-    description='Do development and deploy with the RAPyDo framework',
+    description='A set of python utilities used across all RAPyDo projects',
     version=__version__,
     author="Paolo D'Onorio De Meo",
     author_email='p.donorio.de.meo@gmail.com',
