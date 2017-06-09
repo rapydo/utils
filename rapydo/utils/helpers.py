@@ -5,6 +5,10 @@ import re
 from urllib.parse import urlparse
 
 
+def root_path():
+    return os.path.abspath(os.sep)
+
+
 def script_abspath(file):
     return os.path.dirname(os.path.realpath(file))
 

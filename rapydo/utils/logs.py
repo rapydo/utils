@@ -84,6 +84,7 @@ def pretty_print(self, myobject, prefix_line=None):
 
 logging.addLevelName(CRITICAL_EXIT, "CRITICAL_EXIT")
 logging.Logger.critical_exit = critical_exit
+logging.Logger.exit = critical_exit
 logging.CRITICAL_EXIT = CRITICAL_EXIT
 
 logging.addLevelName(PRINT_STACK, "PRINT_STACK")

@@ -96,11 +96,12 @@ class Meta(object):
         try:
             # Meta language for dinamically import
             module = import_module(modulestring)
-        except ImportError as e:
+        except (ImportError, ModuleNotFoundError) as e:
+            msg = "Failed to load module: "
             if exit_on_fail:
-                raise e
+                log.critical_exit(msg, exc_info=True)  # WOW
             else:
-                log.warning("Failed to load module: " + str(e))
+                log.warning(msg + str(e))
 
         # TOFIX: cannot use the proper exception (available in python 3.6+)
         # because we are stuck on python 3.5 con IMC
