@@ -6,24 +6,38 @@ from rapydo.utils import PROJECT_DIR
 from urllib.parse import urlparse
 
 
+#######################
+# PATH UTILS
 def list_path(path):
     return os.listdir(path)
 
 
-def root_path():
-    return os.path.abspath(os.sep)
+def last_dir(path):
+    return os.path.basename(path)
 
 
-def script_abspath(file):
-    return os.path.dirname(os.path.realpath(file))
+def parent_dir(path):
+    return os.path.dirname(path)
 
 
-def module_from_package(package):
-    return package.split('.')[::-1][0]
+#######################
+# WITH SUFFIXES
+def root_path(*suffixes):
+    return os.path.join(os.path.abspath(os.sep), *suffixes)
+
+
+def script_abspath(file, *suffixes):
+    return os.path.join(os.path.dirname(os.path.realpath(file)), *suffixes)
 
 
 def current_dir(*suffixes):
     return os.path.join(os.curdir, *suffixes)
+
+
+#######################
+# OTHERS
+def module_from_package(package):
+    return package.split('.')[::-1][0]
 
 
 def project_dir(project, *suffixes):

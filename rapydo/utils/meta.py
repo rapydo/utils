@@ -103,8 +103,8 @@ class Meta(object):
             else:
                 log.warning(msg + str(e))
 
-        # TOFIX: cannot use the proper exception (available in python 3.6+)
-        # because we are stuck on python 3.5 con IMC
+        # FIXME: cannot use the proper exception (available in python 3.6+)
+        # because we are stuck on python 3.5 with IMC
         # except ModuleNotFoundError as e:
         except BaseException as e:
             # if True:

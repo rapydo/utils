@@ -31,7 +31,7 @@ def load_yaml_file(file, path=None,
         filepath = os.path.join(path, file)
 
     if not return_path and logger:
-        log.verbose("Reading file %s" % filepath)
+        log.very_verbose("Reading file %s" % filepath)
 
     # load from this file
     if os.path.exists(filepath):

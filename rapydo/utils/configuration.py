@@ -20,7 +20,7 @@ def read(project, development=False):
     Read default configuration
     """
 
-    PROJECT_CONFIGURATION_FILES = \
+    project_configuration_files = \
         [
             # DEFAULT
             {
@@ -40,7 +40,7 @@ def read(project, development=False):
 
     confs = {}
 
-    for args in PROJECT_CONFIGURATION_FILES:
+    for args in project_configuration_files:
         try:
             f = args['file']
             confs[f] = load_yaml_file(**args)
