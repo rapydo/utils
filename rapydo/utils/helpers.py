@@ -2,7 +2,12 @@
 
 import os
 import re
+from rapydo.utils import PROJECT_DIR
 from urllib.parse import urlparse
+
+
+def list_path(path):
+    return os.listdir(path)
 
 
 def root_path():
@@ -19,6 +24,10 @@ def module_from_package(package):
 
 def current_dir(*suffixes):
     return os.path.join(os.curdir, *suffixes)
+
+
+def project_dir(project, *suffixes):
+    return current_dir(PROJECT_DIR, project, *suffixes)
 
 
 def get_api_url(request_object, production=False):

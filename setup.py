@@ -19,7 +19,8 @@ setup(
     ],
     package_data={
         'rapydo.utils': [
-            'logging.ini'
+            'logging.ini',
+            'projects_defaults.yaml'
         ]
     },
     python_requires='>=3.4',

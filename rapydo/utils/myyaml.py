@@ -5,6 +5,7 @@ import os
 # from functools import lru_cache
 
 YAML_EXT = 'yaml'
+SHORT_YAML_EXT = 'yml'
 # Test the library
 yaml.dump({})
 
@@ -30,7 +31,6 @@ def load_yaml_file(file, path=None,
         filepath = os.path.join(path, file)
 
     if not return_path and logger:
-        # TODO: add CHECKED
         log.verbose("Reading file %s" % filepath)
 
     # load from this file

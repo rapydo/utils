@@ -15,8 +15,6 @@ except ImportError:
 
 from rapydo.utils import helpers
 
-AVOID_COLORS_ENV_LABEL = "IDONTWANTCOLORS"
-
 #######################
 # DEBUG level is 10 (https://docs.python.org/3/howto/logging.html)
 CRITICAL_EXIT = 60
@@ -29,17 +27,23 @@ MAX_CHAR_LEN = 200
 OBSCURE_VALUE = '****'
 OBSCURED_FIELDS = ['password', 'pwd', 'token', 'file', 'filename']
 
-ini_file = os.path.join(helpers.script_abspath(__file__), 'logging.ini')
+AVOID_COLORS_ENV_LABEL = "IDONTWANTCOLORS"
+LOG_INI_FILE = os.path.join(helpers.script_abspath(__file__), 'logging.ini')
 
 
-def critical_exit(self, message, *args, **kws):
-    # Yes, logger takes its '*args' as 'args'.
+def critical_exit(self, message=None, error_code=1, *args, **kws):
+
+    if error_code < 1:
+        raise ValueError("Cannot exit with value below 1")
+
     if self.isEnabledFor(CRITICAL_EXIT):
-        self._log(CRITICAL_EXIT, message, args, **kws)
+        if message is not None:
+            # Yes, logger takes its '*args' as 'args'.
+            self._log(CRITICAL_EXIT, message, args, **kws)
 
-    # TO FIX: check if raise is better
+    # TODO: check if raise is better
     import sys
-    sys.exit(1)
+    sys.exit(error_code)
 
 
 def print_stack(self, message, *args, **kws):
@@ -143,7 +147,7 @@ class LogMe(object):
         # Make sure there is at least one logger
         logging.getLogger(__name__).addHandler(NullHandler())
         # Format
-        fileConfig(ini_file)
+        fileConfig(LOG_INI_FILE)
 
         #####################
         # modify logging labels colors
