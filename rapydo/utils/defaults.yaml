@@ -66,8 +66,8 @@ variables:
       path: $$customconf
       mandatory: False
       if: True
-    blueprint:
-      file: $$blueprint
+    mode:
+      file: $$mode
       base: False
       path: $$customconf
       mandatory: True

@@ -93,22 +93,18 @@ class Meta(object):
         if prefix_package:
             modulestring = BACKEND_PACKAGE + '.' + modulestring.lstrip('.')
 
+        from rapydo.utils.checks import import_exceptions
         try:
             # Meta language for dinamically import
             module = import_module(modulestring)
-        except (ImportError, ModuleNotFoundError) as e:
+        except import_exceptions as e:
             msg = "Failed to load module: "
-            if exit_on_fail:
+            if exit_if_not_found:
                 log.critical_exit(msg, exc_info=True)  # WOW
             else:
                 log.warning(msg + str(e))
-
-        # FIXME: cannot use the proper exception (available in python 3.6+)
-        # because we are stuck on python 3.5 with IMC
-        # except ModuleNotFoundError as e:
         except BaseException as e:
-            # if True:
-            if exit_if_not_found:
+            if exit_on_fail:
                 raise e
             else:
                 log.warning("Module %s not found " % modulestring)
