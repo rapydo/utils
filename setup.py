@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from rapydo.utils import __version__
+from rapydo.utils import DEFAULT_FILENAME
 
 # BUG https://stackoverflow.com/a/14220893
 # from setuptools import setup
@@ -20,7 +21,7 @@ setup(
     package_data={
         'rapydo.utils': [
             'logging.ini',
-            'projects_defaults.yaml'
+            '%s.yaml' % DEFAULT_FILENAME
         ]
     },
     python_requires='>=3.4',
@@ -30,8 +31,6 @@ setup(
         "beeprint",
         "PyYAML",
         "pytz",
-        # NOTE: Requirements files are often used to define
-        # the requirements for a complete python environment.
     ],
     classifiers=[
         'Programming Language :: Python',

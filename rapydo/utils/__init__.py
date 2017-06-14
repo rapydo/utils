@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-__version__ = '0.4.0'
+__version__ = '0.4.1'
 
 FRAMEWORK_NAME = 'RAPyDo'
-DEFAULT_FILENAME = 'defaults'
+DEFAULT_FILENAME = 'projects_defaults'
 
 PROJECT_CONF_FILENAME = 'project_configuration'
 PROJECT_DIR = 'projects'

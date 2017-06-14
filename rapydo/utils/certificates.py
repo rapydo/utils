@@ -152,6 +152,8 @@ class Certificates(object):
         args = ["x509", "-in", certfile, "-text"]
 
         bash = BashCommands()
+        # TODO: change the openssl bash command with the pyOpenSSL API
+        # if so we can remove 'plumbum' as a requirement of the rapydo-http
         output = bash.execute_command("openssl", args)
 
         pattern = re.compile(
