@@ -17,8 +17,7 @@ variables:
       path: backend
       if: true
     build-templates:
-      # branch: master
-      branch: scaffold
+      branch: master
       online_url: https://github.com/rapydo/build-templates.git
       path: builds_base
       if: true
