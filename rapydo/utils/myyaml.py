@@ -1,21 +1,70 @@
 # -*- coding: utf-8 -*-
 
-import yaml
 import os
+import yaml
+from collections import OrderedDict
 # from functools import lru_cache
 
 YAML_EXT = 'yaml'
 SHORT_YAML_EXT = 'yml'
-# Test the library
+
+# Test the library as soon as possible
 yaml.dump({})
 
 
+#####################
+class OrderedLoader(yaml.SafeLoader):
+    """
+    A 'workaround' good enough for ordered loading of dictionaries
+
+    https://stackoverflow.com/a/21912744
+
+    NOTE: This was created to skip dependencies.
+    Otherwise this option could be considered:
+    https://pypi.python.org/pypi/ruamel.yaml
+    """
+    pass
+
+
+def construct_mapping(loader, node):
+    loader.flatten_mapping(node)
+    return OrderedDict(loader.construct_pairs(node))
+
+
+def regular_load(stream, loader=yaml.loader.Loader):
+    # LOAD fails if more than one document is there
+    # return yaml.load(fh)
+
+    # LOAD ALL gets more than one document inside the file
+    # gen = yaml.load_all(fh)
+    return yaml.load_all(stream, loader)
+
+
+def ordered_load(stream):
+
+    OrderedLoader.add_constructor(
+        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
+        construct_mapping)
+    # return yaml.load(stream, OrderedLoader)
+    return regular_load(stream, OrderedLoader)
+
+
+#####################
 # @lru_cache()
 def load_yaml_file(file, path=None,
                    get_all=False, skip_error=False,
-                   extension=YAML_EXT, return_path=False, logger=True):
+                   extension=YAML_EXT, return_path=False,
+                   logger=True, keep_order=False):
     """
-    Import data from a YAML file.
+    Import any data from a YAML file.
+
+    NOTE: the logger problem
+
+    Since YAML are important files for configuration in our case,
+    we may be in the situation of not having the loggers yet,
+    since the configuration in itself is needed to configure the logger.
+
+    In that case we have logger=False and a silenced read.
     """
 
     if logger:
@@ -40,10 +89,14 @@ def load_yaml_file(file, path=None,
 
         with open(filepath) as fh:
             try:
-                # LOAD fails if more than one document is there
-                # return yaml.load(fh)
-                # LOAD ALL gets more than one document inside the file
-                gen = yaml.load_all(fh)
+                # LOAD ordered
+                if keep_order:
+                    gen = ordered_load(fh)
+                else:
+                    gen = regular_load(fh)
+            except Exception as e:
+                error = e
+            else:
                 docs = list(gen)
                 if get_all:
                     return docs
@@ -53,11 +106,9 @@ def load_yaml_file(file, path=None,
                     else:
                         message = "YAML file is empty %s" % filepath
                         if logger:
-                            log.critical_exit(message)
+                            log.exit(message)
                         else:
                             raise AttributeError(message)
-            except Exception as e:
-                error = e
     else:
         error = 'File does not exist'
 

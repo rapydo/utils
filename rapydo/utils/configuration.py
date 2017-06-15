@@ -42,6 +42,7 @@ def read(project, is_template=False):
 
     for args in project_configuration_files:
         try:
+            args['keep_order'] = True
             f = args['file']
             confs[f] = load_yaml_file(**args)
             log.debug("(CHECKED) found '%s' rapydo configuration" % f)
@@ -49,8 +50,8 @@ def read(project, is_template=False):
             log.critical_exit(e)
 
     # Recover the two options
-    base_configuration = confs[DEFAULT_FILENAME]
-    custom_configuration = confs[PROJECT_CONF_FILENAME]
+    base_configuration = confs.get(DEFAULT_FILENAME)
+    custom_configuration = confs.get(PROJECT_CONF_FILENAME, {})
 
     # Verify custom project configuration
     prj = custom_configuration.get('project')
