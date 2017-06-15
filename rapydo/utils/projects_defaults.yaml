@@ -17,7 +17,8 @@ variables:
       path: backend
       if: true
     build-templates:
-      branch: master
+      # branch: master
+      branch: scaffold
       online_url: https://github.com/rapydo/build-templates.git
       path: builds_base
       if: true
@@ -98,17 +99,17 @@ variables:
     LETSENCRYPT_MODE: --staging
     FULL_JWT: true
 
-    # GRAPHDB_EXTERNAL: 0
-    # CELERY_EXTERNAL: 0
-    # IRODS_EXTERNAL: 0
+    GRAPHDB_EXTERNAL: 0
+    CELERY_EXTERNAL: 0
+    IRODS_EXTERNAL: 0
 
-    # AUTH_REGISTER_FAILED_LOGIN: False
-    # AUTH_FORCE_FIRST_PASSWORD_CHANGE: False
-    # AUTH_VERIFY_PASSWORD_STRENGTH: False
-    # AUTH_MAX_PASSWORD_VALIDITY: 0
-    # AUTH_DISABLE_UNUSED_CREDENTIALS_AFTER: 0
-    # AUTH_MAX_LOGIN_ATTEMPTS: 0
-    # AUTH_SECOND_FACTOR_AUTHENTICATION: None
+    AUTH_REGISTER_FAILED_LOGIN: False
+    AUTH_FORCE_FIRST_PASSWORD_CHANGE: False
+    AUTH_VERIFY_PASSWORD_STRENGTH: False
+    AUTH_MAX_PASSWORD_VALIDITY: 0
+    AUTH_DISABLE_UNUSED_CREDENTIALS_AFTER: 0
+    AUTH_MAX_LOGIN_ATTEMPTS: 0
+    AUTH_SECOND_FACTOR_AUTHENTICATION: None
 
 project:
   name: rapydo
