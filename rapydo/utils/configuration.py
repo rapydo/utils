@@ -15,7 +15,7 @@ DEFAULT_CONFIG_FILEPATH = os.path.join(
 )
 
 
-def read(project, development=False):
+def read(project, is_template=False):
     """
     Read default configuration
     """
@@ -56,7 +56,7 @@ def read(project, development=False):
     prj = custom_configuration.get('project')
     if prj is None:
         raise AttributeError("Missing project configuration")
-    elif not development:
+    elif not is_template:
         check1 = prj.get('title') == 'My project'
         check2 = prj.get('description') == 'Title of my project'
         check3 = prj.get('name') == 'rapydo'

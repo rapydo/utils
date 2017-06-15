@@ -7,6 +7,7 @@ DEFAULT_FILENAME = 'projects_defaults'
 
 PROJECT_CONF_FILENAME = 'project_configuration'
 PROJECT_DIR = 'projects'
+DEFAULT_TEMPLATE_PROJECT = 'template'
 SWAGGER_DIR = 'swagger'
 SWAGGER_MODELS_FILE = 'params_models'
 CONF_PATH = 'confs'
