@@ -98,11 +98,14 @@ class Meta(object):
             # Meta language for dinamically import
             module = import_module(modulestring)
         except import_exceptions as e:
-            msg = "Failed to load module: "
+            args = {
+                'msg': "Failed to load module:\n%s" % e,
+                'exc_info': True,
+            }
             if exit_if_not_found:
-                log.critical_exit(msg, exc_info=True)  # WOW
+                log.critical_exit(**args)
             else:
-                log.warning(msg + str(e))
+                log.warning(**args)
         except BaseException as e:
             if exit_on_fail:
                 raise e

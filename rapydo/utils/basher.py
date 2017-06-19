@@ -7,6 +7,8 @@ http://plumbum.readthedocs.org/en/latest/index.html#
 
 - use shell commands in a more pythonic way -
 
+TODO: consider switching to https://amoffat.github.io/sh/
+
 """
 
 from rapydo.utils.logs import get_logger

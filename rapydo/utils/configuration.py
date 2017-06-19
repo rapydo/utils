@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-from rapydo.utils import PROJECT_CONF_FILENAME, DEFAULT_FILENAME
+from rapydo.utils import \
+    PROJECT_CONF_FILENAME, DEFAULT_FILENAME, MAIN_PACKAGE, UTILS_PKGNAME
 from rapydo.utils import helpers
 from rapydo.utils.myyaml import load_yaml_file, YAML_EXT
 from rapydo.utils.logs import get_logger
@@ -9,8 +10,13 @@ from rapydo.utils.logs import get_logger
 log = get_logger(__name__)
 
 SCRIPT_PATH = helpers.script_abspath(__file__)
+
+# DEFAULT_CONFIG_FILEPATH = os.path.join(
+#     SCRIPT_PATH, '%s.%s' % (DEFAULT_FILENAME, YAML_EXT))
+
 DEFAULT_CONFIG_FILEPATH = os.path.join(
-    SCRIPT_PATH,
+    MAIN_PACKAGE,
+    UTILS_PKGNAME,
     '%s.%s' % (DEFAULT_FILENAME, YAML_EXT)
 )
 
