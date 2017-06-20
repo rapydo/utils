@@ -150,6 +150,7 @@ class LogMe(object):
             from logging import NullHandler
         except ImportError:
             class NullHandler(logging.Handler):
+
                 def emit(self, record):
                     pass
 
@@ -178,7 +179,7 @@ class LogMe(object):
                 logging.WARNING, "\033[1;30;43m%s\033[1;0m"
                 % logging.getLevelName(logging.WARNING))
             logging.addLevelName(
-                logging.INFO, "\033[1;32m%s\033[1;0m"
+                logging.INFO, "\033[1;32;49m%s\033[1;0m"
                 % logging.getLevelName(logging.INFO))
             logging.addLevelName(
                 logging.DEBUG, "\033[7;30;46m%s\033[1;0m"
