@@ -86,7 +86,16 @@ def pretty_print(self, myobject, prefix_line=None):
     return
 
 
-logging.addLevelName(CRITICAL_EXIT, "CRITICAL_EXIT")
+def checked(self, message, *args, **kws):
+    if self.isEnabledFor(logging.DEBUG):
+        # Yes, logger takes its '*args' as 'args'.
+        # message = "\u2713 %s" % message
+        # message = "(CHECKED) %s" % message
+        message = "\033[0;32m\u2713\033[0m %s" % message
+        self._log(logging.DEBUG, message, args, **kws)
+
+
+logging.addLevelName(CRITICAL_EXIT, "EXIT")
 logging.Logger.critical_exit = critical_exit
 logging.Logger.exit = critical_exit
 logging.CRITICAL_EXIT = CRITICAL_EXIT
@@ -108,6 +117,7 @@ logging.Logger.very_verbose = very_verbose
 logging.VERY_VERBOSE = VERY_VERBOSE
 
 logging.Logger.pp = pretty_print
+logging.Logger.checked = checked
 
 
 #######################

@@ -51,7 +51,7 @@ def read(project, is_template=False):
             args['keep_order'] = True
             f = args['file']
             confs[f] = load_yaml_file(**args)
-            log.debug("(CHECKED) found '%s' rapydo configuration" % f)
+            log.checked("Found '%s' rapydo configuration" % f)
         except AttributeError as e:
             log.critical_exit(e)
 
