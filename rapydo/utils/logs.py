@@ -86,13 +86,16 @@ def pretty_print(self, myobject, prefix_line=None):
     return
 
 
-def checked(self, message, *args, **kws):
+def checked(self, message, increase_level=False, *args, **kws):
     if self.isEnabledFor(logging.DEBUG):
         # Yes, logger takes its '*args' as 'args'.
         # message = "\u2713 %s" % message
         # message = "(CHECKED) %s" % message
         message = "\033[0;32m\u2713\033[0m %s" % message
-        self._log(logging.DEBUG, message, args, **kws)
+        if increase_level:
+            self._log(logging.INFO, message, args, **kws)
+        else:
+            self._log(logging.DEBUG, message, args, **kws)
 
 
 logging.addLevelName(CRITICAL_EXIT, "EXIT")
