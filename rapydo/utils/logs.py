@@ -14,6 +14,7 @@ except ImportError:
     JSONDecodeError = ValueError
 
 from rapydo.utils import helpers
+from rapydo.utils.globals import mem
 
 #######################
 # DEBUG level is 10 (https://docs.python.org/3/howto/logging.html)
@@ -86,16 +87,21 @@ def pretty_print(self, myobject, prefix_line=None):
     return
 
 
-def checked(self, message, increase_level=False, *args, **kws):
-    if self.isEnabledFor(logging.DEBUG):
+def checked(self, message, *args, **kws):
+
+    # checked messages have level VERBOSE, but when is requested the command
+    # rapydo check their level is increase to INFO
+    level = logging.VERBOSE
+    if hasattr(mem, 'action'):
+        if mem.action == "check":
+            level = logging.INFO
+
+    if self.isEnabledFor(level):
         # Yes, logger takes its '*args' as 'args'.
         # message = "\u2713 %s" % message
         # message = "(CHECKED) %s" % message
         message = "\033[0;32m\u2713\033[0m %s" % message
-        if increase_level:
-            self._log(logging.INFO, message, args, **kws)
-        else:
-            self._log(logging.DEBUG, message, args, **kws)
+        self._log(level, message, args, **kws)
 
 
 logging.addLevelName(CRITICAL_EXIT, "EXIT")
