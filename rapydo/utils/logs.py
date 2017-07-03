@@ -194,7 +194,7 @@ class LogMe(object):
                 logging.DEBUG, "\033[7;30;46m%s\033[1;0m"
                 % logging.getLevelName(logging.DEBUG))
             logging.addLevelName(
-                logging.VERBOSE, "\033[1;90m%s\033[1;0m"
+                logging.VERBOSE, "\033[1;90;49m%s\033[1;0m"
                 % logging.getLevelName(logging.VERBOSE))
             logging.addLevelName(
                 logging.VERY_VERBOSE, "\033[7;30;47m%s\033[1;0m"
