@@ -7,7 +7,7 @@ http://plumbum.readthedocs.org/en/latest/index.html#
 
 - use shell commands in a more pythonic way -
 
-TODO: consider switching to https://amoffat.github.io/sh/
+TODO: also consider switching to this other one https://amoffat.github.io/sh/
 
 """
 
@@ -65,7 +65,7 @@ class BashCommands(object):
 
             """ Pattern in plumbum library for executing a shell command """
             # e.g. ICOM["list"][irods_dir].run(retcode = (0,4))
-    # TOFIX: does not work if parameters is bigger than one element
+    # FIXME: does not work if parameters is bigger than one element
             comout = \
                 self._shell[command][parameters].run(retcode=retcodes)
             log.verbose("Executed command %s %s" % (command, parameters))

@@ -64,15 +64,20 @@ def read(project, is_template=False):
     if prj is None:
         raise AttributeError("Missing project configuration")
     elif not is_template:
-        check1 = prj.get('title') == 'My project'
-        check2 = prj.get('description') == 'Title of my project'
-        check3 = prj.get('name') == 'rapydo'
-        if check1 or check2 or check3:
-            filepath = load_yaml_file(return_path=True, **args)
-            log.critical_exit(
-                "\n\nIt seems like your project is not yet configured...\n" +
-                "Please edit file %s" % filepath
-            )
+
+        checks = {
+            'title': 'My project',
+            'description': 'Title of my project',
+            'name': 'rapydo'
+        }
+
+        for key, value in checks.items():
+            if prj.get(key, '') == value:
+                filepath = load_yaml_file(return_path=True, **args)
+                log.critical_exit(
+                    "\n\nYour project is not yet configured:\n" +
+                    "Please edit key '%s' in file %s" % (key, filepath)
+                )
 
     # Mix default and custom configuration
     return mix(base_configuration, custom_configuration)
