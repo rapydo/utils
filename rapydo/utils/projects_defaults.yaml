@@ -98,6 +98,7 @@ variables:
     PROXY_PROD_PORT: 443
     LETSENCRYPT_MODE: --staging
     FULL_JWT: true
+    SMTP_HOST: smtp.dockerized.io 
 
     GRAPHDB_EXTERNAL: 0
     CELERY_EXTERNAL: 0
