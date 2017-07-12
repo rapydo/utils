@@ -3,9 +3,9 @@
 from rapydo.utils import __version__
 from rapydo.utils import DEFAULT_FILENAME
 
+from setuptools import setup
 # BUG https://stackoverflow.com/a/14220893
-# from setuptools import setup
-from distutils.core import setup
+# from distutils.core import setup
 
 setup(
     name='rapydo_utils',
