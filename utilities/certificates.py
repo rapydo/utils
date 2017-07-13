@@ -9,10 +9,10 @@ import re
 import pytz
 from datetime import datetime, timedelta
 
-from rapydo.utils.basher import BashCommands
-from rapydo.utils import htmlcodes as hcodes
-from rapydo.utils.uuid import getUUID
-from rapydo.utils.logs import get_logger
+from utilities.basher import BashCommands
+from utilities import htmlcodes as hcodes
+from utilities.uuid import getUUID
+from utilities.logs import get_logger
 
 log = get_logger(__name__)
 

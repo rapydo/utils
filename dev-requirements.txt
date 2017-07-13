@@ -1,0 +1,5 @@
+
+pytest
+pytest-cov
+coveralls
+#rapydo-develop==0.1.0

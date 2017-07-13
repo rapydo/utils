@@ -10,7 +10,7 @@ http://python-3-patterns-idioms-test.readthedocs.org/en/latest/Metaprogramming.h
 import pkgutil
 import inspect
 from importlib import import_module
-from rapydo.utils.logs import get_logger
+from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
@@ -82,8 +82,11 @@ class Meta(object):
         self.set_latest_classes(classes)
         return self.get_latest_classes()
 
-    def get_module_from_string(self, modulestring, prefix_package=False,
-                               exit_if_not_found=False, exit_on_fail=False):
+    def get_module_from_string(self, modulestring,
+                               prefix_package=False,
+                               exit_if_not_found=False,
+                               exit_on_fail=False,
+                               debug_on_fail=True):
         """
         Getting a module import
         when your module is stored as a string in a variable
@@ -93,19 +96,20 @@ class Meta(object):
         if prefix_package:
             modulestring = BACKEND_PACKAGE + '.' + modulestring.lstrip('.')
 
-        from rapydo.utils.checks import import_exceptions
+        from utilities.checks import import_exceptions
         try:
             # Meta language for dinamically import
             module = import_module(modulestring)
         except import_exceptions as e:
             args = {
                 'msg': "Failed to load module:\n%s" % e,
-                'exc_info': True,
+                'exc_info': True
             }
             if exit_if_not_found:
                 log.critical_exit(**args)
             else:
-                log.warning(**args)
+                if debug_on_fail:
+                    log.warning(**args)
         except BaseException as e:
             if exit_on_fail:
                 raise e
@@ -143,7 +147,7 @@ class Meta(object):
         return methods
 
     @staticmethod
-    def get_class_from_string(classname, module):
+    def get_class_from_string(classname, module, skip_error=False):
         """ Get a specific class from a module using a string variable """
 
         myclass = None
@@ -151,7 +155,10 @@ class Meta(object):
             # Meta language for dinamically import
             myclass = getattr(module, classname)
         except AttributeError as e:
-            log.critical("Failed to load class from module: " + str(e))
+            if not skip_error:
+                log.critical("Failed to load class from module: " + str(e))
+            else:
+                pass
 
         return myclass
 

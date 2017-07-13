@@ -1,6 +1,8 @@
 
 variables:
   repos:
+    # FIXME: all branch should be the latest/fixed tag/release
+    # FIXME: do this directly with do, instead of here?
     rapydo:
       branch: master
       online_url: https://github.com/rapydo/core.git
@@ -98,6 +100,7 @@ variables:
     PROXY_PROD_PORT: 443
     LETSENCRYPT_MODE: --staging
     FULL_JWT: true
+    SMTP_HOST: smtp.dockerized.io 
 
     GRAPHDB_EXTERNAL: 0
     CELERY_EXTERNAL: 0
