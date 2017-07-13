@@ -6,3 +6,4 @@ plumbum
 pyOpenSSL
 python-dateutil
 requests
+markdown 
