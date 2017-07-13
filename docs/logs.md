@@ -12,4 +12,4 @@ log.info("It works")
 
 ---
 
-[back to index][../]
+[back to index](../)

@@ -7,4 +7,4 @@ We will keep on adding documentation as we use them across new projects.
 
 ---
 
-[back to index][../]
+[back to index](../)
