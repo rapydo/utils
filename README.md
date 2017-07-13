@@ -5,7 +5,7 @@ Hello user,
 these repo is a collection of `python` utilities 
 we developed and used while creating the `RAPyDo framework`.
 
-### documentation
+## documentation
 
 The official documentation is hosted here at github:
 
@@ -19,6 +19,6 @@ The official documentation is hosted here at github:
 
 | pypi | travis | coveralls |
 | --- | --- | --- |
-| [![PyPI version](https://badge.fury.io/py/rapydo-utils.svg)](https://badge.fury.io/py/rapydo-utils) | [![Build Status](https://travis-ci.org/rapydo/utils.svg?branch=noprefix)](https://travis-ci.org/rapydo/utils) | [![Coverage Status](https://coveralls.io/repos/github/rapydo/utils/badge.svg?branch=noprefix)](https://coveralls.io/github/rapydo/utils?branch=noprefix) |
+| [![PyPI version](https://badge.fury.io/py/rapydo-utils.svg)](https://badge.fury.io/py/rapydo-utils) | [![Build Status](https://travis-ci.org/rapydo/utils.svg)](https://travis-ci.org/rapydo/utils) | [![Coverage Status](https://coveralls.io/repos/github/rapydo/utils/badge.svg)](https://coveralls.io/github/rapydo/utils) |
 
 
