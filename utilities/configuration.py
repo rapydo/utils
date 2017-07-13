@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import os
-from rapydo.utils import \
+from utilities import \
     PROJECT_CONF_FILENAME, DEFAULT_FILENAME, MAIN_PACKAGE, UTILS_PKGNAME
-from rapydo.utils import helpers
-from rapydo.utils.myyaml import load_yaml_file, YAML_EXT
-from rapydo.utils.logs import get_logger
+from utilities import helpers
+from utilities.myyaml import load_yaml_file, YAML_EXT
+from utilities.logs import get_logger
 
 log = get_logger(__name__)
 

@@ -13,8 +13,8 @@ except ImportError:
     # fix for Python 3.4+
     JSONDecodeError = ValueError
 
-from rapydo.utils import helpers
-from rapydo.utils.globals import mem
+from utilities import helpers
+from utilities.globals import mem
 
 #######################
 # DEBUG level is 10 (https://docs.python.org/3/howto/logging.html)
@@ -45,6 +45,11 @@ def critical_exit(self, message=None, error_code=1, *args, **kws):
     # TODO: check if raise is better
     import sys
     sys.exit(error_code)
+
+
+def fail_exit(self, message, *args, **kws):
+    message = '(FAIL)\t%s' % message
+    return self.error(message, *args, **kws)
 
 
 def print_stack(self, message, *args, **kws):
@@ -104,9 +109,24 @@ def checked(self, message, *args, **kws):
         self._log(level, message, args, **kws)
 
 
+def checked_simple(self, message, *args, **kws):
+
+    # checked messages have level VERBOSE, but when is requested the command
+    # rapydo check their level is increase to INFO
+    level = logging.VERBOSE
+    if hasattr(mem, 'action'):
+        if mem.action == "check":
+            level = logging.INFO
+
+    if self.isEnabledFor(level):
+        message = "(CHECKED)\t%s" % message
+        self._log(level, message, args, **kws)
+
+
 logging.addLevelName(CRITICAL_EXIT, "EXIT")
 logging.Logger.critical_exit = critical_exit
 logging.Logger.exit = critical_exit
+logging.Logger.fail = fail_exit
 logging.CRITICAL_EXIT = CRITICAL_EXIT
 
 logging.addLevelName(PRINT_STACK, "PRINT_STACK")
@@ -127,6 +147,7 @@ logging.VERY_VERBOSE = VERY_VERBOSE
 
 logging.Logger.pp = pretty_print
 logging.Logger.checked = checked
+logging.Logger.checked_simple = checked_simple
 
 
 #######################

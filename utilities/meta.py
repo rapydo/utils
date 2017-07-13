@@ -10,7 +10,7 @@ http://python-3-patterns-idioms-test.readthedocs.org/en/latest/Metaprogramming.h
 import pkgutil
 import inspect
 from importlib import import_module
-from rapydo.utils.logs import get_logger
+from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
@@ -96,7 +96,7 @@ class Meta(object):
         if prefix_package:
             modulestring = BACKEND_PACKAGE + '.' + modulestring.lstrip('.')
 
-        from rapydo.utils.checks import import_exceptions
+        from utilities.checks import import_exceptions
         try:
             # Meta language for dinamically import
             module = import_module(modulestring)

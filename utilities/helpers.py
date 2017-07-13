@@ -2,7 +2,7 @@
 
 import os
 import re
-from rapydo.utils import PROJECT_DIR
+from utilities import PROJECT_DIR
 from urllib.parse import urlparse
 
 

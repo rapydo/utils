@@ -11,7 +11,7 @@ TODO: also consider switching to this other one https://amoffat.github.io/sh/
 
 """
 
-from rapydo.utils.logs import get_logger
+from utilities.logs import get_logger
 log = get_logger(__name__)
 
 try:
