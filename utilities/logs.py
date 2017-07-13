@@ -64,7 +64,8 @@ def myprint(self, message, *args, **kws):
     # if self.isEnabledFor(PRINT):
     if self.isEnabledFor(logging.DEBUG):
         message = "\033[33;5m%s" % message
-        print(message, *args, **kws)
+        # print(message, *args, **kws)
+        print(message, *args)
         print("\033[1;0m", end='')
 
 
