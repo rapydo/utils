@@ -19,6 +19,6 @@ The official documentation is hosted here at github:
 
 | pypi | quality | travis | coveralls |
 | --- | --- | --- | --- |
-| [![PyPI version](https://badge.fury.io/py/rapydo-utils.svg)](https://badge.fury.io/py/rapydo-utils) | [![Code Health](https://landscape.io/github/rapydo/utils/master/landscape.svg?style=flat)](https://landscape.io/github/rapydo/utils/master) | [![Build Status](https://travis-ci.org/rapydo/utils.svg)](https://travis-ci.org/rapydo/utils) | [![Coverage Status](https://coveralls.io/repos/github/rapydo/utils/badge.svg)](https://coveralls.io/github/rapydo/utils) |
+| [![PyPI version](https://badge.fury.io/py/rapydo-utils.svg)](https://badge.fury.io/py/rapydo-utils) | [![Code Health](https://landscape.io/github/rapydo/utils/master/landscape.svg?style=flat)](https://landscape.io/github/rapydo/utils/master) | [![Build Status](https://travis-ci.org/rapydo/utils.svg)](https://travis-ci.org/rapydo/utils) | [![Coverage Status](https://coveralls.io/repos/github/rapydo/utils/badge.svg?branch=master)](https://coveralls.io/github/rapydo/utils?branch=master) |
 
 
