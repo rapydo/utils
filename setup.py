@@ -2,8 +2,7 @@
 
 from setuptools import setup
 from utilities import \
-    __version__, __package__ as main_package, \
-    classifiers, DEFAULT_FILENAME
+    __version__, __package__ as main_package, DEFAULT_FILENAME
 
 setup(
     name='rapydo-utils',
@@ -26,6 +25,14 @@ setup(
         "PyYAML",
         "pytz",
     ],
-    classifiers=classifiers,
+    classifiers=[
+        'Programming Language :: Python',
+        'Intended Audience :: Developers',
+        'Development Status :: 3 - Alpha',
+        'License :: OSI Approved :: MIT License',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+    ],
     keywords=['utilities', 'rapydo', 'logs', 'tools']
 )

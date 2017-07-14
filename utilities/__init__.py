@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import os
+
 __version__ = '0.5.0'
+# TODO: complete this
 __authors__ = [
     "Paolo D'Onorio De Meo <p.donorio.demeo@gmail.com>",
     "Mattia D'Antonio",
@@ -20,12 +23,6 @@ MAIN_PACKAGE = FRAMEWORK_NAME.lower()
 CONTAINERS_YAML_DIRNAME = CONF_PATH
 UTILS_PKGNAME = __package__.split('.')[::-1][0]
 
-classifiers = [
-    'Programming Language :: Python',
-    'Intended Audience :: Developers',
-    'Development Status :: 3 - Alpha',
-    'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 3.4',
-    'Programming Language :: Python :: 3.5',
-    'Programming Language :: Python :: 3.6',
-]
+BACKEND_PACKAGE = 'restapi'  # package inside rapydo-http
+CUSTOM_PACKAGE = os.environ.get('VANILLA_PACKAGE', 'custom')
+CORE_CONFIG_PATH = os.path.join(BACKEND_PACKAGE, 'confs')

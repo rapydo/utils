@@ -10,20 +10,12 @@ http://python-3-patterns-idioms-test.readthedocs.org/en/latest/Metaprogramming.h
 import pkgutil
 import inspect
 from importlib import import_module
+from utilities import BACKEND_PACKAGE, CUSTOM_PACKAGE
 from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
-try:
-    from restapi.confs import BACKEND_PACKAGE, CUSTOM_PACKAGE
-except ImportError:
-    log.warning("Notice: it looks like currently not using a rapydo project")
-    BACKEND_PACKAGE = 'backend'
-    CUSTOM_PACKAGE = 'custom'
 
-
-################################
-# Utilities
 class Meta(object):
     """Utilities with meta in mind"""
 
