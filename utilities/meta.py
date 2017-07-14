@@ -15,7 +15,7 @@ from utilities.logs import get_logger
 log = get_logger(__name__)
 
 try:
-    from rapydo.confs import BACKEND_PACKAGE, CUSTOM_PACKAGE
+    from restapi.confs import BACKEND_PACKAGE, CUSTOM_PACKAGE
 except ImportError:
     log.warning("Notice: it looks like currently not using a rapydo project")
     BACKEND_PACKAGE = 'backend'
