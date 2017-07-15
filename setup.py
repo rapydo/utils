@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup
-from utilities import \
-    __version__, __package__ as main_package, DEFAULT_FILENAME
+from utilities import DEFAULT_FILENAME, \
+    __version__ as current_version, \
+    __package__ as main_package
 
 setup(
     name='rapydo-utils',
-    version=__version__,
+    version=current_version,
     description='A set of python utilities used across all RAPyDo projects',
     author="Paolo D'Onorio De Meo",
     author_email='p.donorio.de.meo@gmail.com',

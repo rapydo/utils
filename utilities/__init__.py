@@ -2,8 +2,7 @@
 
 import os
 
-__version__ = '0.5.0'
-# TODO: complete this
+__version__ = '0.5.1'
 __authors__ = [
     "Paolo D'Onorio De Meo <p.donorio.demeo@gmail.com>",
     "Mattia D'Antonio",
@@ -19,10 +18,11 @@ SWAGGER_DIR = 'swagger'
 SWAGGER_MODELS_FILE = 'params_models'
 CONF_PATH = 'confs'
 
-MAIN_PACKAGE = FRAMEWORK_NAME.lower()
+# MAIN_PACKAGE = FRAMEWORK_NAME.lower()
 CONTAINERS_YAML_DIRNAME = CONF_PATH
 UTILS_PKGNAME = __package__.split('.')[::-1][0]
 
-BACKEND_PACKAGE = 'restapi'  # package inside rapydo-http
+MAIN_PACKAGE = 'restapi'
+BACKEND_PACKAGE = MAIN_PACKAGE  # package inside rapydo-http
 CUSTOM_PACKAGE = os.environ.get('VANILLA_PACKAGE', 'custom')
 CORE_CONFIG_PATH = os.path.join(BACKEND_PACKAGE, 'confs')
