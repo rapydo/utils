@@ -64,8 +64,7 @@ def myprint(self, message, *args, **kws):
     # if self.isEnabledFor(PRINT):
     if self.isEnabledFor(logging.DEBUG):
         message = "\033[33;5m%s" % message
-        # print(message, *args, **kws)
-        print(message, *args)
+        print(message, *args, **kws)
         print("\033[1;0m", end='')
 
 
@@ -323,7 +322,7 @@ def re_obscure_pattern(string):
         'http_credentials': r'[^:]+\:([^@:]+)\@[^:]+:[^:]',
     }
 
-    for name, pattern in patterns.items():
+    for _, pattern in patterns.items():
         p = re.compile(pattern)
         m = p.search(string)
         if m:

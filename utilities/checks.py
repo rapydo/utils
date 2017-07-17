@@ -19,7 +19,7 @@ except NameError:
 DEFAULT_BIN_OPTION = '--version'
 
 
-def check_executable(executable, option=DEFAULT_BIN_OPTION, log=None):
+def check_executable(executable, option=DEFAULT_BIN_OPTION):
 
     from subprocess import check_output
     try:
@@ -45,7 +45,7 @@ def import_package(package_name):
     from importlib import import_module
     try:
         package = import_module(package_name)
-    except import_exceptions as e:
+    except import_exceptions:
         return None
     else:
         return package

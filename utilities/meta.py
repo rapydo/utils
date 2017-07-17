@@ -30,7 +30,7 @@ class Meta(object):
 
     def get_submodules_from_package(self, package):
         self._submodules = []
-        for importer, modname, ispkg \
+        for _, modname, ispkg \
                 in pkgutil.iter_modules(package.__path__):
             if not ispkg:
                 self._submodules.append(modname)
