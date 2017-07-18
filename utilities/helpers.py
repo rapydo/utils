@@ -34,6 +34,14 @@ def current_dir(*suffixes):
     return os.path.join(os.curdir, *suffixes)
 
 
+def current_fullpath(*suffixes):
+    return os.path.join(os.getcwd(), *suffixes)
+
+
+def latest_dir(path):
+    return next(reversed(list(os.path.split(path))))
+
+
 #######################
 # OTHERS
 def module_from_package(package):
