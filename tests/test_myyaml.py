@@ -1,10 +1,18 @@
 
+import pytest
 from utilities.myyaml import load_yaml_file
 
 
 def test():
     yaml_path = "utilities/projects_defaults.yaml"
-    load_yaml_file(yaml_path)
+    yaml = load_yaml_file("blabla")
+    assert yaml == {}
+    try:
+        yaml = load_yaml_file("blabla", logger=False)
+    except AttributeError:
+        pass
+    else:
+        pytest.fail("AttributeError not raised with missing yaml file")
     yaml = load_yaml_file(yaml_path, keep_order=True)
 
     assert "variables" in yaml
