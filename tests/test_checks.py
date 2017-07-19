@@ -9,19 +9,19 @@ def test():
     out = check_executable("blabla")
     assert out is None
 
-    out = check_executable("docker")
+    out = check_executable("python")
     assert out is not None
 
     out = check_package("blabla")
     assert out is None
 
-    out = check_package("compose")
+    out = check_package("logging")
     assert out is not None
 
     out = import_package("blabla")
     assert out is None
 
-    out = import_package("compose")
+    out = import_package("logging")
     assert out is not None
 
     # How to check this??
