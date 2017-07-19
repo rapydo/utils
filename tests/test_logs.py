@@ -1,10 +1,10 @@
 
+import pytest
 from utilities.logs import get_logger
 log = get_logger(__name__)
 
 
 def test():
-    # assert nextint(3) == 4
     log.very_verbose("testing")
     log.verbose("testing")
     log.debug("testing")
@@ -16,5 +16,16 @@ def test():
     log.print_stack("testing")
     log.print("testing")
     log.pp({"test": 123})
-    # log.fail_exit("testing")
-    # log.critical_exit("testing")
+    # try:
+    #     log.fail_exit("testing")
+    # except SystemExit:
+    #     pass
+    # else:
+    #     pytest.fail("A SystemExit should be raised")
+
+    try:
+        log.critical_exit("testing")
+    except SystemExit:
+        pass
+    else:
+        pytest.fail("A SystemExit should be raised")
