@@ -22,5 +22,3 @@ def test():
     assert re.match(regexp, u) is not None
     assert u == getUUIDfromString("test")
     assert u != getUUIDfromString("test2")
-
-    assert False
