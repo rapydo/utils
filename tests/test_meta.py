@@ -4,13 +4,13 @@ from utilities.meta import Meta
 
 
 # NOTE: copied from controller/test_basic.py
-def cut_log(message):
-    try:
-        i = message.index("]")
-        return message[i + 2:]
-    except ValueError:
-        print(message)
-        return message
+# def cut_log(message):
+#     try:
+#         i = message.index("]")
+#         return message[i + 2:]
+#     except ValueError:
+#         print(message)
+#         return message
 
 
 def test():
@@ -78,9 +78,9 @@ def test():
     # meta.get_celery_tasks_from_module
 
 
-def test_failures(capfd):
+# def test_failures(capfd):
+def test_failures():
     meta = Meta()
-    cls_name = "Meta2"
 
     try:
         meta.import_submodules_from_package("utilities_bla")
@@ -150,8 +150,8 @@ def test_failures(capfd):
         "utilities.metabla", debug_on_fail=True)
     assert module is None
 
-    _, err = capfd.readouterr()
-    err = err.split("\n")
-    err = [cut_log(x) for x in err]
+    # _, err = capfd.readouterr()
+    # err = err.split("\n")
+    # err = [cut_log(x) for x in err]
 
-    assert "ImportError: No module named 'utilities.metabla'" in err
+    # assert "ImportError: No module named 'utilities.metabla'" in err

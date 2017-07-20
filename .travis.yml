@@ -9,7 +9,7 @@ before_install:
 install:
   - pip3 install --upgrade --no-cache-dir --editable .
 script:
-  - py.test --cov=utilities -s
+  - py.test --cov=utilities -s -x
 after_success:
   - coveralls
 # before_deploy:
