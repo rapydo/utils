@@ -121,3 +121,16 @@ class BashCommands(object):
 
     def remove_directory(self, directory, ignore=False):
         self.remove(directory, recursive=True, force=ignore)
+
+    def replace_in_file(self, target, destination, file):
+        params = [
+            "-i",
+            "s/%s/%s/g" % (target, destination),
+            file
+        ]
+        self.execute_command("sed", params)
+
+    def copy(self, target, destination):
+
+        params = [target, destination]
+        self.execute_command("cp", params)
