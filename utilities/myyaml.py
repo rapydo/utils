@@ -61,6 +61,14 @@ def get_yaml_path(path, filename, extension):
     return filepath
 
 
+def get_loader(fh, keep_order):
+    # LOAD ordered
+    if keep_order:
+        return ordered_load(fh)
+    else:
+        return regular_load(fh)
+
+
 # @lru_cache()
 def load_yaml_file(file, path=None,
                    get_all=False, skip_error=False,
@@ -89,34 +97,30 @@ def load_yaml_file(file, path=None,
 
     # load from this file
     error = None
-    if os.path.exists(filepath):
+    if not os.path.exists(filepath):
+        error = 'File does not exist'
+    else:
         if return_path:
             return filepath
 
         with open(filepath) as fh:
             try:
-                # LOAD ordered
-                if keep_order:
-                    gen = ordered_load(fh)
-                else:
-                    gen = regular_load(fh)
+                loader = get_loader(fh, keep_order)
             except Exception as e:
                 error = e
             else:
-                docs = list(gen)
+                docs = list(loader)
                 if get_all:
                     return docs
+
+                if len(docs) > 0:
+                    return docs[0]
+
+                message = "YAML file is empty %s" % filepath
+                if logger:
+                    log.exit(message)
                 else:
-                    if len(docs) > 0:
-                        return docs[0]
-                    else:
-                        message = "YAML file is empty %s" % filepath
-                        if logger:
-                            log.exit(message)
-                        else:
-                            raise AttributeError(message)
-    else:
-        error = 'File does not exist'
+                    raise AttributeError(message)
 
     # # IF dealing with a strange exception string (escaped)
     # import codecs
