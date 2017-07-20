@@ -4,9 +4,18 @@ from utilities.configuration import read
 from utilities.basher import BashCommands
 
 
+def replace_in_file(bash, target, destination, file):
+    params = [
+        "-i",
+        "s/%s/%s/g" % (target, destination),
+        file
+    ]
+    bash.execute_command("sed", params)
+
+
 def test():
 
-    project_conf = "projects/template/project_configuration.yaml" 
+    project_conf = "projects/template/project_configuration.yaml"
     bash = BashCommands()
     bash.create_directory("projects")
     bash.create_directory("projects/template")
@@ -23,30 +32,24 @@ def test():
     else:
         pytest.fail("A SystemExit should be raised due to use of default conf")
 
-    params = [
-        "-i",
-        "s/My project/My custom title/g",
-        project_conf
-    ]
-    bash.execute_command("sed", params)
+    replace_in_file(bash, "My project", "My title", project_conf)
+    replace_in_file(bash, "name: rapydo", "name: myname", project_conf)
+    replace_in_file(bash, "Title of my project", "My title", project_conf)
+    replace_in_file(bash, "tags:", "mycustomvar:", project_conf)
 
-    params = [
-        "-i",
-        "s/name: rapydo/name: myname/g",
-        project_conf
-    ]
-    bash.execute_command("sed", params)
-
-    params = [
-        "-i",
-        "s/Title of my project/My custom title/g",
-        project_conf
-    ]
-    bash.execute_command("sed", params)
     conf = read("template")
 
     assert "project" in conf
+    assert "mycustomvar" in conf
     assert "name" in conf["project"]
     assert conf["project"]["name"] == "myname"
+
+    replace_in_file(bash, "project:", "blabla:", project_conf)
+    try:
+        conf = read("template")
+    except AttributeError:
+        pass
+    else:
+        pytest.fail("This call should fail and raise an AttributeError")
 
     bash.remove_directory("projects")
