@@ -62,7 +62,7 @@ def get_yaml_path(path, filename, extension):
 
 
 # @lru_cache()
-def load_yaml_file(filename, path=None,
+def load_yaml_file(file, path=None,
                    get_all=False, skip_error=False,
                    extension=YAML_EXT, return_path=False,
                    logger=True, keep_order=False):
@@ -82,7 +82,7 @@ def load_yaml_file(filename, path=None,
         from utilities.logs import get_logger
         log = get_logger(__name__)
 
-    filepath = get_yaml_path(path, filename, extension)
+    filepath = get_yaml_path(path, file, extension)
 
     if not return_path and logger:
         log.very_verbose("Reading file %s" % filepath)
