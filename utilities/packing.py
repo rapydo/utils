@@ -17,6 +17,10 @@ def check_version(package_name):
         # if pkg.get('_key') == package_name:
         if pkg._key == package_name:
             # return pkg.get('_version')
-            return pkg._version
+            try:
+                return pkg._version
+            except AttributeError:
+                # fix for python 3.4
+                return pkg.get('_version')
 
     return None
