@@ -50,8 +50,19 @@ def ordered_load(stream):
 
 
 #####################
+def get_yaml_path(path, filename, extension):
+    if path is None:
+        filepath = filename
+    else:
+        if extension is not None:
+            filename += '.' + extension
+        filepath = os.path.join(path, filename)
+
+    return filepath
+
+
 # @lru_cache()
-def load_yaml_file(file, path=None,
+def load_yaml_file(filename, path=None,
                    get_all=False, skip_error=False,
                    extension=YAML_EXT, return_path=False,
                    logger=True, keep_order=False):
@@ -71,18 +82,13 @@ def load_yaml_file(file, path=None,
         from utilities.logs import get_logger
         log = get_logger(__name__)
 
-    error = None
-    if path is None:
-        filepath = file
-    else:
-        if extension is not None:
-            file += '.' + extension
-        filepath = os.path.join(path, file)
+    filepath = get_yaml_path(path, filename, extension)
 
     if not return_path and logger:
         log.very_verbose("Reading file %s" % filepath)
 
     # load from this file
+    error = None
     if os.path.exists(filepath):
         if return_path:
             return filepath

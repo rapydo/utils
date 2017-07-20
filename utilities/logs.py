@@ -163,7 +163,7 @@ VERBOSITY_REQUESTED = getattr(logging, USER_DEBUG_LEVEL)
 class LogMe(object):
     """ A common logger to be used all around development packages """
 
-    def __init__(self, debug=None):
+    def __init__(self):
 
         #####################
         self._log_level = None
@@ -295,7 +295,8 @@ please_logme = LogMe()
 # log = please_logme.get_new_logger(__name__)
 
 
-def get_logger(name, debug_setter=None, newlevel=None):
+# def get_logger(name, debug_setter=None, newlevel=None):
+def get_logger(name):
     """ Recover the right logger + set a proper specific level """
 
     # if debug_setter is not None:

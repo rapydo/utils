@@ -35,11 +35,14 @@ class BashCommands(object):
         super(BashCommands, self).__init__()
         log.very_verbose("Internal shell initialized")
 
-    def execute_command(self, command, parameters=[], env=None,
+    def execute_command(self, command, parameters=None, env=None,
                         parseException=False, raisedException=BaseException):
         try:
 
-            """ Pattern in plumbum library for executing a shell command """
+            if parameters is None:
+                parameters=[]
+
+            # Pattern in plumbum library for executing a shell command
             command = self._shell[command]
             # Specify different environment variables
             if env is not None:
@@ -58,14 +61,16 @@ class BashCommands(object):
 
                 raise raisedException(stderr)
 
-    def execute_command_advanced(self, command, parameters=[],
+    def execute_command_advanced(self, command, parameters=None,
                                  retcodes=(), parseException=False,
                                  raisedException=BaseException):
         try:
+            if parameters is None:
+                parameters=[]
 
-            """ Pattern in plumbum library for executing a shell command """
+            # Pattern in plumbum library for executing a shell command
             # e.g. ICOM["list"][irods_dir].run(retcode = (0,4))
-    # FIXME: does not work if parameters is bigger than one element
+            # FIXME: does not work if parameters is bigger than one element
             comout = \
                 self._shell[command][parameters].run(retcode=retcodes)
             log.verbose("Executed command %s %s" % (command, parameters))
