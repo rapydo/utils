@@ -21,6 +21,6 @@ def check_version(package_name):
                 return pkg._version
             except AttributeError:
                 # fix for python 3.4
-                return pkg.get('_version')
+                return pkg.__dict__
 
     return None
