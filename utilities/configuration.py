@@ -73,6 +73,7 @@ def read(project, is_template=False):
 
         for key, value in checks.items():
             if prj.get(key, '') == value:
+                # FIXME: what's this args?
                 filepath = load_yaml_file(return_path=True, **args)
                 log.critical_exit(
                     "\n\nYour project is not yet configured:\n" +

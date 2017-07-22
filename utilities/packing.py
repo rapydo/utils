@@ -14,7 +14,13 @@ def list_all():
 
 def check_version(package_name):
     for pkg in list_all():
-        if pkg.get('_key') == package_name:
-            return pkg.get('_version')
+        # if pkg.get('_key') == package_name:
+        if pkg._key == package_name:
+            # return pkg.get('_version')
+            try:
+                return pkg._version
+            except AttributeError:
+                # fix for python 3.4
+                return pkg.__dict__
 
     return None

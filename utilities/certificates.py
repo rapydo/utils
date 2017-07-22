@@ -45,15 +45,14 @@ class Certificates(object):
         return dn
 
     @classmethod
-    def get_proxy_filename(cls, user, dir=False):
-        if dir:
+    def get_proxy_filename(cls, user, dirname=False):
+        if dirname:
             return "%s/%s" % (cls._dir, user)
         return "%s/%s/%s" % (cls._dir, user, cls._proxyfile)
 
     def save_proxy_cert(self, tmpproxy, user='guest'):
 
-        import os
-        directory = self.get_proxy_filename(user, dir=True)
+        directory = self.get_proxy_filename(user, dirname=True)
         if not os.path.exists(directory):
             os.mkdir(directory)
 
@@ -109,8 +108,7 @@ class Certificates(object):
             # INSECURE SSL CONTEXT.
             # source: http://stackoverflow.com/a/28052583/2114395
             import ssl
-            ssl._create_default_https_context = \
-                ssl._create_unverified_context
+            ssl._create_default_https_context = ssl._create_unverified_context
 
         #######################
         key, req = self.generate_csr_and_key()

@@ -30,7 +30,7 @@ class Meta(object):
 
     def get_submodules_from_package(self, package):
         self._submodules = []
-        for importer, modname, ispkg \
+        for _, modname, ispkg \
                 in pkgutil.iter_modules(package.__path__):
             if not ispkg:
                 self._submodules.append(modname)
@@ -155,15 +155,16 @@ class Meta(object):
         return myclass
 
     @staticmethod
-    def metaclassing(your_class, label=None, attributes={}):
+    def metaclassing(your_class, label=None, attributes=None):
         """
         Creating a class using metas.
         Very usefull for automatic algorithms.
         """
 
         methods = dict(your_class.__dict__)
-        for key, value in attributes.items():
-            methods.update({key: value})
+        if attributes is not None and isinstance(attributes, dict):
+            for key, value in attributes.items():
+                methods.update({key: value})
         return type(label, (your_class,), methods)
 
     @staticmethod
@@ -219,9 +220,11 @@ class Meta(object):
         return module
 
     @staticmethod
-    def class_factory(name, parents=object, attributes_and_methods={}):
+    def class_factory(name, parents=object, attributes_and_methods=None):
         if not isinstance(parents, tuple):
             parents = (parents, )
+        if attributes_and_methods is None:
+            attributes_and_methods = {}
         return type(name, parents, attributes_and_methods)
 
     def get_celery_tasks_from_module(self, submodule):

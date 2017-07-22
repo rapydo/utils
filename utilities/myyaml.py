@@ -50,6 +50,25 @@ def ordered_load(stream):
 
 
 #####################
+def get_yaml_path(path, filename, extension):
+    if path is None:
+        filepath = filename
+    else:
+        if extension is not None:
+            filename += '.' + extension
+        filepath = os.path.join(path, filename)
+
+    return filepath
+
+
+def get_loader(fh, keep_order):
+    # LOAD ordered
+    if keep_order:
+        return ordered_load(fh)
+    else:
+        return regular_load(fh)
+
+
 # @lru_cache()
 def load_yaml_file(file, path=None,
                    get_all=False, skip_error=False,
@@ -71,46 +90,37 @@ def load_yaml_file(file, path=None,
         from utilities.logs import get_logger
         log = get_logger(__name__)
 
-    error = None
-    if path is None:
-        filepath = file
-    else:
-        if extension is not None:
-            file += '.' + extension
-        filepath = os.path.join(path, file)
+    filepath = get_yaml_path(path, file, extension)
 
     if not return_path and logger:
         log.very_verbose("Reading file %s" % filepath)
 
     # load from this file
-    if os.path.exists(filepath):
+    error = None
+    if not os.path.exists(filepath):
+        error = 'File does not exist'
+    else:
         if return_path:
             return filepath
 
         with open(filepath) as fh:
             try:
-                # LOAD ordered
-                if keep_order:
-                    gen = ordered_load(fh)
-                else:
-                    gen = regular_load(fh)
+                loader = get_loader(fh, keep_order)
             except Exception as e:
                 error = e
             else:
-                docs = list(gen)
+                docs = list(loader)
                 if get_all:
                     return docs
+
+                if len(docs) > 0:
+                    return docs[0]
+
+                message = "YAML file is empty %s" % filepath
+                if logger:
+                    log.exit(message)
                 else:
-                    if len(docs) > 0:
-                        return docs[0]
-                    else:
-                        message = "YAML file is empty %s" % filepath
-                        if logger:
-                            log.exit(message)
-                        else:
-                            raise AttributeError(message)
-    else:
-        error = 'File does not exist'
+                    raise AttributeError(message)
 
     # # IF dealing with a strange exception string (escaped)
     # import codecs
@@ -118,18 +128,10 @@ def load_yaml_file(file, path=None,
     # message = "Failed to read YAML file [%s]: %s" % (filepath, mystring)
 
     message = "Failed to read YAML file [%s]: %s" % (filepath, error)
-
-    if skip_error:
-        if logger:
-            log.warning(message)
-        else:
-            if skip_error:
-                pass
-            else:
-                raise NotImplementedError("Cannot log warning %s" % message)
+    if logger:
+        log.warning(message)
+    elif skip_error:
+        raise NotImplementedError("Cannot log warning %s" % message)
     else:
-        if logger:
-            log.warning(message)
-        else:
-            raise AttributeError(message)
+        raise AttributeError(message)
     return {}
