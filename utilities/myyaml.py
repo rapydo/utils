@@ -131,7 +131,8 @@ def load_yaml_file(file, path=None,
     if logger:
         log.warning(message)
     elif skip_error:
-        raise NotImplementedError("Cannot log warning %s" % message)
+        # raise NotImplementedError("Cannot log warning %s" % message)
+        pass
     else:
         raise AttributeError(message)
     return {}

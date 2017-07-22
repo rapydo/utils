@@ -12,7 +12,6 @@ script:
   - py.test --cov=utilities -s -x
 after_success:
   - coveralls
-# before_deploy:
 deploy:
   provider: pypi
   user: pdonorio
@@ -21,5 +20,3 @@ deploy:
   on:
     # all_branches: true
     tags: true
-after_deploy:
-  - echo a new release is available
