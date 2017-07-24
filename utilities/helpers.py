@@ -80,7 +80,7 @@ def ask_yes_or_no(question, error='Unknown'):
     possible_answers = ['yes', 'y', 'no', 'n']
 
     while True:
-        answer = input(question + '\n')
+        answer = input(question + ' (y/n)\n')
         if answer not in possible_answers:
             print("Please answer one of the following: %s" % possible_answers)
         else:
