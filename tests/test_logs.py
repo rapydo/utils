@@ -1,9 +1,9 @@
 
 import pytest
-import os
-import logging
 from utilities.globals import mem
 from utilities.logs import get_logger
+from utilities.logs import handle_log_output
+from utilities.logs import re_obscure_pattern
 log = get_logger(__name__)
 
 
@@ -72,6 +72,44 @@ def test(capfd):
     assert ("INFO %s" % TESTING_MESSAGE) in err
     assert ("WARNING %s" % TESTING_MESSAGE) in err
     assert ("ERROR %s" % TESTING_MESSAGE) in err
+
+    test = re_obscure_pattern("protocol://user:password@host:port")
+    assert test == "protocol://user:****@host:port"
+
+    test = handle_log_output(None)
+    assert test == {}
+
+    test = handle_log_output("         ".encode("utf-8"))
+    assert test == {}
+
+    data = """
+            {
+                "xyz": "abc",
+                "user": "abc",
+                "password": "abc",
+                "pwd": "abc",
+                "token": "abc",
+                "file": "abc",
+                "filename": "abc"
+            }
+""".encode("utf-8")
+    test = handle_log_output(data)
+
+    assert "xyz" in test
+    assert "user" in test
+    assert "password" in test
+    assert "pwd" in test
+    assert "token" in test
+    assert "file" in test
+    assert "filename" in test
+
+    assert test["xyz"] == "abc"
+    assert test["user"] == "abc"
+    assert test["password"] == "****"
+    assert test["pwd"] == "****"
+    assert test["token"] == "****"
+    assert test["file"] == "****"
+    assert test["filename"] == "****"
 
     for e in err:
         print(e)
