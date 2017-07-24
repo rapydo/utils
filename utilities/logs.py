@@ -107,7 +107,10 @@ def checked(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         # message = "\u2713 %s" % message
         # message = "(CHECKED) %s" % message
-        message = "\033[0;32m\u2713\033[0m %s" % message
+        if self._colors_enabled:
+            message = "\033[0;32m\u2713\033[0m %s" % message
+        else:
+            message = "\u2713 %s" % message
         self._log(level, message, args, **kws)
 
 

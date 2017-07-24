@@ -1,6 +1,4 @@
 language: python
-env:
-  - TESTING: 1
 python:
   - 3.4
   - 3.5
@@ -11,6 +9,7 @@ before_install:
 install:
   - pip3 install --upgrade --no-cache-dir --editable .
 script:
+  - export TESTING=1
   - py.test --cov=utilities -s -x
 after_success:
   - coveralls
