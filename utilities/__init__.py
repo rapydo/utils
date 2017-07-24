@@ -22,6 +22,7 @@ CONF_PATH = 'confs'
 CONTAINERS_YAML_DIRNAME = CONF_PATH
 UTILS_PKGNAME = __package__.split('.')[::-1][0]
 
+BACKEND_DIR = 'backend'  # directory outside docker
 MAIN_PACKAGE = 'restapi'
 BACKEND_PACKAGE = MAIN_PACKAGE  # package inside rapydo-http
 CUSTOM_PACKAGE = os.environ.get('VANILLA_PACKAGE', 'custom')
