@@ -10,9 +10,13 @@ log = get_logger(__name__)
 
 def build(path):
     if not isinstance(path, list):
-        path = [path]
+        path = list(path)
     p = Path(*path)
     return p
+
+
+def join(*paths):
+    return build(paths)
 
 
 def home(relative_path=None):
