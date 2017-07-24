@@ -38,3 +38,10 @@ def create(pathobj, directory=False, force=False):
         pathobj.mkdir(exist_ok=force)
     else:
         raise NotImplementedError("Yet to do!")
+
+
+def file_exists_and_nonzero(pathobj):
+    if pathobj.exists():
+        return not pathobj.stat().st_size == 0
+    else:
+        return False
