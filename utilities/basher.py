@@ -101,7 +101,7 @@ class BashCommands(object):
                 args.append("-p")
         # Debug
         self.execute_command(com, args)
-        log.debug("Created %s" % path)
+        log.debug("Created %s", path)
 
     def remove(self, path, recursive=False, force=False):
 

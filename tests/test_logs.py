@@ -57,5 +57,21 @@ def test(capfd):
     assert ("ERROR (FAIL)\t%s" % TESTING_MESSAGE) in err
     assert ("EXIT %s" % TESTING_MESSAGE) in err
 
+    # This syntax should be preferable:
+    # Specify string format arguments as logging function parameters
+
+    log.very_verbose("%s", TESTING_MESSAGE)
+    log.verbose("%s", TESTING_MESSAGE)
+    log.debug("%s", TESTING_MESSAGE)
+    log.info("%s", TESTING_MESSAGE)
+    log.warning("%s", TESTING_MESSAGE)
+    log.error("%s", TESTING_MESSAGE)
+    assert ("VERY_VERBOSE %s" % TESTING_MESSAGE) in err
+    assert ("VERBOSE %s" % TESTING_MESSAGE) in err
+    assert ("DEBUG %s" % TESTING_MESSAGE) in err
+    assert ("INFO %s" % TESTING_MESSAGE) in err
+    assert ("WARNING %s" % TESTING_MESSAGE) in err
+    assert ("ERROR %s" % TESTING_MESSAGE) in err
+
     for e in err:
         print(e)

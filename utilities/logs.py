@@ -107,7 +107,7 @@ def checked(self, message, *args, **kws):
         # Yes, logger takes its '*args' as 'args'.
         # message = "\u2713 %s" % message
         # message = "(CHECKED) %s" % message
-        if self._colors_enabled:
+        if self.colors_enabled:
             message = "\033[0;32m\u2713\033[0m %s" % message
         else:
             message = "\u2713 %s" % message
@@ -171,17 +171,17 @@ class LogMe(object):
     def __init__(self):
 
         #####################
-        self._log_level = None
-        self._colors_enabled = True
-        self._testing = False
+        self.log_level = None
+        self.colors_enabled = True
+        self.testing_mode = False
         super(LogMe, self).__init__()
 
         #####################
         if AVOID_COLORS_ENV_LABEL in os.environ:
-            self._colors_enabled = False
+            self.colors_enabled = False
         if "TESTING" in os.environ:
-            self._testing = True
-            self._colors_enabled = False
+            self.testing_mode = True
+            self.colors_enabled = False
 
         #####################
         # Set default logging handler to avoid "No handler found" warnings.
@@ -197,14 +197,14 @@ class LogMe(object):
         # Make sure there is at least one logger
         logging.getLogger(__name__).addHandler(NullHandler())
         # Format
-        if self._testing:
+        if self.testing_mode:
             fileConfig(LOG_INI_TESTS_FILE)
         else:
             fileConfig(LOG_INI_FILE)
 
         #####################
         # modify logging labels colors
-        if self._colors_enabled:
+        if self.colors_enabled:
             logging.addLevelName(
                 logging.CRITICAL_EXIT, "\033[4;33;41m%s\033[1;0m"
                 % logging.getLevelName(logging.CRITICAL_EXIT))
@@ -241,26 +241,26 @@ class LogMe(object):
         self.debug = debug
         if self.debug:
             if level is not None:
-                self._log_level = level
+                self.log_level = level
             else:
-                self._log_level = logging.DEBUG
+                self.log_level = logging.DEBUG
         else:
-            self._log_level = logging.INFO
+            self.log_level = logging.INFO
 
-        return self._log_level
+        return self.log_level
 
     def get_new_logger(self, name, verbosity=None):
         """ Recover the right logger + set a proper specific level """
-        if self._colors_enabled:
+        if self.colors_enabled:
             name = "\033[1;90m%s\033[1;0m" % name
         logger = logging.getLogger(name)
 
         if verbosity is not None:
             self.set_debug(True, verbosity)
 
-        # print("LOGGER LEVEL", self._log_level, logging.INFO)
-        logger.setLevel(self._log_level)
-        logger._colors_enabled = self._colors_enabled
+        # print("LOGGER LEVEL", self.log_level, logging.INFO)
+        logger.setLevel(self.log_level)
+        logger.colors_enabled = self.colors_enabled
         return logger
 
 
@@ -268,7 +268,7 @@ def set_global_log_level(package=None, app_level=None):
 
     external_level = logging.WARNING
     if app_level is None:
-        app_level = please_logme._log_level
+        app_level = please_logme.log_level
 
     # A list of packages that make too much noise inside the logs
     external_packages = [
