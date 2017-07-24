@@ -106,8 +106,10 @@ def checked(self, message, *args, **kws):
     if self.isEnabledFor(level):
         # Yes, logger takes its '*args' as 'args'.
         # message = "\u2713 %s" % message
-        # message = "(CHECKED) %s" % message
-        if self.colors_enabled:
+
+        if self.disable_unicode:
+            message = "(CHECKED) %s" % message
+        elif self.colors_enabled:
             message = "\033[0;32m\u2713\033[0m %s" % message
         else:
             message = "\u2713 %s" % message
@@ -174,6 +176,7 @@ class LogMe(object):
         self.log_level = None
         self.colors_enabled = True
         self.testing_mode = False
+        self.disable_unicode = False
         super(LogMe, self).__init__()
 
         #####################
@@ -182,6 +185,8 @@ class LogMe(object):
         if "TESTING" in os.environ:
             self.testing_mode = True
             self.colors_enabled = False
+        if "DISABLE_UNICODE" in os.environ:
+            self.disable_unicode = True
 
         #####################
         # Set default logging handler to avoid "No handler found" warnings.
@@ -261,6 +266,7 @@ class LogMe(object):
         # print("LOGGER LEVEL", self.log_level, logging.INFO)
         logger.setLevel(self.log_level)
         logger.colors_enabled = self.colors_enabled
+        logger.disable_unicode = self.disable_unicode
         return logger
 
 
