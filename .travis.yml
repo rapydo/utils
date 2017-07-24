@@ -1,4 +1,6 @@
 language: python
+env:
+  - TESTING: 1
 python:
   - 3.4
   - 3.5

@@ -30,6 +30,8 @@ OBSCURED_FIELDS = ['password', 'pwd', 'token', 'file', 'filename']
 
 AVOID_COLORS_ENV_LABEL = "IDONTWANTCOLORS"
 LOG_INI_FILE = os.path.join(helpers.script_abspath(__file__), 'logging.ini')
+LOG_INI_TESTS_FILE = os.path.join(
+    helpers.script_abspath(__file__), 'logging_tests.ini')
 
 
 def critical_exit(self, message=None, error_code=1, *args, **kws):
@@ -168,10 +170,14 @@ class LogMe(object):
         #####################
         self._log_level = None
         self._colors_enabled = True
+        self._testing = False
         super(LogMe, self).__init__()
 
         #####################
         if AVOID_COLORS_ENV_LABEL in os.environ:
+            self._colors_enabled = False
+        if "TESTING" in os.environ:
+            self._testing = True
             self._colors_enabled = False
 
         #####################
@@ -188,7 +194,10 @@ class LogMe(object):
         # Make sure there is at least one logger
         logging.getLogger(__name__).addHandler(NullHandler())
         # Format
-        fileConfig(LOG_INI_FILE)
+        if self._testing:
+            fileConfig(LOG_INI_TESTS_FILE)
+        else:
+            fileConfig(LOG_INI_FILE)
 
         #####################
         # modify logging labels colors
