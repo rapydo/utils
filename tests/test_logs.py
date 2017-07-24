@@ -51,13 +51,11 @@ def test(capfd):
     assert ("ERROR %s" % TESTING_MESSAGE) in err
     assert ("VERBOSE (CHECKED)\t%s" % TESTING_MESSAGE) in err
     assert ("VERBOSE \u2713 %s" % TESTING_MESSAGE) in err
-    assert ("INFO (CHECKED)  %s" % TESTING_MESSAGE) in err
+    assert ("INFO (CHECKED)\t%s" % TESTING_MESSAGE) in err
     assert ("INFO \u2713 %s" % TESTING_MESSAGE) in err
     assert ("PRINT_STACK %s" % TESTING_MESSAGE) in err
-    assert ("ERROR (FAIL)    %s" % TESTING_MESSAGE) in err
+    assert ("ERROR (FAIL)\t%s" % TESTING_MESSAGE) in err
     assert ("EXIT %s" % TESTING_MESSAGE) in err
 
     for e in err:
         print(e)
-
-    assert False

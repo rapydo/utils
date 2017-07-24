@@ -260,6 +260,7 @@ class LogMe(object):
 
         # print("LOGGER LEVEL", self._log_level, logging.INFO)
         logger.setLevel(self._log_level)
+        logger._colors_enabled = self._colors_enabled
         return logger
 
 
