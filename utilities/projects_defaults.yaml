@@ -80,7 +80,7 @@ variables:
     # PROJECT_DOMAIN: myserver.mydomain.dev  # deprecated
     API_MAIN_ENDPOINT: status
     PYTHON_MAIN_FILE: __main__
-    DB_SUBNET: 172.1.0.0  # FIXME: see issue
+    # DB_SUBNET: 172.1.0.0
     JWT_APP_SECRETS: /jwt_tokens
     ALCHEMY_HOST: psqldb.dockerized.io
     ALCHEMY_PORT: 5432
@@ -100,7 +100,7 @@ variables:
     PROXY_PROD_PORT: 443
     LETSENCRYPT_MODE: --staging
     FULL_JWT: true
-    SMTP_HOST: smtp.dockerized.io 
+    SMTP_HOST: smtp.dockerized.io
 
     GRAPHDB_EXTERNAL: 0
     CELERY_EXTERNAL: 0
