@@ -33,7 +33,7 @@ def test_missing_files(capfd):
     f1 = "%s%s%s" % (prefix_msg, "blabla", suffix_msg)
     f2 = "%s%s%s" % (prefix_msg, "xxyyzz", suffix_msg)
     assert f1 in err
-    assert f2 in err
+    assert f2 not in err
 
 
 def test_regular_file():
