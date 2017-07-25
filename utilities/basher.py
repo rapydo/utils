@@ -35,8 +35,9 @@ class BashCommands(object):
         super(BashCommands, self).__init__()
         log.very_verbose("Internal shell initialized")
 
-    def execute_command(self, command, parameters=None, env=None,
-                        parseException=False, raisedException=BaseException):
+    def execute_command(
+            self, command, parameters=None, env=None,
+            raisedException=BaseException):
         try:
 
             if parameters is None:
@@ -51,7 +52,7 @@ class BashCommands(object):
             return command(parameters)
 
         except ProcessExecutionError as e:
-            if not parseException:
+            if raisedException is None:
                 raise(e)
             else:
                 # argv = e.argv
@@ -61,9 +62,9 @@ class BashCommands(object):
 
                 raise raisedException(stderr)
 
-    def execute_command_advanced(self, command, parameters=None,
-                                 retcodes=(), parseException=False,
-                                 raisedException=BaseException):
+    def execute_command_advanced(
+            self, command, parameters=None, raisedException=BaseException,
+            retcodes=()):  # pylint:disable=too-many-arguments
         try:
             if parameters is None:
                 parameters=[]
@@ -78,7 +79,7 @@ class BashCommands(object):
             return comout
 
         except ProcessExecutionError as e:
-            if not parseException:
+            if raisedException is None:
                 raise(e)
             else:
                 # argv = e.argv
