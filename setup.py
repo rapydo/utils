@@ -17,6 +17,7 @@ setup(
     package_data={
         main_package: [
             'logging.ini',
+            'logging_tests.ini',
             '%s.yaml' % DEFAULT_FILENAME
         ]
     },
