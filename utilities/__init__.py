@@ -27,3 +27,4 @@ MAIN_PACKAGE = 'restapi'
 BACKEND_PACKAGE = MAIN_PACKAGE  # package inside rapydo-http
 CUSTOM_PACKAGE = os.environ.get('VANILLA_PACKAGE', 'custom')
 CORE_CONFIG_PATH = os.path.join(BACKEND_PACKAGE, 'confs')
+ENDPOINTS_CODE_DIR = 'apis'
