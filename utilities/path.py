@@ -35,7 +35,14 @@ def current():
 
 def create(pathobj, directory=False, force=False):
     if directory:
-        pathobj.mkdir(exist_ok=force)
+        # pathobj.mkdir(exist_ok=force)  # does not work with Python 3.4...
+        try:
+            pathobj.mkdir()
+        except FileExistsError:
+            if force:
+                pass
+            else:
+                log.exit("Cannot overwrite existing: %s" % pathobj)
     else:
         raise NotImplementedError("Yet to do!")
 
