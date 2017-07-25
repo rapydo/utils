@@ -30,6 +30,8 @@ OBSCURED_FIELDS = ['password', 'pwd', 'token', 'file', 'filename']
 
 AVOID_COLORS_ENV_LABEL = "IDONTWANTCOLORS"
 LOG_INI_FILE = os.path.join(helpers.script_abspath(__file__), 'logging.ini')
+LOG_INI_TESTS_FILE = os.path.join(
+    helpers.script_abspath(__file__), 'logging_tests.ini')
 
 
 def critical_exit(self, message=None, error_code=1, *args, **kws):
@@ -40,7 +42,9 @@ def critical_exit(self, message=None, error_code=1, *args, **kws):
     if self.isEnabledFor(CRITICAL_EXIT):
         if message is not None:
             # Yes, logger takes its '*args' as 'args'.
-            self._log(CRITICAL_EXIT, message, args, **kws)
+            self._log(
+                CRITICAL_EXIT, message, args, **kws
+            )  # pylint:disable=protected-access
 
     # TODO: check if raise is better
     import sys
@@ -55,7 +59,9 @@ def fail_exit(self, message, *args, **kws):
 def print_stack(self, message, *args, **kws):
     if self.isEnabledFor(PRINT_STACK):
         print("")
-        self._log(PRINT_STACK, message, args, **kws)
+        self._log(  # pylint:disable=protected-access
+            PRINT_STACK, message, args, **kws
+        )
         traceback.print_stack()
         print("\n\n")
 
@@ -71,13 +77,17 @@ def myprint(self, message, *args, **kws):
 def verbose(self, message, *args, **kws):
     # Yes, logger takes its '*args' as 'args'.
     if self.isEnabledFor(VERBOSE):
-        self._log(VERBOSE, message, args, **kws)
+        self._log(  # pylint:disable=protected-access
+            VERBOSE, message, args, **kws
+        )
 
 
 def very_verbose(self, message, *args, **kws):
     if self.isEnabledFor(VERY_VERBOSE):
         # Yes, logger takes its '*args' as 'args'.
-        self._log(VERY_VERBOSE, message, args, **kws)
+        self._log(  # pylint:disable=protected-access
+            VERY_VERBOSE, message, args, **kws
+        )
 
 
 def pretty_print(self, myobject, prefix_line=None):
@@ -104,9 +114,16 @@ def checked(self, message, *args, **kws):
     if self.isEnabledFor(level):
         # Yes, logger takes its '*args' as 'args'.
         # message = "\u2713 %s" % message
-        # message = "(CHECKED) %s" % message
-        message = "\033[0;32m\u2713\033[0m %s" % message
-        self._log(level, message, args, **kws)
+
+        if self.disable_unicode:
+            message = "(CHECKED) %s" % message
+        elif self.colors_enabled:
+            message = "\033[0;32m\u2713\033[0m %s" % message
+        else:
+            message = "\u2713 %s" % message
+        self._log(  # pylint:disable=protected-access
+            level, message, args, **kws
+        )
 
 
 def checked_simple(self, message, *args, **kws):
@@ -120,7 +137,9 @@ def checked_simple(self, message, *args, **kws):
 
     if self.isEnabledFor(level):
         message = "(CHECKED)\t%s" % message
-        self._log(level, message, args, **kws)
+        self._log(  # pylint:disable=protected-access
+            level, message, args, **kws
+        )
 
 
 logging.addLevelName(CRITICAL_EXIT, "EXIT")
@@ -166,13 +185,20 @@ class LogMe(object):
     def __init__(self):
 
         #####################
-        self._log_level = None
-        self._colors_enabled = True
+        self.log_level = None
+        self.colors_enabled = True
+        self.testing_mode = False
+        self.disable_unicode = False
         super(LogMe, self).__init__()
 
         #####################
         if AVOID_COLORS_ENV_LABEL in os.environ:
-            self._colors_enabled = False
+            self.colors_enabled = False
+        if "TESTING" in os.environ:
+            self.testing_mode = True
+            self.colors_enabled = False
+        if "DISABLE_UNICODE" in os.environ:
+            self.disable_unicode = True
 
         #####################
         # Set default logging handler to avoid "No handler found" warnings.
@@ -188,11 +214,14 @@ class LogMe(object):
         # Make sure there is at least one logger
         logging.getLogger(__name__).addHandler(NullHandler())
         # Format
-        fileConfig(LOG_INI_FILE)
+        if self.testing_mode:
+            fileConfig(LOG_INI_TESTS_FILE)
+        else:
+            fileConfig(LOG_INI_FILE)
 
         #####################
         # modify logging labels colors
-        if self._colors_enabled:
+        if self.colors_enabled:
             logging.addLevelName(
                 logging.CRITICAL_EXIT, "\033[4;33;41m%s\033[1;0m"
                 % logging.getLevelName(logging.CRITICAL_EXIT))
@@ -229,25 +258,27 @@ class LogMe(object):
         self.debug = debug
         if self.debug:
             if level is not None:
-                self._log_level = level
+                self.log_level = level
             else:
-                self._log_level = logging.DEBUG
+                self.log_level = logging.DEBUG
         else:
-            self._log_level = logging.INFO
+            self.log_level = logging.INFO
 
-        return self._log_level
+        return self.log_level
 
     def get_new_logger(self, name, verbosity=None):
         """ Recover the right logger + set a proper specific level """
-        if self._colors_enabled:
+        if self.colors_enabled:
             name = "\033[1;90m%s\033[1;0m" % name
         logger = logging.getLogger(name)
 
         if verbosity is not None:
             self.set_debug(True, verbosity)
 
-        # print("LOGGER LEVEL", self._log_level, logging.INFO)
-        logger.setLevel(self._log_level)
+        # print("LOGGER LEVEL", self.log_level, logging.INFO)
+        logger.setLevel(self.log_level)
+        logger.colors_enabled = self.colors_enabled
+        logger.disable_unicode = self.disable_unicode
         return logger
 
 
@@ -255,7 +286,7 @@ def set_global_log_level(package=None, app_level=None):
 
     external_level = logging.WARNING
     if app_level is None:
-        app_level = please_logme._log_level
+        app_level = please_logme.log_level
 
     # A list of packages that make too much noise inside the logs
     external_packages = [

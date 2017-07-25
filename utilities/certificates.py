@@ -108,7 +108,7 @@ class Certificates(object):
             # INSECURE SSL CONTEXT.
             # source: http://stackoverflow.com/a/28052583/2114395
             import ssl
-            ssl._create_default_https_context = ssl._create_unverified_context
+            ssl._create_default_https_context = ssl._create_unverified_context  # nopep8 # pylint:disable=protected-access
 
         #######################
         key, req = self.generate_csr_and_key()
@@ -123,25 +123,25 @@ class Certificates(object):
                 headers={'Accept-Encoding': 'identity'})
             # Note: token is applied from oauth2 lib using the session content
         except ValueError as e:
-            log.error("Oauthlib call with CA: %s" % e)
+            log.error("Oauthlib call with CA: %s", e)
             return None
         except Exception as e:
             # TODO: expand this case
             # 1. CA is unreachable (internet)
             # 2. CA says the token is invalid
-            log.error("CA is probably down... [%s]" % e)
+            log.error("CA is probably down... [%s]", e)
             return None
 
         if response.status != hcodes.HTTP_OK_BASIC:
             # print("\nCertificate:"); log.pp(response)
-            log.error("Could not get proxy from CA: %s" % response.data)
+            log.error("Could not get proxy from CA: %s", response.data)
             return None
         # log.pp(response)
 
         #######################
         # write proxy certificate to a random file name
         proxyfile = self.write_key_and_cert(key, response.data)
-        log.debug('Wrote certificate to %s' % proxyfile)
+        log.debug('Wrote certificate to %s', proxyfile)
 
         return proxyfile
 

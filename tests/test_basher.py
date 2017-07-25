@@ -32,6 +32,7 @@ def test():
     assert out.strip() == output
 
     random_name = randomString()
+    random_name2 = randomString()
     bash.create_empty(random_name)
 
     bash.remove(random_name)
@@ -44,7 +45,10 @@ def test():
 
     bash.create_directory(random_name)
 
+    bash.copy_folder(random_name, random_name2)
+
     bash.remove_directory(random_name)
+    bash.remove_directory(random_name2)
 
     # try:
     #     bash.remove_directory(random_name)

@@ -3,16 +3,6 @@ import pytest
 from utilities.meta import Meta
 
 
-# NOTE: copied from controller/test_basic.py
-# def cut_log(message):
-#     try:
-#         i = message.index("]")
-#         return message[i + 2:]
-#     except ValueError:
-#         print(message)
-#         return message
-
-
 def test():
     meta = Meta()
     cls_name = "Meta"

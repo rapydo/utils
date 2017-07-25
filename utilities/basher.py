@@ -35,8 +35,9 @@ class BashCommands(object):
         super(BashCommands, self).__init__()
         log.very_verbose("Internal shell initialized")
 
-    def execute_command(self, command, parameters=None, env=None,
-                        parseException=False, raisedException=BaseException):
+    def execute_command(
+            self, command, parameters=None, env=None,
+            customException=None):
         try:
 
             if parameters is None:
@@ -51,7 +52,7 @@ class BashCommands(object):
             return command(parameters)
 
         except ProcessExecutionError as e:
-            if not parseException:
+            if customException is None:
                 raise(e)
             else:
                 # argv = e.argv
@@ -59,11 +60,11 @@ class BashCommands(object):
                 # stdout = e.stdout
                 stderr = e.stderr
 
-                raise raisedException(stderr)
+                raise customException(stderr)
 
-    def execute_command_advanced(self, command, parameters=None,
-                                 retcodes=(), parseException=False,
-                                 raisedException=BaseException):
+    def execute_command_advanced(
+            self, command, parameters=None, customException=None,
+            retcodes=()):  # pylint:disable=too-many-arguments
         try:
             if parameters is None:
                 parameters=[]
@@ -78,7 +79,7 @@ class BashCommands(object):
             return comout
 
         except ProcessExecutionError as e:
-            if not parseException:
+            if customException is None:
                 raise(e)
             else:
                 # argv = e.argv
@@ -86,7 +87,7 @@ class BashCommands(object):
                 # stdout = e.stdout
                 stderr = e.stderr
 
-                raise raisedException(stderr)
+                raise customException(stderr)
 
     ###################
     # BASE COMMANDS
@@ -101,7 +102,7 @@ class BashCommands(object):
                 args.append("-p")
         # Debug
         self.execute_command(com, args)
-        log.debug("Created %s" % path)
+        log.debug("Created %s", path)
 
     def remove(self, path, recursive=False, force=False):
 
@@ -116,7 +117,7 @@ class BashCommands(object):
         # Execute
         self.execute_command(com, args)
         # Debug
-        log.debug("Removed %s" % path)
+        log.debug("Removed %s", path)
 
     ###################
     # DIRECTORIES
@@ -138,4 +139,9 @@ class BashCommands(object):
     def copy(self, target, destination):
 
         params = [target, destination]
+        self.execute_command("cp", params)
+
+    def copy_folder(self, target, destination):
+
+        params = ["-r", target, destination]
         self.execute_command("cp", params)

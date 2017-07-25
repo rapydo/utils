@@ -15,10 +15,10 @@ def list_all():
 def check_version(package_name):
     for pkg in list_all():
         # if pkg.get('_key') == package_name:
-        if pkg._key == package_name:
+        if pkg._key == package_name:  # pylint:disable=protected-access
             # return pkg.get('_version')
             try:
-                return pkg._version
+                return pkg._version  # pylint:disable=protected-access
             except AttributeError:
                 # fix for python 3.4
                 return pkg.__dict__

@@ -130,9 +130,8 @@ def load_yaml_file(file, path=None,
     message = "Failed to read YAML file [%s]: %s" % (filepath, error)
     if logger:
         log.warning(message)
-    elif skip_error:
-        # raise NotImplementedError("Cannot log warning %s" % message)
-        pass
-    else:
+    elif not skip_error:
         raise AttributeError(message)
+    # else:
+    #     pass
     return {}
