@@ -108,7 +108,7 @@ class Certificates(object):
             # INSECURE SSL CONTEXT.
             # source: http://stackoverflow.com/a/28052583/2114395
             import ssl
-            ssl._create_default_https_context = ssl._create_unverified_context  # pylint:disable=protected-access # nopep8
+            ssl._create_default_https_context = ssl._create_unverified_context  # nopep8 # pylint:disable=protected-access
 
         #######################
         key, req = self.generate_csr_and_key()
