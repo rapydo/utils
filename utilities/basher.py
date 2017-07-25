@@ -139,3 +139,8 @@ class BashCommands(object):
 
         params = [target, destination]
         self.execute_command("cp", params)
+
+    def copy_folder(self, target, destination):
+
+        params = ["-r", target, destination]
+        self.execute_command("cp", params)
