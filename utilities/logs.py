@@ -42,7 +42,9 @@ def critical_exit(self, message=None, error_code=1, *args, **kws):
     if self.isEnabledFor(CRITICAL_EXIT):
         if message is not None:
             # Yes, logger takes its '*args' as 'args'.
-            self._log(CRITICAL_EXIT, message, args, **kws)
+            self._log(
+                CRITICAL_EXIT, message, args, **kws
+            )  # pylint:disable=protected-access
 
     # TODO: check if raise is better
     import sys
@@ -57,7 +59,9 @@ def fail_exit(self, message, *args, **kws):
 def print_stack(self, message, *args, **kws):
     if self.isEnabledFor(PRINT_STACK):
         print("")
-        self._log(PRINT_STACK, message, args, **kws)
+        self._log(
+            PRINT_STACK, message, args, **kws
+        )  # pylint:disable=protected-access
         traceback.print_stack()
         print("\n\n")
 
@@ -73,13 +77,17 @@ def myprint(self, message, *args, **kws):
 def verbose(self, message, *args, **kws):
     # Yes, logger takes its '*args' as 'args'.
     if self.isEnabledFor(VERBOSE):
-        self._log(VERBOSE, message, args, **kws)
+        self._log(
+            VERBOSE, message, args, **kws
+        )  # pylint:disable=protected-access
 
 
 def very_verbose(self, message, *args, **kws):
     if self.isEnabledFor(VERY_VERBOSE):
         # Yes, logger takes its '*args' as 'args'.
-        self._log(VERY_VERBOSE, message, args, **kws)
+        self._log(
+            VERY_VERBOSE, message, args, **kws
+        )  # pylint:disable=protected-access
 
 
 def pretty_print(self, myobject, prefix_line=None):
@@ -113,7 +121,9 @@ def checked(self, message, *args, **kws):
             message = "\033[0;32m\u2713\033[0m %s" % message
         else:
             message = "\u2713 %s" % message
-        self._log(level, message, args, **kws)
+        self._log(
+            level, message, args, **kws
+        )  # pylint:disable=protected-access
 
 
 def checked_simple(self, message, *args, **kws):
@@ -127,7 +137,9 @@ def checked_simple(self, message, *args, **kws):
 
     if self.isEnabledFor(level):
         message = "(CHECKED)\t%s" % message
-        self._log(level, message, args, **kws)
+        self._log(
+            level, message, args, **kws
+        )  # pylint:disable=protected-access
 
 
 logging.addLevelName(CRITICAL_EXIT, "EXIT")
