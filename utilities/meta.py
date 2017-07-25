@@ -34,7 +34,7 @@ class Meta(object):
                 in pkgutil.iter_modules(package.__path__):
             if not ispkg:
                 self._submodules.append(modname)
-                log.debug("Found %s submodule inside %s" %
+                log.debug("Found %s submodule inside %s",
                           (modname, package.__name__))
         return self._submodules
 
@@ -106,7 +106,7 @@ class Meta(object):
             if exit_on_fail:
                 raise e
             else:
-                log.warning("Module %s not found " % modulestring)
+                log.warning("Module %s not found ", modulestring)
 
         return module
 
@@ -119,7 +119,7 @@ class Meta(object):
 
         for module_name in self.get_submodules_from_package(package):
             module_path = package_name + '.' + module_name
-            log.debug("Loading module '%s'" % module_path)
+            log.debug("Loading module '%s'", module_path)
 
             submod = self.get_module_from_string(
                 module_path,

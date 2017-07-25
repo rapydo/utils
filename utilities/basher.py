@@ -116,7 +116,7 @@ class BashCommands(object):
         # Execute
         self.execute_command(com, args)
         # Debug
-        log.debug("Removed %s" % path)
+        log.debug("Removed %s", path)
 
     ###################
     # DIRECTORIES
