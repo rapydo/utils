@@ -37,7 +37,7 @@ class BashCommands(object):
 
     def execute_command(
             self, command, parameters=None, env=None,
-            raisedException=BaseException):
+            customException=None):
         try:
 
             if parameters is None:
@@ -52,7 +52,7 @@ class BashCommands(object):
             return command(parameters)
 
         except ProcessExecutionError as e:
-            if raisedException is None:
+            if customException is None:
                 raise(e)
             else:
                 # argv = e.argv
@@ -60,10 +60,10 @@ class BashCommands(object):
                 # stdout = e.stdout
                 stderr = e.stderr
 
-                raise raisedException(stderr)
+                raise customException(stderr)
 
     def execute_command_advanced(
-            self, command, parameters=None, raisedException=BaseException,
+            self, command, parameters=None, customException=None,
             retcodes=()):  # pylint:disable=too-many-arguments
         try:
             if parameters is None:
@@ -79,7 +79,7 @@ class BashCommands(object):
             return comout
 
         except ProcessExecutionError as e:
-            if raisedException is None:
+            if customException is None:
                 raise(e)
             else:
                 # argv = e.argv
@@ -87,7 +87,7 @@ class BashCommands(object):
                 # stdout = e.stdout
                 stderr = e.stderr
 
-                raise raisedException(stderr)
+                raise customException(stderr)
 
     ###################
     # BASE COMMANDS
