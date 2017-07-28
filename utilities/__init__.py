@@ -2,7 +2,7 @@
 
 import os
 
-__version__ = '0.5.1'
+__version__ = '0.5.2'
 __authors__ = [
     "Paolo D'Onorio De Meo <p.donorio.demeo@gmail.com>",
     "Mattia D'Antonio",
@@ -22,7 +22,9 @@ CONF_PATH = 'confs'
 CONTAINERS_YAML_DIRNAME = CONF_PATH
 UTILS_PKGNAME = __package__.split('.')[::-1][0]
 
+BACKEND_DIR = 'backend'  # directory outside docker
 MAIN_PACKAGE = 'restapi'
 BACKEND_PACKAGE = MAIN_PACKAGE  # package inside rapydo-http
 CUSTOM_PACKAGE = os.environ.get('VANILLA_PACKAGE', 'custom')
-CORE_CONFIG_PATH = os.path.join(BACKEND_PACKAGE, 'confs')
+CORE_CONFIG_PATH = os.path.join(BACKEND_PACKAGE, CONF_PATH)
+ENDPOINTS_CODE_DIR = 'apis'

@@ -34,6 +34,14 @@ def current_dir(*suffixes):
     return os.path.join(os.curdir, *suffixes)
 
 
+def current_fullpath(*suffixes):
+    return os.path.join(os.getcwd(), *suffixes)
+
+
+def latest_dir(path):
+    return next(reversed(list(os.path.split(path))))
+
+
 #######################
 # OTHERS
 def module_from_package(package):
@@ -64,3 +72,21 @@ def get_api_url(request_object, production=False):
             ).geturl()
 
     return api_url
+
+
+def ask_yes_or_no(question, error='Unknown'):
+
+    answer = 'unknown'
+    possible_answers = ['yes', 'y', 'no', 'n']
+
+    while True:
+        answer = input(question + ' (y/n)\n')
+        if answer not in possible_answers:
+            print("Please answer one of the following: %s" % possible_answers)
+        else:
+            if answer.strip().startswith('y'):
+                break
+            else:
+                print('USER INTERRUPT:\t' + error)
+                import sys
+                sys.exit(1)
