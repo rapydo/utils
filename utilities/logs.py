@@ -42,9 +42,9 @@ def critical_exit(self, message=None, error_code=1, *args, **kws):
     if self.isEnabledFor(CRITICAL_EXIT):
         if message is not None:
             # Yes, logger takes its '*args' as 'args'.
-            self._log(
+            self._log(  # pylint:disable=protected-access
                 CRITICAL_EXIT, message, args, **kws
-            )  # pylint:disable=protected-access
+            )
 
     # TODO: check if raise is better
     import sys
