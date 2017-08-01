@@ -1,28 +1,26 @@
 
-from utilities.checks import check_executable
-from utilities.checks import import_package
-from utilities.checks import check_package
-from utilities.checks import check_internet
+from utilities import checks
 
 
 def test():
-    out = check_executable("blabla")
+    out = checks.executable("blabla")
     assert out is None
 
-    out = check_executable("python")
+    out = checks.executable("python")
     assert out is not None
 
-    out = check_package("blabla")
+    out = checks.package("blabla")
     assert out is None
 
-    out = check_package("logging")
+    out = checks.package("logging")
     assert out is not None
 
-    out = import_package("blabla")
+    out = checks.import_package("blabla")
     assert out is None
 
-    out = import_package("logging")
+    out = checks.import_package("logging")
     assert out is not None
 
     # How to check this??
-    check_internet()
+    # TODO: use a context manager to block requests outgoing into this com
+    checks.internet_connection_available()
