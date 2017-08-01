@@ -131,7 +131,7 @@ class BashCommands(object):
 
     def replace_in_file(self, target, destination, file):
         params = [
-            "-i", "''",
+            "-i", "--",
             "s/%s/%s/g" % (target, destination),
             file
         ]
