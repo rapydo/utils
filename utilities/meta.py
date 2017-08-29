@@ -35,7 +35,7 @@ class Meta(object):
             if not ispkg:
                 self._submodules.append(modname)
                 pname = package.__name__
-                log.debug(
+                log.very_verbose(
                     "Found %s submodule inside %s", modname, pname)
         return self._submodules
 

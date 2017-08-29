@@ -2,7 +2,8 @@
 
 import os
 
-__version__ = '0.5.2'
+__version__ = '0.5.4'
+# __version__ = '0.6.0'
 __authors__ = [
     "Paolo D'Onorio De Meo <p.donorio.demeo@gmail.com>",
     "Mattia D'Antonio",
@@ -18,7 +19,7 @@ SWAGGER_DIR = 'swagger'
 SWAGGER_MODELS_FILE = 'params_models'
 CONF_PATH = 'confs'
 
-# MAIN_PACKAGE = FRAMEWORK_NAME.lower()
+GITREPOS_TEAM = FRAMEWORK_NAME.lower()
 CONTAINERS_YAML_DIRNAME = CONF_PATH
 UTILS_PKGNAME = __package__.split('.')[::-1][0]
 

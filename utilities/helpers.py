@@ -5,6 +5,8 @@ import re
 from utilities import PROJECT_DIR
 from urllib.parse import urlparse
 
+pathjoin = os.path.join
+
 
 #######################
 # PATH UTILS
@@ -23,15 +25,23 @@ def parent_dir(path):
 #######################
 # WITH SUFFIXES
 def root_path(*suffixes):
-    return os.path.join(os.path.abspath(os.sep), *suffixes)
+    return pathjoin(os.path.abspath(os.sep), *suffixes)
 
 
 def script_abspath(file, *suffixes):
-    return os.path.join(os.path.dirname(os.path.realpath(file)), *suffixes)
+    return pathjoin(os.path.dirname(os.path.realpath(file)), *suffixes)
 
 
 def current_dir(*suffixes):
-    return os.path.join(os.curdir, *suffixes)
+    return pathjoin(os.curdir, *suffixes)
+
+
+def current_fullpath(*suffixes):
+    return pathjoin(os.getcwd(), *suffixes)
+
+
+def latest_dir(path):
+    return next(reversed(list(os.path.split(path))))
 
 
 def current_fullpath(*suffixes):

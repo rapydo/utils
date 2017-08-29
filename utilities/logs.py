@@ -290,6 +290,7 @@ def set_global_log_level(package=None, app_level=None):
 
     # A list of packages that make too much noise inside the logs
     external_packages = [
+        logging.getLogger('requests'),
         logging.getLogger('werkzeug'),
         logging.getLogger('plumbum'),
         logging.getLogger('neo4j'),

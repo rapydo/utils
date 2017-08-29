@@ -93,13 +93,14 @@ class BashCommands(object):
     # BASE COMMANDS
     def create_empty(self, path, directory=False, ignore_existing=False):
 
-        args = [path]
+        args = []
         if not directory:
             com = "touch"
         else:
             com = "mkdir"
             if ignore_existing:
                 args.append("-p")
+        args.append(path)
         # Debug
         self.execute_command(com, args)
         log.debug("Created %s", path)
@@ -130,7 +131,7 @@ class BashCommands(object):
 
     def replace_in_file(self, target, destination, file):
         params = [
-            "-i",
+            "-i", "--",
             "s/%s/%s/g" % (target, destination),
             file
         ]

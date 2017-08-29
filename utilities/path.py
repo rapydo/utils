@@ -2,15 +2,33 @@
 
 # TODO: refactor as a class please
 
+import os
+from contextlib import contextmanager
 from pathlib import Path
 from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
 
+@contextmanager
+def cd(newdir):
+    """
+    https://stackoverflow.com/a/24176022
+    """
+    prevdir = os.getcwd()
+    os.chdir(os.path.expanduser(newdir))
+    try:
+        yield
+    finally:
+        os.chdir(prevdir)
+
+
 def build(path):
     if not isinstance(path, list):
-        path = list(path)
+        if isinstance(path, str):
+            path = [path]
+        else:
+            path = list(path)
     p = Path(*path)
     return p
 
