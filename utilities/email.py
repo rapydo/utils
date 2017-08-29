@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+"""
+Sending e-mails in python
+
+more info:
+https://pymotw.com/3/smtplib/
+"""
+
 import smtplib
 from email.mime.text import MIMEText
 import os
