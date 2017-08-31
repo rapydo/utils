@@ -96,9 +96,12 @@ def call(uri,
             else:
                 name = os.path.basename(file)
                 arguments['files'] = {'file': (name, fh)}
-        headers['content-type']: 'application/octet-stream'
+
+        # sending a file
+        headers['content-type'] = 'application/octet-stream'
     else:
-        headers['content-type']: 'application/json'
+        # sending normal json/dictionaries data
+        headers['content-type'] = 'application/json'
 
     # call the api
     try:
