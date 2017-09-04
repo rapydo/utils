@@ -245,10 +245,28 @@ class Certificates(object):
                 log.critical("Cannot find a valid certificate file")
                 return False
 
-        # # DEBUG X509 variables
-        # for key, value in os.environ.items():
-        #     if key.startswith('X509'):
-        #         log.warning("%s:\t%s" % (key, value))
+        from utilities import basher
+        os_user = basher.current_os_user()
+
+        # Check up with X509 variables
+        for key, value in os.environ.items():
+
+            # skip non certificates variables
+            if not key.startswith('X509'):
+                continue
+
+            # check if current HTTP API user can read needed certificates
+            if key.lower().endswith('cert_dir'):
+                # here it has been proven to work even if not readable...
+                pass
+            else:
+                os_owner = basher.file_os_owner(value)
+                if os_user != os_owner:
+                    log.error(
+                        "%s variable (%s) owned by %s instead of %s",
+                        key, value, os_owner, os_user
+                    )
+                    raise AttributeError('Certificates ownership problem')
 
     @staticmethod
     def check_cert_validity(certfile, validity_interval=1):

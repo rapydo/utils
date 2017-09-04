@@ -11,6 +11,8 @@ TODO: also consider switching to this other one https://amoffat.github.io/sh/
 
 """
 
+import os
+import pwd
 from utilities.logs import get_logger
 log = get_logger(__name__)
 
@@ -18,6 +20,18 @@ try:
     from plumbum.commands.processes import ProcessExecutionError
 except ImportError as e:
     log.critical_exit("\nThis module requires an extra package:\n%s" % e)
+
+
+def file_os_owner(filepath):
+    owner = pwd.getpwuid(os.stat(filepath).st_uid).pw_name
+    log.very_verbose("File %s owner: %s", filepath, owner)
+    return owner
+
+
+def current_os_user():
+    os_user = pwd.getpwuid(os.getuid()).pw_name
+    log.very_verbose("Current OS user: %s", os_user)
+    return os_user
 
 
 class BashCommands(object):
