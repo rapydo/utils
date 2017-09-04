@@ -28,6 +28,10 @@ def file_os_owner(filepath):
     return owner
 
 
+def file_is_readable(filepath):
+    return os.path.isfile(filepath) and os.access(filepath, os.R_OK)
+
+
 def current_os_user():
     os_user = pwd.getpwuid(os.getuid()).pw_name
     log.very_verbose("Current OS user: %s", os_user)
