@@ -59,7 +59,7 @@ class BashCommands(object):
         try:
 
             if parameters is None:
-                parameters=[]
+                parameters = []
 
             # Pattern in plumbum library for executing a shell command
             command = self._shell[command]
@@ -70,8 +70,18 @@ class BashCommands(object):
             return command(parameters)
 
         except ProcessExecutionError as e:
+
             if customException is None:
-                raise(e)
+                log.pp(e)
+
+                error = str(e)
+                MAX_ERROR_LEN = 2048
+                error_len = len(error)
+                if error_len > MAX_ERROR_LEN:
+                    error = '\n...\n\n' + error[error_len - MAX_ERROR_LEN:]
+                log.exit('Catched:\n%s(%s)',
+                         e.__class__.__name__, error, error_code=e.retcode)
+
             else:
                 # argv = e.argv
                 # retcode = e.retcode
@@ -85,7 +95,7 @@ class BashCommands(object):
             retcodes=()):  # pylint:disable=too-many-arguments
         try:
             if parameters is None:
-                parameters=[]
+                parameters = []
 
             # Pattern in plumbum library for executing a shell command
             # e.g. ICOM["list"][irods_dir].run(retcode = (0,4))
