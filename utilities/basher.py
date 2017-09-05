@@ -55,7 +55,7 @@ class BashCommands(object):
 
     def execute_command(
             self, command, parameters=None, env=None,
-            customException=None):
+            customException=None, catchException=False):
         try:
 
             if parameters is None:
@@ -72,15 +72,18 @@ class BashCommands(object):
         except ProcessExecutionError as e:
 
             if customException is None:
-                log.pp(e)
 
-                error = str(e)
-                MAX_ERROR_LEN = 2048
-                error_len = len(error)
-                if error_len > MAX_ERROR_LEN:
-                    error = '\n...\n\n' + error[error_len - MAX_ERROR_LEN:]
-                log.exit('Catched:\n%s(%s)',
-                         e.__class__.__name__, error, error_code=e.retcode)
+                if catchException:
+                    error = str(e)
+                    MAX_ERROR_LEN = 2048
+                    error_len = len(error)
+                    if error_len > MAX_ERROR_LEN:
+                        error = '\n...\n\n' + error[error_len - MAX_ERROR_LEN:]
+                    log.exit('Catched:\n%s(%s)',
+                             e.__class__.__name__, error, error_code=e.retcode)
+                else:
+                    # log.pp(e)
+                    raise e
 
             else:
                 # argv = e.argv
