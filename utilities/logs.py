@@ -34,8 +34,11 @@ LOG_INI_TESTS_FILE = os.path.join(
     helpers.script_abspath(__file__), 'logging_tests.ini')
 
 
-def critical_exit(self, message=None, error_code=1, *args, **kws):
+def critical_exit(self, message=None, *args, **kws):
 
+    error_code = kws.pop('error_code', 1)
+    if not isinstance(error_code, int):
+        raise ValueError("Error code must be an integer")
     if error_code < 1:
         raise ValueError("Cannot exit with value below 1")
 
