@@ -6,7 +6,6 @@ to create a client based on Python against our HTTP API
 """
 
 import os
-import sys
 from utilities.logs import get_logger, logging, set_global_log_level
 
 LOGIN_ENDPOINT = '/auth/b2safeproxy'
@@ -21,6 +20,15 @@ def setup_logger(name, level_name):
     log_level = getattr(logging, level_name.upper())
     set_global_log_level(package=__package__, app_level=log_level)
     return get_logger(name)
+
+
+def check_cli_arg(argument='help', reverse=False, exit=False, code=0):
+    import sys
+    check = '--' + argument in sys.argv
+    if reverse:
+        check = not check
+    if check and exit:
+        sys.exit(code)
 
 
 def parse_api_output(req):
@@ -150,6 +158,9 @@ def parse_irods_listing(response, directory):
     to_print = ''
     home_content = []
     for element in response:
+        if len(element) < 1:
+            continue
+        # log.pp(element)
         name, obj = element.popitem()
         home_content.append(name)
         metadata = obj.get('metadata', {})
