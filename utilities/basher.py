@@ -28,8 +28,10 @@ def file_os_owner(filepath):
     return owner
 
 
-def file_is_readable(filepath):
-    return os.path.isfile(filepath) and os.access(filepath, os.R_OK)
+def path_is_readable(filepath):
+    return \
+        (os.path.isfile(filepath) or os.path.isdir(filepath)) \
+        and os.access(filepath, os.R_OK)
 
 
 def current_os_user():

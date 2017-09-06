@@ -263,7 +263,7 @@ class Certificates(object):
             # check if current HTTP API user can read needed certificates
             if key.lower().endswith('cert_dir'):
                 # here it has been proven to work even if not readable...
-                if not basher.file_is_readable(filepath):
+                if not basher.path_is_readable(filepath):
                     failed = True
                     log.error("%s variable (%s) not readable by %s",
                               key, filepath, os_user)
