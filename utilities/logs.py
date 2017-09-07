@@ -176,7 +176,7 @@ logging.Logger.checked_simple = checked_simple
 # read from os DEBUG_LEVEL (level of verbosity)
 # configurated on a container level
 USER_DEBUG_LEVEL = os.environ.get('DEBUG_LEVEL', 'VERY_VERBOSE')
-VERBOSITY_REQUESTED = getattr(logging, USER_DEBUG_LEVEL)
+VERBOSITY_REQUESTED = getattr(logging, USER_DEBUG_LEVEL.upper())
 
 
 ################
