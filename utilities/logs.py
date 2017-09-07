@@ -2,9 +2,11 @@
 
 import os
 import re
+import sys
 import json
 import logging
 import traceback
+from contextlib import contextmanager
 from logging.config import fileConfig
 
 try:
@@ -34,6 +36,23 @@ LOG_INI_TESTS_FILE = os.path.join(
     helpers.script_abspath(__file__), 'logging_tests.ini')
 
 
+#######################
+@contextmanager
+def suppress_stdout():
+    """
+    http://thesmithfam.org/blog/2012/10/25/
+    temporarily-suppress-console-output-in-python/
+    """
+    with open(os.devnull, "w") as devnull:
+        old_stdout = sys.stdout
+        sys.stdout = devnull
+        try:
+            yield
+        finally:
+            sys.stdout = old_stdout
+
+
+#######################
 def critical_exit(self, message=None, *args, **kws):
 
     error_code = kws.pop('error_code', 1)
