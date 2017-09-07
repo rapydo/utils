@@ -29,6 +29,7 @@ def check_cli_arg(argument='help', reverse=False, exit=False, code=0):
         check = not check
     if check and exit:
         sys.exit(code)
+    return check
 
 
 def parse_api_output(req):
@@ -169,4 +170,5 @@ def parse_irods_listing(response, directory):
 
     if len(home_content) > 0:
         log.info("Directory %s current content: %s\n", directory, to_print)
+
     return home_content
