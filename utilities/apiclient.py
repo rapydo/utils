@@ -63,7 +63,8 @@ def parse_api_output(req):
 
 
 def call(uri,
-         endpoint=None, method='get', payload=None, token=None, file=None):
+         endpoint=None, method='get', payload=None,
+         token=None, file=None, timeout=10):
     """
     Helper function based on 'requests' to easily call our HTTP API in Python
     """
@@ -87,7 +88,7 @@ def call(uri,
     arguments = {
         'url': uri + endpoint,
         'headers': headers,
-        'timeout': 10,
+        'timeout': timeout,
     }
 
     if method in ['get']:
