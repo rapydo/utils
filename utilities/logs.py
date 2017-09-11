@@ -2,9 +2,11 @@
 
 import os
 import re
+import sys
 import json
 import logging
 import traceback
+from contextlib import contextmanager
 from logging.config import fileConfig
 
 try:
@@ -34,8 +36,28 @@ LOG_INI_TESTS_FILE = os.path.join(
     helpers.script_abspath(__file__), 'logging_tests.ini')
 
 
-def critical_exit(self, message=None, error_code=1, *args, **kws):
+#######################
+@contextmanager
+def suppress_stdout():
+    """
+    http://thesmithfam.org/blog/2012/10/25/
+    temporarily-suppress-console-output-in-python/
+    """
+    with open(os.devnull, "w") as devnull:
+        old_stdout = sys.stdout
+        sys.stdout = devnull
+        try:
+            yield
+        finally:
+            sys.stdout = old_stdout
 
+
+#######################
+def critical_exit(self, message=None, *args, **kws):
+
+    error_code = kws.pop('error_code', 1)
+    if not isinstance(error_code, int):
+        raise ValueError("Error code must be an integer")
     if error_code < 1:
         raise ValueError("Cannot exit with value below 1")
 
@@ -99,7 +121,7 @@ def pretty_print(self, myobject, prefix_line=None):
         print("PRETTY PRINT [%s]" % prefix_line)
     from beeprint import pp
     pp(myobject)
-    return
+    return self
 
 
 def checked(self, message, *args, **kws):
@@ -173,7 +195,7 @@ logging.Logger.checked_simple = checked_simple
 # read from os DEBUG_LEVEL (level of verbosity)
 # configurated on a container level
 USER_DEBUG_LEVEL = os.environ.get('DEBUG_LEVEL', 'VERY_VERBOSE')
-VERBOSITY_REQUESTED = getattr(logging, USER_DEBUG_LEVEL)
+VERBOSITY_REQUESTED = getattr(logging, USER_DEBUG_LEVEL.upper())
 
 
 ################

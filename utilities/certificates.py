@@ -21,7 +21,7 @@ try:
     from plumbum import local
     import dateutil.parser
 except ImportError as e:
-    log.critical_exit("\nThis module requires an extra package:\n%s" % e)
+    log.critical_exit("\nThis module requires an extra package:\n%s", e)
 
 
 class Certificates(object):
@@ -163,7 +163,7 @@ class Certificates(object):
         else:
             os.environ['X509_CERT_DIR'] = xcdir
 
-    def set_globus_proxy_cert(self, key, cert, proxy=None):
+    def set_globus_proxy_cert(self, key, cert):  # , proxy=None):
 
         os.environ['X509_USER_KEY'] = key
         os.environ['X509_USER_CERT'] = cert
@@ -184,7 +184,7 @@ class Certificates(object):
         ################
         # 1. b2access
         if proxy_file is not None:
-            log.debug("Certificate path: %s" % proxy_file)
+            log.debug("Certificate path: %s", proxy_file)
             self.set_globus_proxy_cert(key=proxy_file, cert=proxy_file)
 
         ################
@@ -207,13 +207,13 @@ class Certificates(object):
                     self.check_cert_validity(proxy_cert_file)
                 if not valid:
                     log.warning(
-                        "Invalid proxy certificate for %s." % user_proxy +
-                        " Validity: %s - %s" % (not_before, not_after)
+                        "Invalid proxy certificate for %s." +
+                        " Validity: %s - %s", user_proxy, not_before, not_after
                     )
 
             # Proxy file does not exist or expired
             if not valid:
-                log.warning("Creating a new proxy for %s" % user_proxy)
+                log.warning("Creating a new proxy for %s", user_proxy)
                 try:
 
                     irods_env = os.environ
@@ -229,12 +229,12 @@ class Certificates(object):
                     )
 
                     if valid:
-                        log.info("Proxy refreshed for %s" % user_proxy)
+                        log.info("Proxy refreshed for %s", user_proxy)
                     else:
-                        log.error("Got invalid proxy: user %s" % user_proxy)
+                        log.error("Got invalid proxy: user %s", user_proxy)
 
                 except Exception as e:
-                    log.critical("Cannot refresh proxy: user %s" % user_proxy)
+                    log.critical("Cannot refresh proxy: user %s", user_proxy)
                     log.critical(e)
 
             ##################
@@ -245,10 +245,37 @@ class Certificates(object):
                 log.critical("Cannot find a valid certificate file")
                 return False
 
-        # # DEBUG X509 variables
-        # for key, value in os.environ.items():
-        #     if key.startswith('X509'):
-        #         log.warning("%s:\t%s" % (key, value))
+        self.check_x509_permissions()
+
+    def check_x509_permissions(self):
+
+        from utilities import basher
+        os_user = basher.current_os_user()
+        failed = False
+
+        # Check up with X509 variables
+        for key, filepath in os.environ.items():
+
+            # skip non certificates variables
+            if not key.startswith('X509'):
+                continue
+
+            # check if current HTTP API user can read needed certificates
+            if key.lower().endswith('cert_dir'):
+                # here it has been proven to work even if not readable...
+                if not basher.path_is_readable(filepath):
+                    failed = True
+                    log.error("%s variable (%s) not readable by %s",
+                              key, filepath, os_user)
+            else:
+                os_owner = basher.file_os_owner(filepath)
+                if os_user != os_owner:
+                    failed = True
+                    log.error("%s variable (%s) owned by %s instead of %s",
+                              key, filepath, os_owner, os_user)
+
+        if failed:
+            raise AttributeError('Certificates ownership problem')
 
     @staticmethod
     def check_cert_validity(certfile, validity_interval=1):

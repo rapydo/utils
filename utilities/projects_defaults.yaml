@@ -1,8 +1,7 @@
 
 variables:
   repos:
-    # FIXME: all branch should be the latest/fixed tag/release
-    # FIXME: do this directly with do, instead of here?
+    # TODO: maybe all branches should be the latest/fixed tag/release
     rapydo:
       branch: master
       online_url: https://github.com/rapydo/core.git
@@ -13,6 +12,11 @@ variables:
       online_url: https://github.com/rapydo/utils.git
       path: utilities
       if: true
+    develop:
+      branch: master
+      online_url: https://github.com/rapydo/develop.git
+      path: dev
+      if: $$rapydodeveloper
     backend:
       branch: master
       online_url: https://github.com/rapydo/http-api.git
@@ -30,7 +34,7 @@ variables:
       path: frontend
       if: $$frontend
   backend:
-    branch: master
+    # branch: master
     credentials:
       username: user@nomail.org
       password: test

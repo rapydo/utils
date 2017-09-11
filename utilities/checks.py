@@ -45,7 +45,7 @@ def import_package(package_name):
     from importlib import import_module
     try:
         package = import_module(package_name)
-    except import_exceptions:
+    except import_exceptions:  # pylint:disable=catching-non-exception
         return None
     else:
         return package

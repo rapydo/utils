@@ -65,16 +65,21 @@ def read(project, is_template=False):
         raise AttributeError("Missing project configuration")
     elif not is_template:
 
+        # Check if these three variables were changed from the initial template
         checks = {
             'title': 'My project',
             'description': 'Title of my project',
             'name': 'rapydo'
         }
-
         for key, value in checks.items():
             if prj.get(key, '') == value:
-                # FIXME: what's this args?
-                filepath = load_yaml_file(return_path=True, **args)
+
+                # get file name with the load file utility
+                args = {}
+                kwargs = project_configuration_files.pop()
+                filepath = load_yaml_file(
+                    *args, return_path=True, **kwargs)
+
                 log.critical_exit(
                     "\n\nYour project is not yet configured:\n" +
                     "Please edit key '%s' in file %s" % (key, filepath)

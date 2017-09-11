@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 
+"""
+Sending e-mails in python
+
+more info:
+https://pymotw.com/3/smtplib/
+"""
+
 import smtplib
 from email.mime.text import MIMEText
 import os
@@ -40,7 +47,7 @@ def send_mail(body, subject, to_address=None, from_address=None):
         msg['From'] = from_address
         msg['To'] = to_address
 
-        s = smtplib.SMTP(host)
+        s = smtplib.SMTP(smtp_host)
         s.send_message(msg)
         s.quit()
 
