@@ -74,6 +74,12 @@ variables:
       path: $$customconf
       mandatory: True
       if: True
+    logging:
+      file: logging
+      base: True
+      path: $$baseconf
+      mandatory: False
+      if: $$logging
 
   env:
     # COMPOSE_PROJECT_NAME: $PLACEHOLDER
