@@ -6,7 +6,8 @@ to create a client based on Python against our HTTP API
 """
 
 import os
-from utilities.logs import get_logger, logging, set_global_log_level
+from utilities.logs import \
+    get_logger, logging, set_global_log_level, DEFAULT_LOGLEVEL_NAME
 
 LOGIN_ENDPOINT = '/auth/b2safeproxy'
 BASIC_ENDPOINT = '/api/registered'
@@ -30,15 +31,16 @@ def check_cli_arg(arg='help', reverse=False, exit=False, code=0, get=False):
 
     if reverse:
         check = not check
-    elif check and get:
-        is_next = False
-        for current_arg in sys.argv:
-            if is_next:
-                return current_arg
-            elif real_arg == current_arg:
-                is_next = True
-            # print(current_arg)
-        return None
+    elif get:
+        if check:
+            is_next = False
+            for current_arg in sys.argv:
+                if is_next:
+                    return current_arg
+                elif real_arg == current_arg:
+                    is_next = True
+                # print(current_arg)
+        return DEFAULT_LOGLEVEL_NAME
 
     if check and exit:
         sys.exit(code)
