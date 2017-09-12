@@ -19,7 +19,7 @@ except NameError:
 DEFAULT_BIN_OPTION = '--version'
 
 
-def check_executable(executable, option=DEFAULT_BIN_OPTION):
+def executable(executable, option=DEFAULT_BIN_OPTION):
 
     from subprocess import check_output
     try:
@@ -45,13 +45,13 @@ def import_package(package_name):
     from importlib import import_module
     try:
         package = import_module(package_name)
-    except import_exceptions:
+    except import_exceptions:  # pylint:disable=catching-non-exception
         return None
     else:
         return package
 
 
-def check_package(package_name):
+def package(package_name):
     package = import_package(package_name)
     if package is not None:
         return package.__version__
@@ -59,7 +59,7 @@ def check_package(package_name):
         return None
 
 
-def check_internet(test_site='https://www.google.com'):
+def internet_connection_available(test_site='https://www.google.com'):
 
     import requests
     try:

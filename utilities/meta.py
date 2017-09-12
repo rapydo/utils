@@ -35,7 +35,7 @@ class Meta(object):
             if not ispkg:
                 self._submodules.append(modname)
                 pname = package.__name__
-                log.debug(
+                log.very_verbose(
                     "Found %s submodule inside %s", modname, pname)
         return self._submodules
 
@@ -93,7 +93,7 @@ class Meta(object):
         try:
             # Meta language for dinamically import
             module = import_module(modulestring)
-        except import_exceptions as e:
+        except import_exceptions as e:  # pylint:disable=catching-non-exception
             args = {
                 'msg': "Failed to load module:\n%s" % e,
                 'exc_info': True

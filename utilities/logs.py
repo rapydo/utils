@@ -2,9 +2,11 @@
 
 import os
 import re
+import sys
 import json
 import logging
 import traceback
+from contextlib import contextmanager
 from logging.config import fileConfig
 
 try:
@@ -23,6 +25,7 @@ PRINT_STACK = 59
 PRINT = 9
 VERBOSE = 5
 VERY_VERBOSE = 1
+DEFAULT_LOGLEVEL_NAME = 'info'
 
 MAX_CHAR_LEN = 200
 OBSCURE_VALUE = '****'
@@ -34,17 +37,37 @@ LOG_INI_TESTS_FILE = os.path.join(
     helpers.script_abspath(__file__), 'logging_tests.ini')
 
 
-def critical_exit(self, message=None, error_code=1, *args, **kws):
+#######################
+@contextmanager
+def suppress_stdout():
+    """
+    http://thesmithfam.org/blog/2012/10/25/
+    temporarily-suppress-console-output-in-python/
+    """
+    with open(os.devnull, "w") as devnull:
+        old_stdout = sys.stdout
+        sys.stdout = devnull
+        try:
+            yield
+        finally:
+            sys.stdout = old_stdout
 
+
+#######################
+def critical_exit(self, message=None, *args, **kws):
+
+    error_code = kws.pop('error_code', 1)
+    if not isinstance(error_code, int):
+        raise ValueError("Error code must be an integer")
     if error_code < 1:
         raise ValueError("Cannot exit with value below 1")
 
     if self.isEnabledFor(CRITICAL_EXIT):
         if message is not None:
             # Yes, logger takes its '*args' as 'args'.
-            self._log(
+            self._log(  # pylint:disable=protected-access
                 CRITICAL_EXIT, message, args, **kws
-            )  # pylint:disable=protected-access
+            )
 
     # TODO: check if raise is better
     import sys
@@ -99,7 +122,7 @@ def pretty_print(self, myobject, prefix_line=None):
         print("PRETTY PRINT [%s]" % prefix_line)
     from beeprint import pp
     pp(myobject)
-    return
+    return self
 
 
 def checked(self, message, *args, **kws):
@@ -173,7 +196,7 @@ logging.Logger.checked_simple = checked_simple
 # read from os DEBUG_LEVEL (level of verbosity)
 # configurated on a container level
 USER_DEBUG_LEVEL = os.environ.get('DEBUG_LEVEL', 'VERY_VERBOSE')
-VERBOSITY_REQUESTED = getattr(logging, USER_DEBUG_LEVEL)
+VERBOSITY_REQUESTED = getattr(logging, USER_DEBUG_LEVEL.upper())
 
 
 ################
@@ -288,8 +311,17 @@ def set_global_log_level(package=None, app_level=None):
     if app_level is None:
         app_level = please_logme.log_level
 
+    # List of rapydo packages to include into the current level of debugging
+    internal_packages = [
+        'utilities',
+        # 'develop',
+        'controller',
+        'restapi'
+    ]
+
     # A list of packages that make too much noise inside the logs
     external_packages = [
+        logging.getLogger('requests'),
         logging.getLogger('werkzeug'),
         logging.getLogger('plumbum'),
         logging.getLogger('neo4j'),
@@ -305,6 +337,7 @@ def set_global_log_level(package=None, app_level=None):
         handler.setLevel(app_level)
 
     logging.getLogger().setLevel(app_level)
+    package_base = package.split('.')[0]
 
     for key, value in logging.Logger.manager.loggerDict.items():
 
@@ -312,11 +345,22 @@ def set_global_log_level(package=None, app_level=None):
             # print("placeholder", key, value)
             continue
 
+        key_colors = key.split('0m')
+        if len(key_colors) > 1:
+            key = key_colors[1]
+        key_base = key.split('.')[0]
+
         if package is not None and package + '.' in key:
             # print("current", key, value.level)
             value.setLevel(app_level)
+        elif key_base == package_base:
+            # print("current package", key, key_base)
+            value.setLevel(app_level)
         elif __package__ + '.' in key or 'flask_ext' in key:
             # print("common", key)
+            value.setLevel(app_level)
+        elif key in internal_packages:
+            # print("internal", key, package)
             value.setLevel(app_level)
         else:
             value.setLevel(external_level)

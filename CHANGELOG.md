@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 0.5.4 
+
+`2017/09/05`
+
+- testing the EUDAT release candidate
+
 ## 0.5.0
 
 - removing `rapydo` prefix to all rapydo python packages in Pypi

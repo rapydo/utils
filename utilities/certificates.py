@@ -21,7 +21,7 @@ try:
     from plumbum import local
     import dateutil.parser
 except ImportError as e:
-    log.critical_exit("\nThis module requires an extra package:\n%s" % e)
+    log.critical_exit("\nThis module requires an extra package:\n%s", e)
 
 
 class Certificates(object):
@@ -50,20 +50,31 @@ class Certificates(object):
             return "%s/%s" % (cls._dir, user)
         return "%s/%s/%s" % (cls._dir, user, cls._proxyfile)
 
-    def save_proxy_cert(self, tmpproxy, user='guest'):
-
-        directory = self.get_proxy_filename(user, dirname=True)
-        if not os.path.exists(directory):
-            os.mkdir(directory)
-
-        dst = self.get_proxy_filename(user)
+    @staticmethod
+    def proxy_write(tmpproxy, destination_path):
 
         from shutil import copyfile
-        copyfile(tmpproxy, dst)
+        # NOTE: trhows error if files do not exist
+        copyfile(tmpproxy, destination_path)
+        # NOTE: use the octave from the UNIX 'mode'
+        os.chmod(destination_path, 0o600)
 
-        os.chmod(dst, 0o600)  # note: you need the octave of the unix mode
+    def save_proxy_cert(self, tmpproxy, unityid='guest', user=None):
 
-        return dst
+        destination_path = self.get_proxy_filename(unityid)
+
+        from utilities.helpers import parent_dir
+        destination_dir = parent_dir(destination_path)
+        if not os.path.exists(destination_dir):
+            os.mkdir(destination_dir)
+
+        # write the irods username inside as #/.username
+        if user is not None:
+            with open(os.path.join(destination_dir, '.username'), 'w') as f:
+                f.write(user)
+
+        self.proxy_write(tmpproxy, destination_path)
+        return destination_path
 
     def encode_csr(self, req):
         enc = crypto.dump_certificate_request(crypto.FILETYPE_PEM, req)
@@ -145,13 +156,134 @@ class Certificates(object):
 
         return proxyfile
 
-    @classmethod
-    def check_cert_validity(cls, certfile, validity_interval=1):
+    def set_globus_ca_dir(self, xcdir):
+        # CA CERTIFICATES DIR
+        if xcdir is None:
+            os.environ['X509_CERT_DIR'] = os.path.join(self._dir, 'simple_ca')
+        else:
+            os.environ['X509_CERT_DIR'] = xcdir
+
+    def set_globus_proxy_cert(self, key, cert):  # , proxy=None):
+
+        os.environ['X509_USER_KEY'] = key
+        os.environ['X509_USER_CERT'] = cert
+
+        # NOTE: for proxy we use above as temporary fix
+        # check in the future why the right variable doesn't work anymore
+        # os.environ['X509_USER_PROXY'] = proxy
+
+    def globus_proxy(self,
+                     proxy_file=None, user_proxy=None,
+                     cert_dir=None, myproxy_host=None,
+                     cert_name=None, cert_pwd=None):
+
+        # Compute paths for certificates
+        self.set_globus_ca_dir(cert_dir)
+        cpath = os.path.join(self._dir, user_proxy)
+
+        ################
+        # 1. b2access
+        if proxy_file is not None:
+            log.debug("Certificate path: %s", proxy_file)
+            self.set_globus_proxy_cert(key=proxy_file, cert=proxy_file)
+
+        ################
+        # 2. normal certificates (e.g. 'guest')
+        elif os.path.isdir(cpath):
+            self.set_globus_proxy_cert(
+                key=os.path.join(cpath, 'userkey.pem'),
+                cert=os.path.join(cpath, 'usercert.pem'))
+
+        ################
+        # 3. mattia's certificates?
+        elif myproxy_host is not None:
+
+            proxy_cert_file = cpath + '.pem'
+            if not os.path.isfile(proxy_cert_file):
+                # Proxy file does not exist
+                valid = False
+            else:
+                valid, not_before, not_after = \
+                    self.check_cert_validity(proxy_cert_file)
+                if not valid:
+                    log.warning(
+                        "Invalid proxy certificate for %s." +
+                        " Validity: %s - %s", user_proxy, not_before, not_after
+                    )
+
+            # Proxy file does not exist or expired
+            if not valid:
+                log.warning("Creating a new proxy for %s", user_proxy)
+                try:
+
+                    irods_env = os.environ
+
+                    valid = Certificates.get_myproxy_certificate(
+                        # FIXME: X509_CERT_DIR should be enough
+                        irods_env=irods_env,
+                        irods_user=user_proxy,
+                        myproxy_cert_name=cert_name,
+                        irods_cert_pwd=cert_pwd,
+                        proxy_cert_file=proxy_cert_file,
+                        myproxy_host=myproxy_host
+                    )
+
+                    if valid:
+                        log.info("Proxy refreshed for %s", user_proxy)
+                    else:
+                        log.error("Got invalid proxy: user %s", user_proxy)
+
+                except Exception as e:
+                    log.critical("Cannot refresh proxy: user %s", user_proxy)
+                    log.critical(e)
+
+            ##################
+            if valid:
+                self.set_globus_proxy_cert(
+                    key=proxy_cert_file, cert=proxy_cert_file)
+            else:
+                log.critical("Cannot find a valid certificate file")
+                return False
+
+        self.check_x509_permissions()
+
+    def check_x509_permissions(self):
+
+        from utilities import basher
+        os_user = basher.current_os_user()
+        failed = False
+
+        # Check up with X509 variables
+        for key, filepath in os.environ.items():
+
+            # skip non certificates variables
+            if not key.startswith('X509'):
+                continue
+
+            # check if current HTTP API user can read needed certificates
+            if key.lower().endswith('cert_dir'):
+                # here it has been proven to work even if not readable...
+                if not basher.path_is_readable(filepath):
+                    failed = True
+                    log.error("%s variable (%s) not readable by %s",
+                              key, filepath, os_user)
+            else:
+                os_owner = basher.file_os_owner(filepath)
+                if os_user != os_owner:
+                    failed = True
+                    log.error("%s variable (%s) owned by %s instead of %s",
+                              key, filepath, os_owner, os_user)
+
+        if failed:
+            raise AttributeError('Certificates ownership problem')
+
+    @staticmethod
+    def check_cert_validity(certfile, validity_interval=1):
         args = ["x509", "-in", certfile, "-text"]
 
         bash = BashCommands()
         # TODO: change the openssl bash command with the pyOpenSSL API
-        # if so we can remove 'plumbum' as a requirement of the rapydo-http
+        # if so we may remove 'plumbum' from requirements of rapydo-http repo
         output = bash.execute_command("openssl", args)
 
         pattern = re.compile(

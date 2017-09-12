@@ -11,6 +11,8 @@ TODO: also consider switching to this other one https://amoffat.github.io/sh/
 
 """
 
+import os
+import pwd
 from utilities.logs import get_logger
 log = get_logger(__name__)
 
@@ -18,6 +20,24 @@ try:
     from plumbum.commands.processes import ProcessExecutionError
 except ImportError as e:
     log.critical_exit("\nThis module requires an extra package:\n%s" % e)
+
+
+def file_os_owner(filepath):
+    owner = pwd.getpwuid(os.stat(filepath).st_uid).pw_name
+    log.very_verbose("File %s owner: %s", filepath, owner)
+    return owner
+
+
+def path_is_readable(filepath):
+    return \
+        (os.path.isfile(filepath) or os.path.isdir(filepath)) \
+        and os.access(filepath, os.R_OK)
+
+
+def current_os_user():
+    os_user = pwd.getpwuid(os.getuid()).pw_name
+    log.very_verbose("Current OS user: %s", os_user)
+    return os_user
 
 
 class BashCommands(object):
@@ -37,11 +57,11 @@ class BashCommands(object):
 
     def execute_command(
             self, command, parameters=None, env=None,
-            customException=None):
+            customException=None, catchException=False):
         try:
 
             if parameters is None:
-                parameters=[]
+                parameters = []
 
             # Pattern in plumbum library for executing a shell command
             command = self._shell[command]
@@ -52,8 +72,21 @@ class BashCommands(object):
             return command(parameters)
 
         except ProcessExecutionError as e:
+
             if customException is None:
-                raise(e)
+
+                if catchException:
+                    error = str(e)
+                    MAX_ERROR_LEN = 2048
+                    error_len = len(error)
+                    if error_len > MAX_ERROR_LEN:
+                        error = '\n...\n\n' + error[error_len - MAX_ERROR_LEN:]
+                    log.exit('Catched:\n%s(%s)',
+                             e.__class__.__name__, error, error_code=e.retcode)
+                else:
+                    # log.pp(e)
+                    raise e
+
             else:
                 # argv = e.argv
                 # retcode = e.retcode
@@ -67,7 +100,7 @@ class BashCommands(object):
             retcodes=()):  # pylint:disable=too-many-arguments
         try:
             if parameters is None:
-                parameters=[]
+                parameters = []
 
             # Pattern in plumbum library for executing a shell command
             # e.g. ICOM["list"][irods_dir].run(retcode = (0,4))
@@ -93,13 +126,14 @@ class BashCommands(object):
     # BASE COMMANDS
     def create_empty(self, path, directory=False, ignore_existing=False):
 
-        args = [path]
+        args = []
         if not directory:
             com = "touch"
         else:
             com = "mkdir"
             if ignore_existing:
                 args.append("-p")
+        args.append(path)
         # Debug
         self.execute_command(com, args)
         log.debug("Created %s", path)
@@ -130,7 +164,7 @@ class BashCommands(object):
 
     def replace_in_file(self, target, destination, file):
         params = [
-            "-i",
+            "-i", "--",
             "s/%s/%s/g" % (target, destination),
             file
         ]
