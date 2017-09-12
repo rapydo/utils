@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# TODO: refactor as a class please
-
 import os
 from contextlib import contextmanager
 from pathlib import Path

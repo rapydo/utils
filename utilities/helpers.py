@@ -68,6 +68,14 @@ def random_element(mylist):
     return mylist.pop(index)
 
 
+def current_fullpath(*suffixes):
+    return os.path.join(os.getcwd(), *suffixes)
+
+
+def latest_dir(path):
+    return next(reversed(list(os.path.split(path))))
+
+
 #######################
 # OTHERS
 def module_from_package(package):
@@ -116,5 +124,3 @@ def ask_yes_or_no(question, error='Unknown'):
                 print('USER INTERRUPT:\t' + error)
                 import sys
                 sys.exit(1)
-
-
