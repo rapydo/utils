@@ -5,7 +5,7 @@ from jinja2 import FileSystemLoader, Environment
 """
 Simplify the usage of jinja2 templating.
 
-src: https://www.pydanny.com/jinja2-quick-load-function.html
+https://www.pydanny.com/jinja2-quick-load-function.html
 """
 
 
