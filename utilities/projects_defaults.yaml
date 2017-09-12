@@ -66,6 +66,12 @@ variables:
       path: $$baseconf
       mandatory: False
       if: $$frontend
+    logging:
+      file: logging
+      base: True
+      path: $$baseconf
+      mandatory: False
+      if: $$logging
     commons:
       file: commons
       base: False
@@ -78,12 +84,6 @@ variables:
       path: $$customconf
       mandatory: True
       if: True
-    logging:
-      file: logging
-      base: True
-      path: $$baseconf
-      mandatory: False
-      if: $$logging
 
   env:
     # COMPOSE_PROJECT_NAME: $PLACEHOLDER
