@@ -314,7 +314,7 @@ def set_global_log_level(package=None, app_level=None):
     # List of rapydo packages to include into the current level of debugging
     internal_packages = [
         'utilities',
-        'develop',
+        # 'develop',
         'controller',
         'restapi'
     ]
@@ -337,6 +337,7 @@ def set_global_log_level(package=None, app_level=None):
         handler.setLevel(app_level)
 
     logging.getLogger().setLevel(app_level)
+    package_base = package.split('.')[0]
 
     for key, value in logging.Logger.manager.loggerDict.items():
 
@@ -344,13 +345,22 @@ def set_global_log_level(package=None, app_level=None):
             # print("placeholder", key, value)
             continue
 
+        key_colors = key.split('0m')
+        if len(key_colors) > 1:
+            key = key_colors[1]
+        key_base = key.split('.')[0]
+
         if package is not None and package + '.' in key:
             # print("current", key, value.level)
+            value.setLevel(app_level)
+        elif key_base == package_base:
+            # print("current package", key, key_base)
             value.setLevel(app_level)
         elif __package__ + '.' in key or 'flask_ext' in key:
             # print("common", key)
             value.setLevel(app_level)
-        elif package.split('.')[0] in internal_packages:
+        elif key in internal_packages:
+            # print("internal", key, package)
             value.setLevel(app_level)
         else:
             value.setLevel(external_level)
