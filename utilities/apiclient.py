@@ -5,7 +5,6 @@ Helpers functions
 to create a client based on Python against our HTTP API
 """
 
-from utilities.logs import get_logger, logging, set_global_log_level
 from utilities.logs import \
     get_logger, logging, set_global_log_level, DEFAULT_LOGLEVEL_NAME
 
