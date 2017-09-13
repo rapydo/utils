@@ -5,8 +5,9 @@ Helpers functions
 to create a client based on Python against our HTTP API
 """
 
-import os
 from utilities.logs import get_logger, logging, set_global_log_level
+from utilities.logs import \
+    get_logger, logging, set_global_log_level, DEFAULT_LOGLEVEL_NAME
 
 LOGIN_ENDPOINT = '/auth/b2safeproxy'
 BASIC_ENDPOINT = '/api/registered'
@@ -18,15 +19,29 @@ log = get_logger(__name__)
 def setup_logger(name, level_name):
 
     log_level = getattr(logging, level_name.upper())
-    set_global_log_level(package=__package__, app_level=log_level)
+    set_global_log_level(package=name, app_level=log_level)
     return get_logger(name)
 
 
-def check_cli_arg(argument='help', reverse=False, exit=False, code=0):
+def check_cli_arg(arg='help', reverse=False, exit=False, code=0, get=False):
     import sys
-    check = '--' + argument in sys.argv
+    arg_prefix = '--'
+    real_arg = arg_prefix + arg
+    check = real_arg in sys.argv
+
     if reverse:
         check = not check
+    elif get:
+        if check:
+            is_next = False
+            for current_arg in sys.argv:
+                if is_next:
+                    return current_arg
+                elif real_arg == current_arg:
+                    is_next = True
+                # print(current_arg)
+        return DEFAULT_LOGLEVEL_NAME
+
     if check and exit:
         sys.exit(code)
     return check
