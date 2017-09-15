@@ -5,12 +5,12 @@ from utilities.globals import mem
 from utilities.logs import handle_log_output
 from utilities.logs import re_obscure_pattern
 
-# from utilities.logs import get_logger
-# log = get_logger(__name__)
+from utilities.logs import get_logger
+log = get_logger(__name__)
 
-from utilities import apiclient
-log = apiclient.setup_logger(name=__name__, level_name='very_verbose')
-log.warning("DEBUG TRAVIS", log)
+# from utilities import apiclient
+# log = apiclient.setup_logger(name=__name__, level_name='very_verbose')
+# # log.warning("DEBUG TRAVIS", log)
 
 
 def test(capfd):
@@ -46,7 +46,7 @@ def test(capfd):
     out, err = capfd.readouterr()
     out = out.split("\n")
     err = err.split("\n")
-    log.pp(err)
+    # log.pp(err)
 
     assert ("VERY_VERBOSE %s" % TESTING_MESSAGE) in err
     assert ("VERBOSE %s" % TESTING_MESSAGE) in err
