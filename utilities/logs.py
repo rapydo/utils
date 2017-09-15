@@ -297,6 +297,9 @@ class LogMe(object):
 
         if verbosity is not None:
             self.set_debug(True, verbosity)
+            logger.warning("TRAVIS: %s/%s", verbosity, self.log_level)
+        else:
+            logger.warning("TRAVIS not: %s/%s", verbosity, self.log_level)
 
         # print("LOGGER LEVEL", self.log_level, logging.INFO)
         logger.setLevel(self.log_level)
