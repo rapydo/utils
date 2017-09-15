@@ -24,6 +24,7 @@ def setup_logger(name, level_name):
 
     log_level = getattr(logging, level_name.upper())
     set_global_log_level(package=name, app_level=log_level)
+    log.critical("TRAVIS: %s, %s", name, log_level)
     return get_logger(name)
 
 

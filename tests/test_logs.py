@@ -10,7 +10,7 @@ from utilities.logs import re_obscure_pattern
 
 from utilities import apiclient
 log = apiclient.setup_logger(name=__name__, level_name='very_verbose')
-print("DEBUG TRAVIS", log)
+log.warning("DEBUG TRAVIS", log)
 
 
 def test(capfd):
