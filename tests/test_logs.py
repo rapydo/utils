@@ -48,6 +48,8 @@ def test(capfd):
     err = err.split("\n")
     # log.pp(err)
 
+    log.warning("PRINT TRAVIS LOGGER LEVEL: %s", log)
+
     # FIXME: travis doesn't use the right level here. why?
 
     # assert ("VERY_VERBOSE %s" % TESTING_MESSAGE) in err
