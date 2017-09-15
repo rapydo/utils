@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from utilities.time import timestamp_from_string
 from datetime import datetime

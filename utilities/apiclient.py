@@ -4,7 +4,6 @@
 Helpers functions
 to create a client based on Python against our HTTP API
 """
-
 import os
 from utilities.logs import \
     get_logger, logging, set_global_log_level, DEFAULT_LOGLEVEL_NAME
@@ -14,6 +13,11 @@ BASIC_ENDPOINT = '/api/registered'
 ADVANCEND_ENDPOINT = '/api/pids'
 
 log = get_logger(__name__)
+
+try:
+    import requests
+except ImportError as e:
+    log.exit("\nThis module requires an extra package:\n%s", e)
 
 
 def setup_logger(name, level_name):
@@ -79,7 +83,7 @@ def parse_api_output(req):
 
 def call(uri,
          endpoint=None, method='get', payload=None,
-         token=None, file=None, timeout=10):
+         token=None, file=None, timeout=10, exit_on_fail=True):
     """
     Helper function based on 'requests' to easily call our HTTP API in Python
     """
@@ -92,7 +96,6 @@ def call(uri,
         headers['Authorization'] = "Bearer %s" % token
 
     method = method.lower()
-    import requests
     requests_callable = getattr(requests, method)
 
     if method in ['post', 'patch']:
@@ -137,7 +140,10 @@ def call(uri,
             request = requests_callable(**arguments)
 
     except requests.exceptions.ConnectionError as e:
-        log.exit("Connection failed:\n%s", e)
+        if exit_on_fail:
+            log.exit("Connection failed:\n%s", e)
+        else:
+            return None
     else:
         log.very_verbose("URL: %s", request.url)
 

@@ -28,11 +28,14 @@ class Schedule(object):
     def add(self, function, parameters=None, interval_type="minutes"):
         if interval_type == 'minutes':
             return self._cron.every(self.interval).minutes.do(function)
-        else:
+        elif interval_type == 'seconds':
             return self._cron.every(self.interval).seconds.do(function)
+        else:
+            log.exit("Unhandled interval type: %s", interval_type)
 
     def list(self):
         log.info("Jobs:\n%s", self._cron.jobs)
+        return self._cron.jobs
 
     def run(self):
         import time
