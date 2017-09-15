@@ -19,7 +19,7 @@ log = get_logger(__name__)
 try:
     from plumbum.commands.processes import ProcessExecutionError
 except ImportError as e:
-    log.critical_exit("\nThis module requires an extra package:\n%s" % e)
+    log.exit("\nThis module requires an extra package:\n%s", e)
 
 
 def file_os_owner(filepath):
