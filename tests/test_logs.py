@@ -10,6 +10,7 @@ from utilities.logs import re_obscure_pattern
 
 from utilities import apiclient
 log = apiclient.setup_logger(name=__name__, level_name='very_verbose')
+print("DEBUG TRAVIS", log)
 
 
 def test(capfd):
@@ -45,6 +46,7 @@ def test(capfd):
     out, err = capfd.readouterr()
     out = out.split("\n")
     err = err.split("\n")
+    log.pp(err)
 
     assert ("VERY_VERBOSE %s" % TESTING_MESSAGE) in err
     assert ("VERBOSE %s" % TESTING_MESSAGE) in err
