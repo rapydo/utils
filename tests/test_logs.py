@@ -2,10 +2,14 @@
 
 import pytest
 from utilities.globals import mem
-from utilities.logs import get_logger
 from utilities.logs import handle_log_output
 from utilities.logs import re_obscure_pattern
-log = get_logger(__name__)
+
+# from utilities.logs import get_logger
+# log = get_logger(__name__)
+
+from utilities import apiclient
+log = apiclient.setup_logger(name=__name__, level_name='very_verbose')
 
 
 def test(capfd):
@@ -33,7 +37,6 @@ def test(capfd):
 
     try:
         log.critical_exit(TESTING_MESSAGE)
-        pass
     except SystemExit:
         pass
     else:
