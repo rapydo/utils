@@ -68,14 +68,6 @@ def random_element(mylist):
     return mylist.pop(index)
 
 
-def current_fullpath(*suffixes):
-    return os.path.join(os.getcwd(), *suffixes)
-
-
-def latest_dir(path):
-    return next(reversed(list(os.path.split(path))))
-
-
 #######################
 # OTHERS
 def module_from_package(package):
@@ -108,13 +100,25 @@ def get_api_url(request_object, production=False):
     return api_url
 
 
-def ask_yes_or_no(question, error='Unknown'):
+def ask_yes_or_no(question, error='Unknown', print_function=None):
+
+    if print_function is None:
+        print_function = print
 
     answer = 'unknown'
     possible_answers = ['yes', 'y', 'no', 'n']
 
     while True:
-        answer = input(question + ' (y/n)\n')
+        print_function(question)
+        try:
+            answer = input('(y/n) ')
+        except BaseException as e:
+            raise e
+        finally:
+            if answer == 'unknown' or answer.strip() == '':
+                print("\nInterrupted!!\n")
+                # log.warning("Interrupted by the user")
+
         if answer not in possible_answers:
             print("Please answer one of the following: %s" % possible_answers)
         else:
