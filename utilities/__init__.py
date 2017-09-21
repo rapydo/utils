@@ -15,7 +15,7 @@ PROJECT_CONF_FILENAME = 'project_configuration'
 PROJECT_DIR = 'projects'
 DEFAULT_TEMPLATE_PROJECT = 'template'
 SWAGGER_DIR = 'swagger'
-SWAGGER_MODELS_FILE = 'params_models'
+SWAGGER_MODELS_FILE = 'models'
 CONF_PATH = 'confs'
 
 GITREPOS_TEAM = FRAMEWORK_NAME.lower()
