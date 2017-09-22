@@ -27,6 +27,7 @@ setup(
         "better_exceptions",
         "PyYAML",
         "pytz",
+        "python-dateutil",
     ],
     classifiers=[
         'Programming Language :: Python',
