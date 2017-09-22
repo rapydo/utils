@@ -86,7 +86,9 @@ class BashCommands(object):
                     error_len = len(error)
 
                     # limit the output
+                    log.warning("ERROR LEN: %s/%s", error_len, error_max_len)
                     if error_max_len > 0 and error_len > error_max_len:
+                        log.warning("LIMIT")
                         error = '\n...\n\n' + error[error_len - error_max_len:]
 
                     log.exit('Catched:\n%s(%s)',
