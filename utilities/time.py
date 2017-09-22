@@ -34,7 +34,10 @@ def date_from_string(date, format="%d/%m/%Y"):
     except BaseException:
         return_date = dateutil.parser.parse(date)
 
-    return pytz.utc.localize(return_date)
+    if return_date.tzinfo is None:
+        return pytz.utc.localize(return_date)
+
+    return return_date
 
 
 def string_from_timestamp(timestamp):
