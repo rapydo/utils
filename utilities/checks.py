@@ -30,7 +30,7 @@ def executable(executable, option=DEFAULT_BIN_OPTION):
     else:
         if option == DEFAULT_BIN_OPTION:
             try:
-                # try splitting on coma and/or parenthesis
+                # try splitting on comma and/or parenthesis
                 # then last element on spaces
                 output = output \
                     .split('(')[0].split(',')[0] \

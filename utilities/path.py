@@ -22,11 +22,13 @@ def cd(newdir):
 
 
 def build(path):
+
     if not isinstance(path, list):
-        if isinstance(path, str):
+        if isinstance(path, str) or isinstance(path, Path):
             path = [path]
         else:
             path = list(path)
+
     p = Path(*path)
     return p
 

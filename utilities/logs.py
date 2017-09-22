@@ -165,6 +165,11 @@ def checked_simple(self, message, *args, **kws):
         )
 
 
+def clear_screen(self):
+    import sys
+    sys.stderr.write("\x1b[2J\x1b[H")
+
+
 logging.addLevelName(CRITICAL_EXIT, "EXIT")
 logging.Logger.critical_exit = critical_exit
 logging.Logger.exit = critical_exit
@@ -190,6 +195,7 @@ logging.VERY_VERBOSE = VERY_VERBOSE
 logging.Logger.pp = pretty_print
 logging.Logger.checked = checked
 logging.Logger.checked_simple = checked_simple
+logging.Logger.clear_screen = clear_screen
 
 
 #######################
@@ -297,6 +303,9 @@ class LogMe(object):
 
         if verbosity is not None:
             self.set_debug(True, verbosity)
+        #     logger.warning("TRAVIS: %s/%s", verbosity, self.log_level)
+        # else:
+        #     logger.warning("TRAVIS not: %s/%s", verbosity, self.log_level)
 
         # print("LOGGER LEVEL", self.log_level, logging.INFO)
         logger.setLevel(self.log_level)
@@ -327,7 +336,8 @@ def set_global_log_level(package=None, app_level=None):
         logging.getLogger('neo4j'),
         logging.getLogger('neomodel'),
         logging.getLogger('httpstream'),
-        logging.getLogger('amqp')
+        logging.getLogger('amqp'),
+        logging.getLogger('schedule')
     ]
 
     for logger in external_packages:

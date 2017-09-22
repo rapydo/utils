@@ -19,7 +19,9 @@ log = get_logger(__name__)
 try:
     from plumbum.commands.processes import ProcessExecutionError
 except ImportError as e:
-    log.critical_exit("\nThis module requires an extra package:\n%s" % e)
+    log.exit("\nThis module requires an extra package:\n%s", e)
+
+MAX_ERROR_LEN = 2048
 
 
 def file_os_owner(filepath):
@@ -57,7 +59,7 @@ class BashCommands(object):
 
     def execute_command(
             self, command, parameters=None, env=None,
-            customException=None, catchException=False):
+            customException=None, catchException=False, error_max_len=None):
         try:
 
             if parameters is None:
@@ -76,11 +78,19 @@ class BashCommands(object):
             if customException is None:
 
                 if catchException:
+
+                    if error_max_len is None:
+                        error_max_len = MAX_ERROR_LEN
+
                     error = str(e)
-                    MAX_ERROR_LEN = 2048
                     error_len = len(error)
-                    if error_len > MAX_ERROR_LEN:
-                        error = '\n...\n\n' + error[error_len - MAX_ERROR_LEN:]
+
+                    # limit the output
+                    log.warning("ERROR LEN: %s/%s", error_len, error_max_len)
+                    if error_max_len > 0 and error_len > error_max_len:
+                        log.warning("LIMIT")
+                        error = '\n...\n\n' + error[error_len - error_max_len:]
+
                     log.exit('Catched:\n%s(%s)',
                              e.__class__.__name__, error, error_code=e.retcode)
                 else:

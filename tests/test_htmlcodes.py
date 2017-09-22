@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from utilities.htmlcodes import (
     HTTP_CONTINUE,

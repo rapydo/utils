@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import pytest
 from utilities.helpers import (
@@ -9,7 +10,7 @@ from utilities.helpers import (
     current_dir,
     module_from_package,
     project_dir,
-    get_api_url,
+    # get_api_url,
 )
 
 

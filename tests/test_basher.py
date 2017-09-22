@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from utilities.basher import BashCommands
 
 import string

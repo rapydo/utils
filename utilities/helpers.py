@@ -46,7 +46,7 @@ def latest_dir(path):
 
 
 #######################
-# RANDOMd
+# RANDOM
 def random_name(lenght=10):
     import string
 
@@ -68,12 +68,27 @@ def random_element(mylist):
     return mylist.pop(index)
 
 
-def current_fullpath(*suffixes):
-    return os.path.join(os.getcwd(), *suffixes)
+#######################
+# RANDOMd
+def random_name(lenght=10):
+    import string
+
+    return ''.join(
+        random.choice(
+            # string.ascii_uppercase
+            string.ascii_lowercase + string.digits
+        ) for _ in range(lenght))
 
 
-def latest_dir(path):
-    return next(reversed(list(os.path.split(path))))
+def random_element(mylist):
+    """ Recover a random element from a list """
+    if not isinstance(mylist, list):
+        return None
+    if len(mylist) < 1:
+        return None
+    index = random.randint(0, len(mylist) - 1)
+    # log.debug("Random index: %s", index)
+    return mylist.pop(index)
 
 
 #######################
@@ -108,13 +123,25 @@ def get_api_url(request_object, production=False):
     return api_url
 
 
-def ask_yes_or_no(question, error='Unknown'):
+def ask_yes_or_no(question, error='Unknown', print_function=None):
+
+    if print_function is None:
+        print_function = print
 
     answer = 'unknown'
     possible_answers = ['yes', 'y', 'no', 'n']
 
     while True:
-        answer = input(question + ' (y/n)\n')
+        print_function(question)
+        try:
+            answer = input('(y/n) ')
+        except BaseException as e:
+            raise e
+        finally:
+            if answer == 'unknown' or answer.strip() == '':
+                print("\nInterrupted!!\n")
+                # log.warning("Interrupted by the user")
+
         if answer not in possible_answers:
             print("Please answer one of the following: %s" % possible_answers)
         else:

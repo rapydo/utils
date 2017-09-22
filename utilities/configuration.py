@@ -100,6 +100,10 @@ def mix(base, custom):
 
         if isinstance(elements, dict):
             mix(base[key], custom[key])
+
+        elif isinstance(elements, list):
+            for e in elements:
+                base[key].append(e)
         else:
             # log.info("Replacing default %s in configuration" % key)
             base[key] = elements
