@@ -2,7 +2,7 @@
 variables:
   repos:
     # TODO: maybe all branches should be the latest/fixed tag/release
-    rapydo:
+    core:
       branch: master
       online_url: https://github.com/rapydo/core.git
       path: .
@@ -12,12 +12,7 @@ variables:
       online_url: https://github.com/rapydo/utils.git
       path: utilities
       if: true
-    develop:
-      branch: master
-      online_url: https://github.com/rapydo/develop.git
-      path: dev
-      if: $$rapydodeveloper
-    backend:
+    http-api:
       branch: master
       online_url: https://github.com/rapydo/http-api.git
       path: backend
@@ -33,6 +28,11 @@ variables:
       online_url: https://github.com/rapydo/angularjs-on-flask.git
       path: frontend
       if: $$frontend
+    # develop:
+    #   branch: master
+    #   online_url: https://github.com/rapydo/develop.git
+    #   path: dev
+    #   if: $$rapydodeveloper
   backend:
     # branch: master
     credentials:
@@ -98,7 +98,7 @@ variables:
     GRAPHDB_BOLT_PORT: 7687
     IRODS_HOST: rodserver.dockerized.io
     IRODS_PORT: 1247
-    IRODS_DB: ICAT 
+    IRODS_DB: ICAT
     IRODS_AUTHSCHEME:   # to be auto-detected
     MONGO_HOST: mongo.dockerized.io
     MONGO_PORT: 27017
@@ -131,6 +131,7 @@ project:
   title: REST HTTP-API server with Python, Flask and Docker
   version: v0.1
   description: No description yet
+  # rapydo: master
 
 tags:
   specifications: JSON with SWAGGER standards for any REST client

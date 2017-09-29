@@ -15,8 +15,20 @@ def list_path(path):
     return os.listdir(path)
 
 
-def last_dir(path):
-    return os.path.basename(path)
+def last_dir(path, level=1):
+
+    suffix = ""
+    current_level = level
+    path = str(path)
+    while current_level > 0:
+        if suffix != "":
+            suffix = '/' + suffix
+        suffix = os.path.basename(path) + suffix
+        current_level -= 1
+        if current_level > 0:
+            path = os.path.dirname(path)
+
+    return suffix
 
 
 def parent_dir(path):
