@@ -65,10 +65,16 @@ def create(pathobj, directory=False, force=False):
         raise NotImplementedError("Yet to do!")
 
 
-def file_exists_and_nonzero(pathobj):
+def file_exists_and_nonzero(pathobj, accept_link=False):
+
     if pathobj.exists():
-        return not pathobj.stat().st_size == 0
+        iostats = pathobj.stat()
+        # log.pp(iostats)
+        return not iostats.st_size == 0
     else:
+        if accept_link:
+            if os.path.islink(pathobj):
+                return True
         return False
 
 

@@ -81,29 +81,6 @@ def random_element(mylist):
 
 
 #######################
-# RANDOMd
-def random_name(lenght=10):
-    import string
-
-    return ''.join(
-        random.choice(
-            # string.ascii_uppercase
-            string.ascii_lowercase + string.digits
-        ) for _ in range(lenght))
-
-
-def random_element(mylist):
-    """ Recover a random element from a list """
-    if not isinstance(mylist, list):
-        return None
-    if len(mylist) < 1:
-        return None
-    index = random.randint(0, len(mylist) - 1)
-    # log.debug("Random index: %s", index)
-    return mylist.pop(index)
-
-
-#######################
 # OTHERS
 def module_from_package(package):
     return package.split('.')[::-1][0]
