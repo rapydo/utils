@@ -3,38 +3,32 @@ variables:
   repos:
     # TODO: maybe all branches should be the latest/fixed tag/release
     core:
-      branch: master
       online_url: https://github.com/rapydo/core.git
+      if: true
       path: .
-      if: true
+      # branch: master
     utils:
-      branch: master
       online_url: https://github.com/rapydo/utils.git
-      path: utilities
       if: true
+      # path: utilities
+      # branch: master
     http-api:
-      branch: master
       online_url: https://github.com/rapydo/http-api.git
-      path: backend
       if: true
+      # branch: master
+      # path: backend
     build-templates:
-      branch: master
       online_url: https://github.com/rapydo/build-templates.git
-      path: builds_base
       if: true
+      # branch: master
+      # path: builds_base
     frontend:
-      branch: master
-      # online_url: https://github.com/rapydo/node-ui.git
       online_url: https://github.com/rapydo/angularjs-on-flask.git
-      path: frontend
+      # online_url: https://github.com/rapydo/node-ui.git
       if: $$frontend
-    # develop:
-    #   branch: master
-    #   online_url: https://github.com/rapydo/develop.git
-    #   path: dev
-    #   if: $$rapydodeveloper
+      # branch: master
+      # path: frontend
   backend:
-    # branch: master
     credentials:
       username: user@nomail.org
       password: test
