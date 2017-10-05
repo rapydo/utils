@@ -26,7 +26,7 @@ variables:
       online_url: https://github.com/rapydo/angularjs-on-flask.git
       # online_url: https://github.com/rapydo/node-ui.git
       if: $$frontend
-      # branch: master
+      branch: master
       # path: frontend
   backend:
     credentials:
