@@ -8,7 +8,7 @@ from utilities.logs import get_logger
 log = get_logger(__name__)
 
 
-def root_path():
+def root():
     return os.path.abspath(os.sep)
 
 
@@ -29,7 +29,7 @@ def build(path=None):
 
     # no path would just mean the FS root directory
     if path is None:
-        path = root_path()
+        path = root()
 
     if not isinstance(path, list):
         if isinstance(path, str) or isinstance(path, Path):
