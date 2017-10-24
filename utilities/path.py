@@ -2,10 +2,14 @@
 
 import os
 from contextlib import contextmanager
-from pathlib import Path
+from pathlib import Path, PurePath
 from utilities.logs import get_logger
 
 log = get_logger(__name__)
+
+
+def root():
+    return os.path.abspath(os.sep)
 
 
 @contextmanager
@@ -21,7 +25,11 @@ def cd(newdir):
         os.chdir(prevdir)
 
 
-def build(path):
+def build(path=None):
+
+    # no path would just mean the FS root directory
+    if path is None:
+        path = root()
 
     if not isinstance(path, list):
         if isinstance(path, str) or isinstance(path, Path):
@@ -33,18 +41,21 @@ def build(path):
     return p
 
 
-def join(*paths):
-    return build(paths)
+def join(*paths, return_str=False):
+    path = build(paths)
+    if return_str:
+        path = str(path)
+    return path
 
 
 def home(relative_path=None):
     if relative_path is None:
         return Path.home()
     else:
-        if relative_path.startswith('/'):
+        if relative_path.startswith(os.sep):
             log.exit(
                 "Requested abspath '%s' in relative context" % relative_path)
-        return build('~/' + relative_path).expanduser()
+        return build('~' + os.sep + relative_path).expanduser()
 
 
 def current():
@@ -65,10 +76,16 @@ def create(pathobj, directory=False, force=False):
         raise NotImplementedError("Yet to do!")
 
 
-def file_exists_and_nonzero(pathobj):
+def file_exists_and_nonzero(pathobj, accept_link=False):
+
     if pathobj.exists():
-        return not pathobj.stat().st_size == 0
+        iostats = pathobj.stat()
+        # log.pp(iostats)
+        return not iostats.st_size == 0
     else:
+        if accept_link:
+            if os.path.islink(pathobj):
+                return True
         return False
 
 
@@ -82,3 +99,7 @@ def existing(path_list, error_msg_base='Failed'):
         log.verbose('"%s" located' % filepath)
 
     return str(filepath)
+
+
+def parts(my_path):
+    return PurePath(my_path).parts

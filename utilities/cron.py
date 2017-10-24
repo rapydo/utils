@@ -38,7 +38,20 @@ class Schedule(object):
         return self._cron.jobs
 
     def run(self):
+
         import time
+
         while True:
-            self._cron.run_pending()
+
+            # FIXME: this is a draft catching exceptions,
+            # to be further tested and improved
+            try:
+                self._cron.run_pending()
+            except BaseException as e:
+                etype = e.__class__.__name__
+                if etype == 'KeyboardInterrupt':
+                    log.exit("Killed by user")
+                log.warning(
+                    "Failed to execute cron job\n%s(%s)", etype, e)
+
             time.sleep(1)

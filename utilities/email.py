@@ -7,38 +7,32 @@ more info:
 https://pymotw.com/3/smtplib/
 """
 
-import smtplib
+from smtplib import SMTP, SMTPException
 from email.mime.text import MIMEText
-import os
+import datetime
 
 from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
-# TODO: remove env var
 # TODO: configure HOST with gmail, search example online
 
 
-def send_mail(body, subject, to_address=None, from_address=None):
-
-    smtp_host = os.environ.get("SMTP_HOST")
-    admin_email_address = os.environ.get("SMTP_ADMIN")
+def send_mail(body, subject,
+              to_address, from_address,
+              smtp_host='localhost', smtp_port=587,
+              username=None, password=None):
 
     if smtp_host is None:
-        log.info("Skipping send email: smtp host not configured")
+        log.error("Skipping send email: smtp host not configured")
         return False
 
     if from_address is None:
-        if admin_email_address is None:
-            log.warning(
-                "Unable to send: " +
-                "both from address and default admin are missing")
-            return False
-        else:
-            from_address = admin_email_address
+        log.error("Skipping send email: from address not configured")
+        return False
 
     if to_address is None:
-        log.warning("Unable to send: destination is missing")
+        log.error("Skipping send email: destination address not configured")
         return False
 
     try:
@@ -46,14 +40,26 @@ def send_mail(body, subject, to_address=None, from_address=None):
         msg['Subject'] = subject
         msg['From'] = from_address
         msg['To'] = to_address
+        msg['Date'] = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
 
-        s = smtplib.SMTP(smtp_host)
-        s.send_message(msg)
-        s.quit()
+        smtp = SMTP()
+        smtp.set_debuglevel(0)
+        smtp.connect(smtp_host, smtp_port)
+        if username is not None and password is not None:
+            smtp.login(username, password)
 
-        log.debug("Mail sent to %s" % to_address)
-        return True
+        try:
+            smtp.sendmail(from_address, to_address, msg)
+            log.info("Successfully sent email to %s" % to_address)
+            smtp.quit()
+            return True
+        except SMTPException:
+            log.error("Enable to send email to %s" % to_address)
+            smtp.quit()
+            return False
 
     except BaseException as e:
         log.error(str(e))
         return False
+
+    return False
