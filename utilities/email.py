@@ -50,11 +50,11 @@ def send_mail(body, subject,
 
         try:
             smtp.sendmail(from_address, to_address, msg)
-            log.info("Successfully sent email to %s" % to_address)
+            log.info("Successfully sent email to %s", to_address)
             smtp.quit()
             return True
         except SMTPException:
-            log.error("Enable to send email to %s" % to_address)
+            log.error("Unable to send email to %s", to_address)
             smtp.quit()
             return False
 
