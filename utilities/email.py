@@ -44,11 +44,14 @@ def send_mail(body, subject,
 
         smtp = SMTP()
         smtp.set_debuglevel(0)
+        log.verbose("Connecting to %s:%s" % (smtp_host, smtp_port))
         smtp.connect(smtp_host, smtp_port)
         if username is not None and password is not None:
+            log.verbose("Authenticating SMTP")
             smtp.login(username, password)
 
         try:
+            log.verbose("Sending email to %s", to_address)
             smtp.sendmail(from_address, to_address, msg)
             log.info("Successfully sent email to %s", to_address)
             smtp.quit()
