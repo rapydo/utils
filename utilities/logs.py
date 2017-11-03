@@ -70,7 +70,6 @@ def critical_exit(self, message=None, *args, **kws):
             )
 
     # TODO: check if raise is better
-    import sys
     sys.exit(error_code)
 
 
@@ -166,7 +165,6 @@ def checked_simple(self, message, *args, **kws):
 
 
 def clear_screen(self):
-    import sys
     sys.stderr.write("\x1b[2J\x1b[H")
 
 

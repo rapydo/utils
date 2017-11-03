@@ -2,13 +2,9 @@
 
 from jinja2 import FileSystemLoader, Environment
 
-"""
-Simplify the usage of jinja2 templating.
 
-https://www.pydanny.com/jinja2-quick-load-function.html
-"""
-
-
+# Simplify the usage of jinja2 templating.
+# https://www.pydanny.com/jinja2-quick-load-function.html
 def render(template_name, directory, **kwargs):
 
     loader = FileSystemLoader(directory)
