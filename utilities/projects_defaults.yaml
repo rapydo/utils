@@ -66,6 +66,12 @@ variables:
       path: $$baseconf
       mandatory: False
       if: $$logging
+    devel:
+      file: devel
+      base: True
+      path: $$baseconf
+      mandatory: False
+      if: $$devel
     commons:
       file: commons
       base: False
