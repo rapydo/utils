@@ -10,6 +10,7 @@ https://pymotw.com/3/smtplib/
 from smtplib import SMTP, SMTPException
 from email.mime.text import MIMEText
 import datetime
+import pytz
 
 from utilities.logs import get_logger
 
@@ -36,11 +37,13 @@ def send_mail(body, subject,
         return False
 
     try:
+
+        date_fmt = "%a, %b %d, %Y at %I:%M %p %z"
         msg = MIMEText(body)
         msg['Subject'] = subject
         msg['From'] = from_address
         msg['To'] = to_address
-        msg['Date'] = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
+        msg['Date'] = datetime.datetime.now(pytz.utc).strftime(date_fmt)
 
         smtp = SMTP()
         smtp.set_debuglevel(0)
@@ -52,7 +55,7 @@ def send_mail(body, subject,
 
         try:
             log.verbose("Sending email to %s", to_address)
-            smtp.sendmail(from_address, to_address, msg)
+            smtp.sendmail(from_address, to_address, msg.as_string())
             log.info("Successfully sent email to %s", to_address)
             smtp.quit()
             return True
