@@ -90,6 +90,8 @@ variables:
     # PROJECT_DOMAIN: myserver.mydomain.dev  # deprecated
     API_MAIN_ENDPOINT: status
     PYTHON_MAIN_FILE: __main__
+    # Path to dist-packages in backend/celery containers
+    PYTHON_PATH: /usr/local/lib/python3.6/dist-packages 
     # DB_SUBNET: 172.1.0.0
     JWT_APP_SECRETS: /jwt_tokens
     ALCHEMY_HOST: psqldb.dockerized.io
