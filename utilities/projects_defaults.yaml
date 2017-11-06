@@ -9,12 +9,12 @@ variables:
       # branch: master
     utils:
       online_url: https://github.com/rapydo/utils.git
-      if: true
+      if: $$devel
       # path: utilities
       # branch: master
     http-api:
       online_url: https://github.com/rapydo/http-api.git
-      if: true
+      if: $$devel
       # branch: master
       # path: backend
     build-templates:
