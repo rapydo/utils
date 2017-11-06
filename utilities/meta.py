@@ -186,7 +186,7 @@ class Meta(object):
 
     def models_module(self, name, package):
         module_name = "%s.%s.%s" % (package, 'models', name)
-        return self.get_module_from_string(module_name)
+        return self.get_module_from_string(module_name, exit_on_fail=True)
 
     def obj_from_models(self, obj_name, module_name, package):
         module = self.models_module(module_name, package)
