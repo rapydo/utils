@@ -18,7 +18,7 @@ def cd(newdir):
     https://stackoverflow.com/a/24176022
     """
     prevdir = os.getcwd()
-    os.chdir(os.path.expanduser(newdir))
+    os.chdir(str(os.path.expanduser(newdir)))
     try:
         yield
     finally:
