@@ -21,28 +21,31 @@ SCRIPT_PATH = helpers.script_abspath(__file__)
 # )
 
 
-def read(project, is_template=False):
+def read(project=None, is_template=False):
     """
     Read default configuration
     """
 
-    project_configuration_files = \
-        [
-            # DEFAULT
-            {
-                'path': SCRIPT_PATH,
-                'skip_error': False,
-                'logger': False,
-                'file': DEFAULT_FILENAME
-            },
+    project_configuration_files = [
+        # DEFAULT
+        {
+            'path': SCRIPT_PATH,
+            'skip_error': False,
+            'logger': False,
+            'file': DEFAULT_FILENAME
+        }
+    ]
+
+    if project is not None:
+        project_configuration_files.append(
             # CUSTOM FROM THE USER
             {
                 'path': helpers.project_dir(project),
                 'skip_error': False,
                 'logger': False,
                 'file': PROJECT_CONF_FILENAME
-            },
-        ]
+            }
+        )
 
     confs = {}
 
@@ -57,6 +60,8 @@ def read(project, is_template=False):
 
     # Recover the two options
     base_configuration = confs.get(DEFAULT_FILENAME)
+    if project is None:
+        return base_configuration
     custom_configuration = confs.get(PROJECT_CONF_FILENAME, {})
 
     # Verify custom project configuration

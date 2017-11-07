@@ -6,28 +6,26 @@ variables:
       online_url: https://github.com/rapydo/core.git
       if: true
       path: .
-      # branch: master
     utils:
       online_url: https://github.com/rapydo/utils.git
       if: $$devel
-      # path: utilities
-      # branch: master
     http-api:
       online_url: https://github.com/rapydo/http-api.git
       if: $$devel
-      # branch: master
-      # path: backend
     build-templates:
       online_url: https://github.com/rapydo/build-templates.git
       if: true
-      # branch: master
-      # path: builds_base
     frontend:
       online_url: https://github.com/rapydo/angularjs-on-flask.git
       # online_url: https://github.com/rapydo/node-ui.git
       if: $$frontend
       branch: master
-      # path: frontend
+    do:
+      online_url: https://github.com/rapydo/do.git
+      if: false
+    develop:
+      online_url: https://github.com/rapydo/develop.git
+      if: false
   backend:
     credentials:
       username: user@nomail.org
@@ -91,7 +89,7 @@ variables:
     API_MAIN_ENDPOINT: status
     PYTHON_MAIN_FILE: __main__
     # Path to dist-packages in backend/celery containers
-    PYTHON_PATH: /usr/local/lib/python3.6/dist-packages 
+    PYTHON_PATH: /usr/local/lib/python3.6/dist-packages
     # DB_SUBNET: 172.1.0.0
     JWT_APP_SECRETS: /jwt_tokens
     ALCHEMY_HOST: psqldb.dockerized.io

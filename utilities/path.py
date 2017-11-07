@@ -89,14 +89,19 @@ def file_exists_and_nonzero(pathobj, accept_link=False):
         return False
 
 
-def existing(path_list, error_msg_base='Failed'):
+def existing(path_list, error_msg_base='Failed', exit=True):
 
     filepath = build(path_list)
 
     if not file_exists_and_nonzero(filepath):
-        log.exit(error_msg_base + ": file %s not found" % filepath)
+        if exit:
+            log.exit(error_msg_base + ": file %s not found" % filepath)
+        else:
+            return False
     else:
         log.verbose('"%s" located' % filepath)
+        if not exit:
+            return True
 
     return str(filepath)
 
