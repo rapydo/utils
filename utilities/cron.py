@@ -25,7 +25,7 @@ class Schedule(object):
         self._cron = schedule
         self.interval = interval
 
-    def add(self, function, parameters=None, interval_type="minutes"):
+    def add(self, function, interval_type="minutes"):
         if interval_type == 'minutes':
             return self._cron.every(self.interval).minutes.do(function)
         elif interval_type == 'seconds':

@@ -29,7 +29,7 @@ def setup_logger(name, level_name):
     return get_logger(name)
 
 
-def check_cli_arg(arg='help', reverse=False, exit=False, code=0, get=False):
+def check_cli_arg(arg='help', reverse=False, do_exit=False, code=0, get=False):
     import sys
     arg_prefix = '--'
     real_arg = arg_prefix + arg
@@ -48,7 +48,7 @@ def check_cli_arg(arg='help', reverse=False, exit=False, code=0, get=False):
                 # print(current_arg)
         return DEFAULT_LOGLEVEL_NAME
 
-    if check and exit:
+    if check and do_exit:
         sys.exit(code)
     return check
 

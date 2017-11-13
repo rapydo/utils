@@ -24,13 +24,13 @@ def timestamp_from_string(timestamp_string):
     return aware_utc_dt
 
 
-def date_from_string(date, format="%d/%m/%Y"):
+def date_from_string(date, fmt="%d/%m/%Y"):
 
     if date == "":
         return ""
     # datetime.now(pytz.utc)
     try:
-        return_date = datetime.strptime(date, format)
+        return_date = datetime.strptime(date, fmt)
     except BaseException:
         return_date = dateutil.parser.parse(date)
 
