@@ -5,7 +5,7 @@ from pip import main as pip_exec
 
 
 def install(package):
-    pip_exec(['install', package])
+    pip_exec(['install --upgrade', package])
 
 
 def list_all():
