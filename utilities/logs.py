@@ -164,7 +164,8 @@ def checked_simple(self, message, *args, **kws):
         )
 
 
-def clear_screen(self):
+@staticmethod
+def clear_screen():
     sys.stderr.write("\x1b[2J\x1b[H")
 
 
