@@ -2,7 +2,6 @@
 
 # import os
 from utilities import PROJECT_CONF_FILENAME, PROJECTS_DEFAULTS_FILE
-from utilities import helpers
 from utilities.myyaml import load_yaml_file
 from utilities.logs import get_logger
 
@@ -11,7 +10,7 @@ log = get_logger(__name__)
 # SCRIPT_PATH = helpers.script_abspath(__file__)
 
 
-def read(file_path, project=None, is_template=False):
+def read(base_path, project_path=None, is_template=False):
     """
     Read default configuration
     """
@@ -20,18 +19,18 @@ def read(file_path, project=None, is_template=False):
         # DEFAULT
         {
             # 'path': SCRIPT_PATH,
-            'path': file_path,
+            'path': base_path,
             'skip_error': False,
             'logger': False,
             'file': PROJECTS_DEFAULTS_FILE
         }
     ]
 
-    if project is not None:
+    if project_path is not None:
         project_configuration_files.append(
             # CUSTOM FROM THE USER
             {
-                'path': helpers.project_dir(project),
+                'path': project_path,
                 'skip_error': False,
                 'logger': False,
                 'file': PROJECT_CONF_FILENAME
@@ -51,7 +50,7 @@ def read(file_path, project=None, is_template=False):
 
     # Recover the two options
     base_configuration = confs.get(PROJECTS_DEFAULTS_FILE)
-    if project is None:
+    if project_path is None:
         return base_configuration
     custom_configuration = confs.get(PROJECT_CONF_FILENAME, {})
 
