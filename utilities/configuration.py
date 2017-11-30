@@ -1,27 +1,17 @@
 # -*- coding: utf-8 -*-
 
 # import os
-from utilities import \
-    PROJECT_CONF_FILENAME, DEFAULT_FILENAME  # , MAIN_PACKAGE, UTILS_PKGNAME
+from utilities import PROJECT_CONF_FILENAME, PROJECTS_DEFAULTS_FILE
 from utilities import helpers
-from utilities.myyaml import load_yaml_file  # , YAML_EXT
+from utilities.myyaml import load_yaml_file
 from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
-SCRIPT_PATH = helpers.script_abspath(__file__)
-
-# DEFAULT_CONFIG_FILEPATH = os.path.join(
-#     SCRIPT_PATH, '%s.%s' % (DEFAULT_FILENAME, YAML_EXT))
-
-# DEFAULT_CONFIG_FILEPATH = os.path.join(
-#     MAIN_PACKAGE,
-#     UTILS_PKGNAME,
-#     '%s.%s' % (DEFAULT_FILENAME, YAML_EXT)
-# )
+# SCRIPT_PATH = helpers.script_abspath(__file__)
 
 
-def read(project=None, is_template=False):
+def read(file_path, project=None, is_template=False):
     """
     Read default configuration
     """
@@ -29,10 +19,11 @@ def read(project=None, is_template=False):
     project_configuration_files = [
         # DEFAULT
         {
-            'path': SCRIPT_PATH,
+            # 'path': SCRIPT_PATH,
+            'path': file_path,
             'skip_error': False,
             'logger': False,
-            'file': DEFAULT_FILENAME
+            'file': PROJECTS_DEFAULTS_FILE
         }
     ]
 
@@ -59,7 +50,7 @@ def read(project=None, is_template=False):
             log.critical_exit(e)
 
     # Recover the two options
-    base_configuration = confs.get(DEFAULT_FILENAME)
+    base_configuration = confs.get(PROJECTS_DEFAULTS_FILE)
     if project is None:
         return base_configuration
     custom_configuration = confs.get(PROJECT_CONF_FILENAME, {})
