@@ -11,15 +11,15 @@ __authors__ = [
 ###############
 FRAMEWORK_NAME = 'RAPyDo'
 
-TOOLS = [
-    'utils',
-    'core',
-    'frontend',
-    'do',
-    'develop',
-    'build-templates',
-    'http-api',
-]
+# TOOLS = [
+#     'utils',
+#     'core',
+#     'frontend',
+#     'do',
+#     'develop',
+#     'build-templates',
+#     'http-api',
+# ]
 # ORDER: utils > core > do > develop > builds > http-api > frontend
 
 ###############
