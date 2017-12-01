@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from pip.utils import get_installed_distributions
-from pip import main as pip_exec
+from sultan.api import Sultan
+# from pip import main as pip_exec
 
 
 def install(package):
-    pip_exec(['install', '--upgrade', package])
+    with Sultan.load(sudo=True) as sultan:
+        sultan.pip3('install --upgrade %s' % package).run()
+    # pip_exec(['install', '--upgrade', package])
 
 
 def list_all():
