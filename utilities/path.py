@@ -18,7 +18,7 @@ def cd(newdir):
     https://stackoverflow.com/a/24176022
     """
     prevdir = os.getcwd()
-    os.chdir(os.path.expanduser(newdir))
+    os.chdir(os.path.expanduser(str(newdir)))
     try:
         yield
     finally:
@@ -89,14 +89,19 @@ def file_exists_and_nonzero(pathobj, accept_link=False):
         return False
 
 
-def existing(path_list, error_msg_base='Failed'):
+def existing(path_list, error_msg_base='Failed', do_exit=True):
 
     filepath = build(path_list)
 
     if not file_exists_and_nonzero(filepath):
-        log.exit(error_msg_base + ": file %s not found" % filepath)
+        if do_exit:
+            log.exit(error_msg_base + ": file %s not found" % filepath)
+        else:
+            return False
     else:
         log.verbose('"%s" located' % filepath)
+        if not do_exit:
+            return True
 
     return str(filepath)
 

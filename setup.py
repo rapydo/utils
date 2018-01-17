@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup
-from utilities import DEFAULT_FILENAME, \
+from utilities import \
     __version__ as current_version, \
     __package__ as main_package
 
@@ -17,8 +17,7 @@ setup(
     package_data={
         main_package: [
             'logging.ini',
-            'logging_tests.ini',
-            '%s.yaml' % DEFAULT_FILENAME
+            'logging_tests.ini'
         ]
     },
     python_requires='>=3.4',
@@ -28,6 +27,7 @@ setup(
         "PyYAML",
         "pytz",
         "python-dateutil",
+        "sultan"
     ],
     classifiers=[
         'Programming Language :: Python',

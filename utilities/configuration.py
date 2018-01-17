@@ -1,48 +1,41 @@
 # -*- coding: utf-8 -*-
 
 # import os
-from utilities import \
-    PROJECT_CONF_FILENAME, DEFAULT_FILENAME  # , MAIN_PACKAGE, UTILS_PKGNAME
-from utilities import helpers
-from utilities.myyaml import load_yaml_file  # , YAML_EXT
+from utilities import PROJECT_CONF_FILENAME, PROJECTS_DEFAULTS_FILE
+from utilities.myyaml import load_yaml_file
 from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
-SCRIPT_PATH = helpers.script_abspath(__file__)
-
-# DEFAULT_CONFIG_FILEPATH = os.path.join(
-#     SCRIPT_PATH, '%s.%s' % (DEFAULT_FILENAME, YAML_EXT))
-
-# DEFAULT_CONFIG_FILEPATH = os.path.join(
-#     MAIN_PACKAGE,
-#     UTILS_PKGNAME,
-#     '%s.%s' % (DEFAULT_FILENAME, YAML_EXT)
-# )
+# SCRIPT_PATH = helpers.script_abspath(__file__)
 
 
-def read(project, is_template=False):
+def read(base_path, project_path=None, is_template=False):
     """
     Read default configuration
     """
 
-    project_configuration_files = \
-        [
-            # DEFAULT
-            {
-                'path': SCRIPT_PATH,
-                'skip_error': False,
-                'logger': False,
-                'file': DEFAULT_FILENAME
-            },
+    project_configuration_files = [
+        # DEFAULT
+        {
+            # 'path': SCRIPT_PATH,
+            'path': base_path,
+            'skip_error': False,
+            'logger': False,
+            'file': PROJECTS_DEFAULTS_FILE
+        }
+    ]
+
+    if project_path is not None:
+        project_configuration_files.append(
             # CUSTOM FROM THE USER
             {
-                'path': helpers.project_dir(project),
+                'path': project_path,
                 'skip_error': False,
                 'logger': False,
                 'file': PROJECT_CONF_FILENAME
-            },
-        ]
+            }
+        )
 
     confs = {}
 
@@ -56,7 +49,9 @@ def read(project, is_template=False):
             log.critical_exit(e)
 
     # Recover the two options
-    base_configuration = confs.get(DEFAULT_FILENAME)
+    base_configuration = confs.get(PROJECTS_DEFAULTS_FILE)
+    if project_path is None:
+        return base_configuration
     custom_configuration = confs.get(PROJECT_CONF_FILENAME, {})
 
     # Verify custom project configuration

@@ -2,7 +2,7 @@
 
 import os
 
-__version__ = '0.5.7'
+__version__ = '0.6.0'
 __authors__ = [
     "Paolo D'Onorio De Meo <p.donorio.demeo@gmail.com>",
     "Mattia D'Antonio",
@@ -11,19 +11,19 @@ __authors__ = [
 ###############
 FRAMEWORK_NAME = 'RAPyDo'
 
-TOOLS = [
-    'utils',
-    'core',
-    'frontend',
-    'do',
-    'develop',
-    'build-templates',
-    'http-api',
-]
+# TOOLS = [
+#     'utils',
+#     'core',
+#     'frontend',
+#     'do',
+#     'develop',
+#     'build-templates',
+#     'http-api',
+# ]
 # ORDER: utils > core > do > develop > builds > http-api > frontend
 
 ###############
-DEFAULT_FILENAME = 'projects_defaults'
+PROJECTS_DEFAULTS_FILE = 'projects_defaults'
 PROJECT_CONF_FILENAME = 'project_configuration'
 PROJECT_DIR = 'projects'
 DEFAULT_TEMPLATE_PROJECT = 'template'
