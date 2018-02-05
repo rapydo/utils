@@ -26,13 +26,13 @@ MAX_ERROR_LEN = 2048
 
 def file_os_owner_raw(filepath):
     owner = os.stat(filepath).st_uid
-    log.very_verbose("File %s owner: %s", filepath, owner)
+    # log.very_verbose("File %s owner: %s", filepath, owner)
     return owner
 
 
 def file_os_owner(filepath):
     owner = pwd.getpwuid(os.stat(filepath).st_uid).pw_name
-    log.very_verbose("File %s owner: %s", filepath, owner)
+    # log.very_verbose("File %s owner: %s", filepath, owner)
     return owner
 
 
