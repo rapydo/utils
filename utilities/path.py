@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+"""
+TODO: apply the / magic of pathlib
+src: http://j.mp/2nwz908
+"""
+
 import os
 from contextlib import contextmanager
 from pathlib import Path, PurePath
