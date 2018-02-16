@@ -24,9 +24,15 @@ except ImportError as e:
 MAX_ERROR_LEN = 2048
 
 
+def file_os_owner_raw(filepath):
+    owner = os.stat(filepath).st_uid
+    # log.very_verbose("File %s owner: %s", filepath, owner)
+    return owner
+
+
 def file_os_owner(filepath):
     owner = pwd.getpwuid(os.stat(filepath).st_uid).pw_name
-    log.very_verbose("File %s owner: %s", filepath, owner)
+    # log.very_verbose("File %s owner: %s", filepath, owner)
     return owner
 
 
@@ -36,9 +42,15 @@ def path_is_readable(filepath):
         and os.access(filepath, os.R_OK)
 
 
+def path_is_writable(filepath):
+    return \
+        (os.path.isfile(filepath) or os.path.isdir(filepath)) \
+        and os.access(filepath, os.W_OK)
+
+
 def current_os_user():
     os_user = pwd.getpwuid(os.getuid()).pw_name
-    log.very_verbose("Current OS user: %s", os_user)
+    # log.very_verbose("Current OS user: %s", os_user)
     return os_user
 
 
