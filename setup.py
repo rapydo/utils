@@ -22,7 +22,7 @@ setup(
     },
     python_requires='>=3.4',
     install_requires=[
-        "beeprint",
+        "prettyprinter",  # "beeprint",
         "better_exceptions",
         "PyYAML",
         "pytz",
