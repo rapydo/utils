@@ -19,8 +19,6 @@ def test():
     assert len(jobs) == 1
 
     next_job = jobs.pop()
-    # from beeprint import pp
-    # pp(next_job.__dict__)
 
     # verify that this job is every minute
     assert next_job.interval == my_interval

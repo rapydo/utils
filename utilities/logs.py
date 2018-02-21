@@ -119,7 +119,8 @@ def pretty_print(self, myobject, prefix_line=None):
 
     if prefix_line is not None:
         print("PRETTY PRINT [%s]" % prefix_line)
-    from beeprint import pp
+    # from beeprint import pp
+    from prettyprinter import pprint as pp
     pp(myobject)
     return self
 

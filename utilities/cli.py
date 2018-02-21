@@ -43,9 +43,6 @@ class App(InvokeProgram):
 
     def core_args(self):
         core_args = super(App, self).core_args()
-        # for core in core_args:
-        #     from beeprint import pp
-        #     pp(core)
         return core_args + self.extra_args
 
     def print_help(self):

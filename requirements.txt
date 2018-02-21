@@ -1,5 +1,5 @@
 
-beeprint
+prettyprinter
 PyYAML
 pytz
 plumbum
