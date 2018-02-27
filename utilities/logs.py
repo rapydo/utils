@@ -119,7 +119,18 @@ def pretty_print(self, myobject, prefix_line=None):
 
     if prefix_line is not None:
         print("PRETTY PRINT [%s]" % prefix_line)
-    # from beeprint import pp
+    from beeprint import pp
+    pp(myobject)
+    return self
+
+
+def alternative_pretty_print(self, myobject, prefix_line=None):
+    """
+    Make object(s) and structure(s) clearer to debug
+    """
+
+    if prefix_line is not None:
+        print("PRETTY PRINT [%s]" % prefix_line)
     from prettyprinter import pprint as pp
     pp(myobject)
     return self
@@ -193,6 +204,7 @@ logging.Logger.very_verbose = very_verbose
 logging.VERY_VERBOSE = VERY_VERBOSE
 
 logging.Logger.pp = pretty_print
+logging.Logger.app = alternative_pretty_print
 logging.Logger.checked = checked
 logging.Logger.checked_simple = checked_simple
 logging.Logger.clear_screen = clear_screen
