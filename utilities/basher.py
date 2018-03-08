@@ -48,6 +48,10 @@ def path_is_writable(filepath):
         and os.access(filepath, os.W_OK)
 
 
+def current_os_uid():
+    return os.getuid()
+
+
 def current_os_user():
     os_user = pwd.getpwuid(os.getuid()).pw_name
     # log.very_verbose("Current OS user: %s", os_user)
