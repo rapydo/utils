@@ -11,6 +11,7 @@ from pathlib import Path, PurePath
 from utilities.logs import get_logger
 
 log = get_logger(__name__)
+COMPRESSION_FORMAT = 'zip'
 
 
 def root():
@@ -117,3 +118,14 @@ def parts(my_path):
 
 def last_part(my_path):
     return os.path.basename(my_path)
+
+
+def append_compress_extension(base_name):
+    return '%s.%s' % (base_name, COMPRESSION_FORMAT)
+
+
+def compress(dir_path, zip_file_path):
+    import shutil
+    base_name = str(zip_file_path).replace('.' + COMPRESSION_FORMAT, '')
+    shutil.make_archive(
+        base_name=base_name, format=COMPRESSION_FORMAT, root_dir=dir_path)
