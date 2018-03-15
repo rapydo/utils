@@ -113,3 +113,7 @@ def existing(path_list, error_msg_base='Failed', do_exit=True):
 
 def parts(my_path):
     return PurePath(my_path).parts
+
+
+def last_part(my_path):
+    return os.path.basename(my_path)
