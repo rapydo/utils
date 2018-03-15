@@ -120,6 +120,10 @@ def last_part(my_path):
     return os.path.basename(my_path)
 
 
+def dir_name(my_path):
+    return os.path.dirname(my_path)
+
+
 def append_compress_extension(base_name):
     return '%s.%s' % (base_name, COMPRESSION_FORMAT)
 
