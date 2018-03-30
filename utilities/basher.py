@@ -58,6 +58,18 @@ def current_os_user():
     return os_user
 
 
+def detect_vargroup(label):
+
+    variables = {}
+    for var, value in os.environ.items():
+        var = var.lower()
+        if var.startswith(label):
+            key = var[len(label):].strip('_')
+            value = value.strip('"').strip("'")
+            variables[key] = value
+    return variables
+
+
 class BashCommands(object):
     """ Wrapper for execution of commands in a bash shell """
 
