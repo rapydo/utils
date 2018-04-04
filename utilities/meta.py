@@ -107,7 +107,7 @@ class Meta(object):
             if exit_on_fail:
                 raise e
             else:
-                log.warning("Module %s not found ", modulestring)
+                log.warning("Module %s not found.\nError: %s", modulestring, e)
 
         return module
 
