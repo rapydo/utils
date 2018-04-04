@@ -9,6 +9,7 @@ https://pymotw.com/3/smtplib/
 
 from smtplib import SMTP, SMTPException
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import datetime
 import pytz
 
@@ -22,7 +23,7 @@ log = get_logger(__name__)
 def send_mail(body, subject,
               to_address, from_address,
               smtp_host='localhost', smtp_port=587,
-              username=None, password=None):
+              username=None, password=None, html=False, plain_body=None):
 
     if smtp_host is None:
         log.error("Skipping send email: smtp host not configured")
@@ -39,11 +40,23 @@ def send_mail(body, subject,
     try:
 
         date_fmt = "%a, %b %d, %Y at %I:%M %p %z"
-        msg = MIMEText(body)
+        if html:
+            msg = MIMEMultipart('alternative')
+        else:
+            msg = MIMEText(body)
         msg['Subject'] = subject
         msg['From'] = from_address
         msg['To'] = to_address
         msg['Date'] = datetime.datetime.now(pytz.utc).strftime(date_fmt)
+
+        if html:
+            if plain_body is None:
+                log.warning("Plain body is none")
+                plain_body = body
+            part1 = MIMEText(plain_body, 'plain')
+            part2 = MIMEText(body, 'html')
+            msg.attach(part1)
+            msg.attach(part2)
 
         smtp = SMTP()
         smtp.set_debuglevel(0)
