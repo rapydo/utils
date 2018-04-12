@@ -10,6 +10,17 @@ log = get_logger(__name__)
 # SCRIPT_PATH = helpers.script_abspath(__file__)
 
 
+def load_project_configuration(project_path):
+    args = {
+        'path': project_path,
+        'skip_error': False,
+        'logger': False,
+        'file': PROJECT_CONF_FILENAME,
+        'keep_order': True
+    }
+    return load_yaml_file(**args)
+
+
 def read(base_path, project_path=None, is_template=False, do_exit=True):
     """
     Read default configuration
