@@ -76,7 +76,8 @@ def send_mail(body, subject,
 
             smtp.sendmail(from_address, to_address, msg.as_string())
 
-            log.info("Successfully sent email to %s", to_address)
+            log.info("Successfully sent email to %s [cc=%s], [bcc=%s]",
+                     to_address, cc, bcc)
             smtp.quit()
             return True
         except SMTPException:
