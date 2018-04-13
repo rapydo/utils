@@ -23,6 +23,7 @@ log = get_logger(__name__)
 def send_mail(body, subject,
               to_address, from_address,
               smtp_host='localhost', smtp_port=587,
+              cc=None, bcc=None,
               username=None, password=None, html=False, plain_body=None):
 
     if smtp_host is None:
@@ -47,6 +48,10 @@ def send_mail(body, subject,
         msg['Subject'] = subject
         msg['From'] = from_address
         msg['To'] = to_address
+        if cc is not None:
+            msg['Cc'] = cc
+        if bcc is not None:
+            msg['Bcc'] = bcc
         msg['Date'] = datetime.datetime.now(pytz.utc).strftime(date_fmt)
 
         if html:
