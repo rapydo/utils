@@ -40,6 +40,8 @@ def send_mail(body, subject,
 
     try:
 
+        dest_addresses = [to_address]
+
         date_fmt = "%a, %b %d, %Y at %I:%M %p %z"
         if html:
             msg = MIMEMultipart('alternative')
@@ -48,10 +50,30 @@ def send_mail(body, subject,
         msg['Subject'] = subject
         msg['From'] = from_address
         msg['To'] = to_address
-        if cc is not None:
+        if cc is None:
+            pass
+        elif isinstance(cc, str):
             msg['Cc'] = cc
-        if bcc is not None:
+            dest_addresses.append(cc.split(","))
+        elif isinstance(cc, list):
+            msg['Cc'] = ",".join(cc)
+            dest_addresses.append(cc)
+        else:
+            log.warning("Invalid CC value: %s", cc)
+            cc = None
+
+        if bcc is None:
+            pass
+        elif isinstance(bcc, str):
             msg['Bcc'] = bcc
+            dest_addresses.append(bcc.split(","))
+        elif isinstance(bcc, list):
+            msg['Bcc'] = ",".join(bcc)
+            dest_addresses.append(bcc)
+        else:
+            log.warning("Invalid BCC value: %s", bcc)
+            bcc = None
+
         msg['Date'] = datetime.datetime.now(pytz.utc).strftime(date_fmt)
 
         if html:
@@ -74,7 +96,7 @@ def send_mail(body, subject,
         try:
             log.verbose("Sending email to %s", to_address)
 
-            smtp.sendmail(from_address, to_address, msg.as_string())
+            smtp.sendmail(from_address, dest_addresses, msg.as_string())
 
             log.info("Successfully sent email to %s [cc=%s], [bcc=%s]",
                      to_address, cc, bcc)
