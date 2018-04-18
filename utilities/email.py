@@ -9,6 +9,7 @@ https://pymotw.com/3/smtplib/
 
 from smtplib import SMTP, SMTPException
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import datetime
 import pytz
 
@@ -22,7 +23,8 @@ log = get_logger(__name__)
 def send_mail(body, subject,
               to_address, from_address,
               smtp_host='localhost', smtp_port=587,
-              username=None, password=None):
+              cc=None, bcc=None,
+              username=None, password=None, html=False, plain_body=None):
 
     if smtp_host is None:
         log.error("Skipping send email: smtp host not configured")
@@ -38,12 +40,50 @@ def send_mail(body, subject,
 
     try:
 
+        dest_addresses = [to_address]
+
         date_fmt = "%a, %b %d, %Y at %I:%M %p %z"
-        msg = MIMEText(body)
+        if html:
+            msg = MIMEMultipart('alternative')
+        else:
+            msg = MIMEText(body)
         msg['Subject'] = subject
         msg['From'] = from_address
         msg['To'] = to_address
+        if cc is None:
+            pass
+        elif isinstance(cc, str):
+            msg['Cc'] = cc
+            dest_addresses.append(cc.split(","))
+        elif isinstance(cc, list):
+            msg['Cc'] = ",".join(cc)
+            dest_addresses.append(cc)
+        else:
+            log.warning("Invalid CC value: %s", cc)
+            cc = None
+
+        if bcc is None:
+            pass
+        elif isinstance(bcc, str):
+            msg['Bcc'] = bcc
+            dest_addresses.append(bcc.split(","))
+        elif isinstance(bcc, list):
+            msg['Bcc'] = ",".join(bcc)
+            dest_addresses.append(bcc)
+        else:
+            log.warning("Invalid BCC value: %s", bcc)
+            bcc = None
+
         msg['Date'] = datetime.datetime.now(pytz.utc).strftime(date_fmt)
+
+        if html:
+            if plain_body is None:
+                log.warning("Plain body is none")
+                plain_body = body
+            part1 = MIMEText(plain_body, 'plain')
+            part2 = MIMEText(body, 'html')
+            msg.attach(part1)
+            msg.attach(part2)
 
         smtp = SMTP()
         smtp.set_debuglevel(0)
@@ -56,9 +96,10 @@ def send_mail(body, subject,
         try:
             log.verbose("Sending email to %s", to_address)
 
-            smtp.sendmail(from_address, to_address, msg.as_string())
+            smtp.sendmail(from_address, dest_addresses, msg.as_string())
 
-            log.info("Successfully sent email to %s", to_address)
+            log.info("Successfully sent email to %s [cc=%s], [bcc=%s]",
+                     to_address, cc, bcc)
             smtp.quit()
             return True
         except SMTPException:

@@ -23,11 +23,12 @@ setup(
     python_requires='>=3.4',
     install_requires=[
         "beeprint",
+        "prettyprinter",
         "better_exceptions",
         "PyYAML",
         "pytz",
         "python-dateutil",
-        "sultan"
+        "sultan==0.7.1",
     ],
     classifiers=[
         'Programming Language :: Python',
