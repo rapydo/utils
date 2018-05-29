@@ -100,9 +100,10 @@ def call(uri,
     method = method.lower()
     requests_callable = getattr(requests, method)
 
-    if method in ['post', 'patch']:
-        import json
-        payload = json.dumps(payload)
+    if method in ['post', 'patch', 'put']:
+        if method != 'put' or file is not None:
+            import json
+            payload = json.dumps(payload)
 
     log.very_verbose('Calling %s on %s', method, endpoint)
     arguments = {
