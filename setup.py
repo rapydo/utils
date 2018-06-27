@@ -25,7 +25,7 @@ setup(
         "beeprint",
         "prettyprinter",
         "better_exceptions",
-        "PyYAML",
+        "PyYAML==3.12",
         "pytz",
         "python-dateutil",
         "sultan==0.8.0",
