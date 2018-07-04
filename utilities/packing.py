@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from pip.utils import get_installed_distributions
+try:
+    from pip.utils import get_installed_distributions
+except ModuleNotFoundError:
+    # from pip 10
+    from pip._internal.utils.misc import get_installed_distributions
 from sultan.api import Sultan
 # from pip import main as pip_exec
 from utilities.logs import get_logger
