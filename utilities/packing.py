@@ -8,9 +8,14 @@ from utilities.logs import get_logger
 log = get_logger(__name__)
 
 
-def install(package):
+def install(package, editable=False):
     with Sultan.load(sudo=True) as sultan:
-        result = sultan.pip3('install --upgrade %s' % package).run()
+        command = 'install --upgrade'
+        if editable:
+            command += " --editable"
+        command += ' %s' % package
+
+        result = sultan.pip3(command).run()
 
         for r in result.stdout:
             print(r)
