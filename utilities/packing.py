@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+# BEWARE: to not import this package at startup,
+# but only into functions otherwise pip will go crazy
+# (we cannot understand why, but it does!)
+
 from pip.utils import get_installed_distributions
 from sultan.api import Sultan
 # from pip import main as pip_exec
