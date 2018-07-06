@@ -65,6 +65,7 @@ def test():
     out = bash.execute_command("cat", random_name)
     assert out.strip() == 'REPLACED!'
 
+    bash.remove(random_name)
     try:
         bash.remove(random_name)
     except plumbum.commands.processes.ProcessExecutionError:
