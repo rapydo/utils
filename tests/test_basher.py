@@ -15,6 +15,10 @@ import pytest
 import os
 
 
+class MyException(BaseException):
+    pass
+
+
 def test():
     bash = BashCommands()
 
@@ -31,7 +35,21 @@ def test():
     out = bash.execute_command("env", env={"MYSUPER_VAR": "MYSUPER_VALUE"})
     assert "MYSUPER_VAR=MYSUPER_VALUE" in out.split('\n')
 
-    bash.execute_command("invalid_command", catchException=True)
+    try:
+        bash.execute_command("ls", "/invalid/path")
+    except plumbum.commands.processes.ProcessExecutionError:
+        pass
+    else:
+        pytest.fail("This command should fail, because path is missing!")
+
+    try:
+        bash.execute_command(
+            "ls", "/invalid/path", customException=MyException)
+    except MyException:
+        pass
+    else:
+        pytest.fail("This command should fail, because path is missing!")
+
     bash.execute_command("ls", "/invalid/path", catchException=True)
 
     random_name = get_random_name()
