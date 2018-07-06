@@ -3,6 +3,7 @@
 from utilities.time import timestamp_from_string
 from utilities.time import date_from_string
 from utilities.time import string_from_timestamp
+from utilities.time import get_online_utc_time
 from datetime import datetime
 import pytz
 import pytest
@@ -10,7 +11,8 @@ import pytest
 
 def test():
 
-    t = timestamp_from_string("423423423")
+    test_timestamp = "423423423"
+    t = timestamp_from_string(test_timestamp)
 
     d = datetime(1983, 6, 2, 17, 37, 3, tzinfo=pytz.utc)
     assert t == d
@@ -29,3 +31,29 @@ def test():
     t = timestamp_from_string("-1")
     d = datetime(1969, 12, 31, 23, 59, 59, tzinfo=pytz.utc)
     assert t == d
+
+    d1 = date_from_string('06/07/2018')
+    d2 = date_from_string('2018-07-06', fmt='%Y-%m-%d')
+
+    assert d1 == d2
+
+    d = date_from_string('')
+    assert d == ""
+
+    d = date_from_string('2017-09-22T07:10:35.822772835Z')
+
+    assert d1.tzinfo != pytz.utc
+    assert d.tzinfo == pytz.utc
+
+    d = string_from_timestamp('')
+    assert d == ""
+
+    d = string_from_timestamp("not-float-value")
+    assert d == ""
+
+    d = string_from_timestamp(test_timestamp)
+    # Isoformat expected
+    assert d == '1983-06-02T19:37:03'
+
+    # Just to call it... what to verify?
+    get_online_utc_time()
