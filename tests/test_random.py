@@ -18,7 +18,7 @@ def test():
 
     s1 = get_random_name(prefix='TEST_')
 
-    assert s1.startwith('TEST_')
+    assert s1.startswith('TEST_')
 
     s1 = get_random_name(len=0)
     assert s1 == ""
