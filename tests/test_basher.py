@@ -61,8 +61,8 @@ def test():
     with open(random_name, 'w') as f:
         f.write("TEST")
 
-    bash.replace_in_file('TEST', 'REPLACED!', "prova123")
-    out = bash.execute_command("cat", "prova123")
+    bash.replace_in_file('TEST', 'REPLACED!', random_name)
+    out = bash.execute_command("cat", random_name)
     assert out.strip() == 'REPLACED!'
 
     try:
