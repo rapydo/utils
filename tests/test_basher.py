@@ -18,21 +18,44 @@ import os
 def test():
     bash = BashCommands()
 
-    output = "just_a_test"
+    out = bash.execute_command("echo")
+    assert out.strip() == ""
+
+    output = "test_parameters"
     out = bash.execute_command("echo", output)
     assert out.strip() == output
+
+    out = bash.execute_command("env")
+    assert "MYSUPER_VAR=MYSUPER_VALUE" not in out.split('\n')
+
+    out = bash.execute_command("env", env={"MYSUPER_VAR": "MYSUPER_VALUE"})
+    assert "MYSUPER_VAR=MYSUPER_VALUE" in out.split('\n')
+
+    bash.execute_command("invalid_command", catchException=True)
+    bash.execute_command("ls", "/invalid/path", catchException=True)
 
     random_name = get_random_name()
     random_name2 = get_random_name()
     bash.create_empty(random_name)
+    bash.copy(random_name, random_name2)
+    bash.remove(random_name2)
 
-    bash.remove(random_name)
+    with open(random_name, 'w') as f:
+        f.write("TEST")
+
+    bash.replace_in_file('TEST', 'REPLACED!', "prova123")
+    out = bash.execute_command("cat", "prova123")
+    assert out.strip() == 'REPLACED!'
+
     try:
         bash.remove(random_name)
     except plumbum.commands.processes.ProcessExecutionError:
         pass
     else:
         pytest.fail("This remove should fail, because was missing!")
+
+    # the path do not exist, but no fail with force flag
+    bash.remove(random_name, force=True)
 
     bash.create_directory(random_name)
 
@@ -47,7 +70,6 @@ def test():
     #     pass
     # else:
     #     pytest.fail("This remove should fail, directory was missing!")
-
 
     assert file_os_owner_raw('/etc') == 0
     assert file_os_owner('/etc') == 'root'

@@ -58,7 +58,7 @@ def test():
 
     d = string_from_timestamp(test_timestamp)
     # Isoformat expected
-    assert d == '1983-06-02T19:37:03'
+    assert d == '1983-06-02T17:37:03'
 
     # Just to call it... what to verify?
     get_online_utc_time()
