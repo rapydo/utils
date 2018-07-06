@@ -5,6 +5,7 @@ from utilities.time import date_from_string
 from utilities.time import string_from_timestamp
 from utilities.time import get_online_utc_time
 from datetime import datetime
+from dateutil.tz import tzutc
 import pytz
 import pytest
 
@@ -37,16 +38,16 @@ def test():
 
     assert d1 == d2
     # UTC is defaulted for non-localized dates
-    assert d1.tzinfo == pytz.utc
+    assert d1.tzinfo == tzutc()
 
     d = date_from_string('')
     assert d == ""
 
     d = date_from_string('2017-09-22T07:10:35.822772835Z')
-    assert d.tzinfo == pytz.utc
+    assert d.tzinfo == tzutc()
 
     d = date_from_string('2017-09-22T07:10:35.822772835+01:00')
-    assert d.tzinfo != pytz.utc
+    assert d.tzinfo != tzutc()
     assert d.tzinfo is not None
 
     d = string_from_timestamp('')
