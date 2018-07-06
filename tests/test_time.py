@@ -36,14 +36,18 @@ def test():
     d2 = date_from_string('2018-07-06', fmt='%Y-%m-%d')
 
     assert d1 == d2
+    # UTC is defaulted for non-localized dates
+    assert d1.tzinfo == pytz.utc
 
     d = date_from_string('')
     assert d == ""
 
     d = date_from_string('2017-09-22T07:10:35.822772835Z')
-
-    assert d1.tzinfo != pytz.utc
     assert d.tzinfo == pytz.utc
+
+    d = date_from_string('2017-09-22T07:10:35.822772835+01:00')
+    assert d.tzinfo != pytz.utc
+    assert d.tzinfo is not None
 
     d = string_from_timestamp('')
     assert d == ""
