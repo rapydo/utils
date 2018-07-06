@@ -38,7 +38,7 @@ def test():
 
     assert d1 == d2
     # UTC is defaulted for non-localized dates
-    assert d1.tzinfo == tzutc()
+    assert d1.tzinfo == pytz.utc
 
     d = date_from_string('')
     assert d == ""

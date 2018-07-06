@@ -1,29 +1,18 @@
 # -*- coding: utf-8 -*-
 
 from utilities.basher import BashCommands
+from utilities.basher import file_os_owner_raw
+from utilities.basher import file_os_owner
+from utilities.basher import path_is_readable
+from utilities.basher import path_is_writable
+from utilities.basher import current_os_uid
+from utilities.basher import current_os_user
+from utilities.basher import detect_vargroup
 
-import string
-import random
+from utilities.random import get_random_name
 import plumbum
 import pytest
-
-
-def randomString(len=16, prefix="TEST:"):
-    """
-        Create a random string to be used to build data for tests
-    """
-    if len > 500000:
-        lis = list(string.ascii_lowercase)
-        return ''.join(random.choice(lis) for _ in range(len))
-
-    rand = random.SystemRandom()
-    charset = string.ascii_uppercase + string.digits
-
-    random_string = prefix
-    for _ in range(len):
-        random_string += rand.choice(charset)
-
-    return random_string
+import os
 
 
 def test():
@@ -33,8 +22,8 @@ def test():
     out = bash.execute_command("echo", output)
     assert out.strip() == output
 
-    random_name = randomString()
-    random_name2 = randomString()
+    random_name = get_random_name()
+    random_name2 = get_random_name()
     bash.create_empty(random_name)
 
     bash.remove(random_name)
@@ -58,3 +47,23 @@ def test():
     #     pass
     # else:
     #     pytest.fail("This remove should fail, directory was missing!")
+
+
+    assert file_os_owner_raw('/etc') == 0
+    assert file_os_owner('/etc') == 'root'
+    assert path_is_readable('/etc')
+    assert not path_is_writable('/etc')
+
+    home = os.getenv("HOME")
+
+    assert file_os_owner_raw(home) == current_os_uid()
+    assert file_os_owner(home) == current_os_user()
+
+    assert path_is_readable(home)
+    assert path_is_writable(home)
+
+    assert not path_is_readable("/do/not/exists")
+    assert not path_is_writable("/do/not/exists")
+
+    v = detect_vargroup('SDVOJSDOFJSV')
+    assert len(v) == 0
