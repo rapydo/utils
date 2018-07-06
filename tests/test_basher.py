@@ -50,7 +50,7 @@ def test():
     # else:
     #     pytest.fail("This command should fail, because path is missing!")
 
-    bash.execute_command("ls", "/invalid/path", catchException=True)
+    # bash.execute_command("ls", "/invalid/path", catchException=True)
 
     random_name = get_random_name()
     random_name2 = get_random_name()
