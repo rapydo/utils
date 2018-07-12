@@ -10,17 +10,25 @@ before_install:
   - pip install --upgrade -r dev-requirements.txt
 install:
   - pip3 install --upgrade --no-cache-dir --editable .
-script:
-  - export TESTING=1
-  - export DEBUG_LEVEL='VERY_VERBOSE'
-  - py.test --cov=utilities -s -x
-after_success:
-  - coveralls
-deploy:
-  provider: pypi
-  user: pdonorio
-  password:
-    secure: pAsXVY1/+gmjlmz8KkhJN6GRYAnStRQOtMz4pqB59tWCfnGrYQf3S/Qpe6QQ6ZpxgGq+ItZUvZYILUFWDa1synsjrBu7xea2LRYNnc2AeIQqc3X5seCER5DwZRjAw77R2kfx52NyGHIgT5c3xyqRBCdrx/u6pYGd6k0qHaCO9xcNq5gFMsJdzj5ySCsHEMX+K5o7TGl4WkuYftQt0La+r2MA0/ELrdbBFD/TZWw7YyjVAECnmtDNIe9fsRO5yZj2f/GwGOqDjKT2coy7E1sqE4G3W7RVOZqV654+2WZWjXBqQB3V+ENolSPUfQ6qI7VnohV7/CrGxbBmSN3foBEoXf9B55iSgPyU+1ScigWR56Xeaba2Ea0o+g7+rcTyOTFOtizX7SJnktCiObjYamGNUsWM3Avvr0POMOKfty75+VRVcLaSO96Sym2Yb5rA8M9PCxc0mgQXzsAxtZw7c74lz5YUytmtqeIem9te9L8J923ZP6crk3epPaRF/B3x2m4EJcCd7jStXe0Qb0EjSt1hnArxT+ybwb87PzMhuMpCrq6WS17lMZn3DmV5fN/cxgzwKnqeBV0tRZNT3m67VwDo5wF54M/vWVcj4sn3I6NkmAWMQMaNh1uaSFXzfoY3oMnAX+wjZGaMjGFeNg7dlPQ90j15Erf2nL5CrsW4zRA4rhM=
-  on:
-    # all_branches: true
-    tags: true
+
+jobs:
+  include:
+    # Note: projects are more or less sorted by average duration DESC
+    - stage: test
+      script:
+        - export TESTING=1
+        - export DEBUG_LEVEL='VERY_VERBOSE'
+        - py.test --cov=utilities -s -x
+      after_success:
+        - coveralls
+
+    - stage: deploy
+      script: skip
+      deploy:
+        provider: pypi
+        user: pdonorio
+        password:
+          secure: pAsXVY1/+gmjlmz8KkhJN6GRYAnStRQOtMz4pqB59tWCfnGrYQf3S/Qpe6QQ6ZpxgGq+ItZUvZYILUFWDa1synsjrBu7xea2LRYNnc2AeIQqc3X5seCER5DwZRjAw77R2kfx52NyGHIgT5c3xyqRBCdrx/u6pYGd6k0qHaCO9xcNq5gFMsJdzj5ySCsHEMX+K5o7TGl4WkuYftQt0La+r2MA0/ELrdbBFD/TZWw7YyjVAECnmtDNIe9fsRO5yZj2f/GwGOqDjKT2coy7E1sqE4G3W7RVOZqV654+2WZWjXBqQB3V+ENolSPUfQ6qI7VnohV7/CrGxbBmSN3foBEoXf9B55iSgPyU+1ScigWR56Xeaba2Ea0o+g7+rcTyOTFOtizX7SJnktCiObjYamGNUsWM3Avvr0POMOKfty75+VRVcLaSO96Sym2Yb5rA8M9PCxc0mgQXzsAxtZw7c74lz5YUytmtqeIem9te9L8J923ZP6crk3epPaRF/B3x2m4EJcCd7jStXe0Qb0EjSt1hnArxT+ybwb87PzMhuMpCrq6WS17lMZn3DmV5fN/cxgzwKnqeBV0tRZNT3m67VwDo5wF54M/vWVcj4sn3I6NkmAWMQMaNh1uaSFXzfoY3oMnAX+wjZGaMjGFeNg7dlPQ90j15Erf2nL5CrsW4zRA4rhM=
+        on:
+          # all_branches: true
+          tags: true
