@@ -8,18 +8,20 @@ before_install:
 install:
   - pip3 install --upgrade --no-cache-dir --editable .
 
+script:
+  - export TESTING=1
+  - export DEBUG_LEVEL='VERY_VERBOSE'
+  - py.test --cov=utilities -s -x
+
+after_success:
+  - coveralls
+
 jobs:
   include:
-    # - python: 3.5
-    # - python: 3.6.2
     - stage: test
       python: 3.4
-      script:
-        - export TESTING=1
-        - export DEBUG_LEVEL='VERY_VERBOSE'
-        - py.test --cov=utilities -s -x
-      after_success:
-        - coveralls
+      python: 3.5
+      python: 3.6.2
 
     - stage: deploy
       script: skip
