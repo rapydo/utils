@@ -1,8 +1,5 @@
 language: python
-python:
-  - 3.4
-  - 3.5
-  - 3.6.2
+
 before_install:
   - pip install --upgrade setuptools
   # bug fix: https://github.com/pypa/setuptools/issues/1101
@@ -13,8 +10,10 @@ install:
 
 jobs:
   include:
-    # Note: projects are more or less sorted by average duration DESC
+    # - python: 3.5
+    # - python: 3.6.2
     - stage: test
+      python: 3.4
       script:
         - export TESTING=1
         - export DEBUG_LEVEL='VERY_VERBOSE'
