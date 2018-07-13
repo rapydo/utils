@@ -126,7 +126,8 @@ def call(uri,
         # headers['content-type'] = 'multipart/form-data'
     else:
         # sending normal json/dictionaries data
-        headers['content-type'] = 'application/json'
+        if 'Content-Type' not in headers:
+            headers['content-type'] = 'application/json'
 
     # call the api
     try:
