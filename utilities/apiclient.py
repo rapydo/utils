@@ -143,7 +143,7 @@ def call(uri,
 
         elif filecontent is not None:
             # Streaming a file
-            arguments['file'] = (io.BytesIO(filecontent), filename)
+            arguments['data'] = dict(file=(io.BytesIO(filecontent), filename))
 
         request = requests_callable(**arguments)
 
