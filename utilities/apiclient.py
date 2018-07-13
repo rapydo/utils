@@ -84,7 +84,7 @@ def parse_api_output(req):
 
 
 def call(uri,
-         endpoint=None, method='get', payload=None,
+         endpoint=None, method='get', payload=None, headers=None,
          token=None, file=None, timeout=10, exit_on_fail=True):
     """
     Helper function based on 'requests' to easily call our HTTP API in Python
@@ -93,7 +93,8 @@ def call(uri,
     if endpoint is None:
         endpoint = '/api/status'
 
-    headers = {}
+    if headers is None:
+        headers = {}
     if token is not None:
         headers['Authorization'] = "Bearer %s" % token
 
