@@ -2,7 +2,9 @@
 
 import os
 import re
+import sys
 import random
+import contextlib
 from utilities import PROJECT_DIR
 from urllib.parse import urlparse
 
@@ -140,3 +142,26 @@ def ask_yes_or_no(question, error='Unknown', print_function=None):
                 print('USER INTERRUPT:\t' + error)
                 import sys
                 sys.exit(1)
+
+
+@contextlib.contextmanager
+def nooutput():
+    """ Thanks Alex: https://stackoverflow.com/a/1810086 """
+    savestderr = sys.stderr
+    savestdout = sys.stdout
+
+    class Devnull(object):
+
+        def write(self, _):
+            pass
+
+        def flush(self):
+            pass
+
+    sys.stdout = Devnull()
+    sys.stderr = Devnull()
+    try:
+        yield
+    finally:
+        sys.stdout = savestdout
+        sys.stderr = savestderr
