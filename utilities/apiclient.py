@@ -6,6 +6,7 @@ to create a client based on Python against our HTTP API
 """
 
 import os
+import io
 from utilities.logs import \
     get_logger, logging, set_global_log_level, DEFAULT_LOGLEVEL_NAME
 
@@ -84,8 +85,9 @@ def parse_api_output(req):
 
 
 def call(uri,
-         endpoint=None, method='get', payload=None,
-         token=None, file=None, timeout=10, exit_on_fail=True):
+         endpoint=None, method='get', payload=None, headers=None,
+         token=None, file=None, filecontent=None, filename=None,
+         timeout=10, exit_on_fail=True):
     """
     Helper function based on 'requests' to easily call our HTTP API in Python
     """
@@ -93,16 +95,18 @@ def call(uri,
     if endpoint is None:
         endpoint = '/api/status'
 
-    headers = {}
+    if headers is None:
+        headers = {}
     if token is not None:
         headers['Authorization'] = "Bearer %s" % token
 
     method = method.lower()
     requests_callable = getattr(requests, method)
 
-    if method in ['post', 'patch']:
-        import json
-        payload = json.dumps(payload)
+    if method in ['post', 'patch', 'put']:
+        if method != 'put' or file is not None or filecontent is not None:
+            import json
+            payload = json.dumps(payload)
 
     log.very_verbose('Calling %s on %s', method, endpoint)
     arguments = {
@@ -116,7 +120,7 @@ def call(uri,
     else:
         arguments['data'] = payload
 
-    if file is not None:
+    if file is not None or filecontent is not None:
         if method != 'put':
             log.exit("Cannot upload file in RAPyDo with method '%s'", method)
 
@@ -124,7 +128,8 @@ def call(uri,
         # headers['content-type'] = 'multipart/form-data'
     else:
         # sending normal json/dictionaries data
-        headers['content-type'] = 'application/json'
+        if 'Content-Type' not in headers:
+            headers['content-type'] = 'application/json'
 
     # call the api
     try:
@@ -136,10 +141,11 @@ def call(uri,
                 # name = os.path.basename(file)
                 # arguments['files'] = {'file': (name, f)}
 
-                request = requests_callable(**arguments)
-        else:
-            # Normal request
-            request = requests_callable(**arguments)
+        elif filecontent is not None:
+            # Streaming a file
+            arguments['data'] = dict(file=(io.BytesIO(filecontent), filename))
+
+        request = requests_callable(**arguments)
 
     except requests.exceptions.ConnectionError as e:
         if exit_on_fail:

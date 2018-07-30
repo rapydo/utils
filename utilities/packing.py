@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from pip.utils import get_installed_distributions
+# BEWARE: to not import this package at startup,
+# but only into functions otherwise pip will go crazy
+# (we cannot understand why, but it does!)
+
+try:
+    from pip.utils import get_installed_distributions
+except ModuleNotFoundError:
+    # from pip 10
+    from pip._internal.utils.misc import get_installed_distributions
 from sultan.api import Sultan
 # from pip import main as pip_exec
 from utilities.logs import get_logger
@@ -8,9 +16,14 @@ from utilities.logs import get_logger
 log = get_logger(__name__)
 
 
-def install(package):
+def install(package, editable=False):
     with Sultan.load(sudo=True) as sultan:
-        result = sultan.pip3('install --upgrade %s' % package).run()
+        command = 'install --upgrade'
+        if editable:
+            command += " --editable"
+        command += ' %s' % package
+
+        result = sultan.pip3(command).run()
 
         for r in result.stdout:
             print(r)

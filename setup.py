@@ -25,10 +25,10 @@ setup(
         "beeprint",
         "prettyprinter",
         "better_exceptions",
-        "PyYAML",
+        "PyYAML==3.12",
         "pytz",
         "python-dateutil",
-        "sultan==0.7.1",
+        "sultan==0.8.0",
     ],
     classifiers=[
         'Programming Language :: Python',

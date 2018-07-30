@@ -235,7 +235,8 @@ class LogMe(object):
         #####################
         if AVOID_COLORS_ENV_LABEL in os.environ:
             self.colors_enabled = False
-        if "TESTING" in os.environ:
+        testing_key = "TESTING"
+        if testing_key in os.environ and os.environ.get(testing_key) == '1':
             self.testing_mode = True
             self.colors_enabled = False
         if "DISABLE_UNICODE" in os.environ:
