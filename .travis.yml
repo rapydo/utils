@@ -1,15 +1,11 @@
 language: python
 
-before_install:
+script:
   - pip install --upgrade setuptools
   # bug fix: https://github.com/pypa/setuptools/issues/1101
   - pip install --upgrade -r requirements.txt
   - pip install --upgrade -r dev-requirements.txt
-
-install:
   - pip3 install --upgrade --no-cache-dir --editable .
-
-script:
   - export TESTING=1
   - export DEBUG_LEVEL='VERY_VERBOSE'
   - py.test --cov=utilities -s -x
