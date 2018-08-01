@@ -27,7 +27,7 @@ def test():
 
     output = "test_parameters"
     out = bash.execute_command("echo", output)
-    assert out.strip() == output
+    assert out.strip() != output
 
     out = bash.execute_command("env")
     assert "MYSUPER_VAR=MYSUPER_VALUE" not in out.split('\n')
