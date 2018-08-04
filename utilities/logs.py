@@ -329,7 +329,8 @@ class LogMe(object):
 
 def set_global_log_level(package=None, app_level=None):
 
-    external_level = logging.WARNING
+    # external_level = logging.WARNING
+    external_level = logging.ERROR
     if app_level is None:
         app_level = please_logme.log_level
 
@@ -350,7 +351,9 @@ def set_global_log_level(package=None, app_level=None):
         logging.getLogger('neomodel'),
         logging.getLogger('httpstream'),
         logging.getLogger('amqp'),
-        logging.getLogger('schedule')
+        logging.getLogger('schedule'),
+        logging.getLogger('googleapiclient'),
+        logging.getLogger('oauth2client')
     ]
 
     for logger in external_packages:
