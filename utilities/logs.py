@@ -365,6 +365,7 @@ def set_global_log_level(package=None, app_level=None):
     logging.getLogger().setLevel(app_level)
     package_base = package.split('.')[0]
 
+    extra_packages = []
     for key, value in logging.Logger.manager.loggerDict.items():
 
         if not isinstance(value, logging.Logger):
@@ -388,8 +389,13 @@ def set_global_log_level(package=None, app_level=None):
         elif key in internal_packages:
             # print("internal", key, package)
             value.setLevel(app_level)
+        else:
+            extra_packages.append(key)
+
         # else:
         #     value.setLevel(external_level)
+
+        assert extra_packages == []
 
 
 please_logme = LogMe()
