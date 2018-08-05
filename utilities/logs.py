@@ -395,7 +395,7 @@ def set_global_log_level(package=None, app_level=None):
         # else:
         #     value.setLevel(external_level)
 
-        assert extra_packages == []
+        raise SystemExit(extra_packages)
 
 
 please_logme = LogMe()
