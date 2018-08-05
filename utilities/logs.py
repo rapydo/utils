@@ -335,12 +335,12 @@ def set_global_log_level(package=None, app_level=None):
         app_level = please_logme.log_level
 
     # List of rapydo packages to include into the current level of debugging
-    # internal_packages = [
-    #     'utilities',
-    #     # 'develop',
-    #     'controller',
-    #     'restapi'
-    # ]
+    internal_packages = [
+        'utilities',
+        # 'develop',
+        'controller',
+        'restapi'
+    ]
 
     # A list of packages that make too much noise inside the logs
     external_packages = [
@@ -385,7 +385,8 @@ def set_global_log_level(package=None, app_level=None):
         elif __package__ + '.' in key or 'flask_ext' in key:
             # print("common", key)
             value.setLevel(app_level)
-        # elif key in internal_packages:
+        elif key in internal_packages:
+            value.setLevel(app_level)
         elif key == 'test_logs':
             # print("internal", key, package)
             value.setLevel(app_level)
