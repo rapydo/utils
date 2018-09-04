@@ -353,7 +353,8 @@ def set_global_log_level(package=None, app_level=None):
         logging.getLogger('amqp'),
         logging.getLogger('schedule'),
         logging.getLogger('googleapiclient'),
-        logging.getLogger('oauth2client')
+        logging.getLogger('oauth2client'),
+        logging.getLogger('mailchimp3')
     ]
 
     for logger in external_packages:

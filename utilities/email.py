@@ -7,7 +7,7 @@ more info:
 https://pymotw.com/3/smtplib/
 """
 
-from smtplib import SMTP, SMTPException
+from smtplib import SMTP, SMTP_SSL, SMTPException
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import datetime
@@ -85,7 +85,16 @@ def send_mail(body, subject,
             msg.attach(part1)
             msg.attach(part2)
 
-        smtp = SMTP()
+        ###################
+        # https://stackabuse.com/how-to-send-emails-with-gmail-using-python/
+        if smtp_port == '465':
+            smtp = SMTP_SSL()
+        else:
+            smtp = SMTP()
+            # if this is 587 we might need also
+            # smtp.starttls()
+
+        ###################
         smtp.set_debuglevel(0)
         log.verbose("Connecting to %s:%s" % (smtp_host, smtp_port))
         smtp.connect(smtp_host, smtp_port)

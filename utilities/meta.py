@@ -247,7 +247,7 @@ class Meta(object):
             tasks[func[0]] = func[1]
         return tasks
 
-    def get_customizer_class(self, module_relpath, class_name, args={}):
+    def get_customizer_class(self, module_relpath, class_name, args=None):
 
         abspath = "%s.%s" % (CUSTOM_PACKAGE, module_relpath)
         MyClass = self.get_class_from_string(
@@ -257,6 +257,9 @@ class Meta(object):
         )
 
         instance = None
+        if args is None:
+            args = {}
+
         if MyClass is None:
             log.debug("No customizer available for %s", class_name)
         else:
