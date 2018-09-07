@@ -245,7 +245,7 @@ class Certificates(object):
                 log.critical("Cannot find a valid certificate file")
                 return False
 
-        self.check_x509_permissions()
+            self.check_x509_permissions()
 
     def check_x509_permissions(self):
 
