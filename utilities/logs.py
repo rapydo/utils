@@ -210,11 +210,6 @@ logging.Logger.checked_simple = checked_simple
 logging.Logger.clear_screen = clear_screen
 
 
-#######################
-# read from os DEBUG_LEVEL (level of verbosity)
-# configurated on a container level
-USER_DEBUG_LEVEL = os.environ.get('DEBUG_LEVEL', 'VERY_VERBOSE')
-VERBOSITY_REQUESTED = getattr(logging, USER_DEBUG_LEVEL.upper())
 
 
 ################
@@ -399,26 +394,15 @@ please_logme = LogMe()
 # log = please_logme.get_new_logger(__name__)
 
 
-# def get_logger(name, debug_setter=None, newlevel=None):
 def get_logger(name):
     """ Recover the right logger + set a proper specific level """
 
-    # if debug_setter is not None:
-    #     please_logme.set_debug(debug_setter, level=newlevel)
+    # read from os DEBUG_LEVEL (level of verbosity)
+    # configurated on a container level
+    USER_DEBUG_LEVEL = os.environ.get('DEBUG_LEVEL', 'VERY_VERBOSE')
+    VERBOSITY_REQUESTED = getattr(logging, USER_DEBUG_LEVEL.upper())
 
     return please_logme.get_new_logger(name, verbosity=VERBOSITY_REQUESTED)
-
-
-# def silence_loggers():
-# # UNSUSED
-#     root_logger = logging.getLogger()
-#     first = True
-#     for handler in root_logger.handlers:
-#         if first:
-#             first = False
-#             continue
-#         root_logger.removeHandler(handler)
-#         # handler.close()
 
 
 def re_obscure_pattern(string):
