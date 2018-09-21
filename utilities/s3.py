@@ -30,7 +30,8 @@ class S3(object):
             self.client.download_file(self.bucket, remote_path, local_path)
         except botocore.exceptions.ClientError as e:
             if e.response.get('Error', {}).get('Code', 0) == "404":
-                print("The object does not exist.")
+                log.error("Object '%s' does not exist.", remote_path)
+                return False
             else:
                 raise
         else:
@@ -39,6 +40,7 @@ class S3(object):
                     remote_path, local_path
                 )
             )
+        return True
 
     def push(self, local_path, remote_path):
         self.client.upload_file(local_path, self.bucket, remote_path)
