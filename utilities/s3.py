@@ -5,6 +5,7 @@ log = get_logger(__name__)
 
 try:
     import boto3
+    import botocore
 except ImportError as e:
     log.exit("\nThis module requires an extra package:\n%s", e)
 
@@ -24,11 +25,26 @@ class S3(object):
         )
         self.bucket = bucket_name
 
-    def push(self, local_file, remote_path):
-        self.client.upload_file(local_file, self.bucket, remote_path)
+    def pull(self, remote_path, local_path):
+        try:
+            self.client.download_file(self.bucket, remote_path, local_path)
+        except botocore.exceptions.ClientError as e:
+            if e.response.get('Error', {}).get('Code', 0) == "404":
+                print("The object does not exist.")
+            else:
+                raise
+        else:
+            log.info(
+                'File "%s": obtained\n\t%s' % (
+                    remote_path, local_path
+                )
+            )
+
+    def push(self, local_path, remote_path):
+        self.client.upload_file(local_path, self.bucket, remote_path)
         log.info(
             'File "%s": uploaded\n\t%s/%s' % (
-                local_file, self.url, remote_path
+                local_path, self.url, remote_path
             )
         )
 
