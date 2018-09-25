@@ -103,7 +103,7 @@ def call(uri,
     method = method.lower()
     requests_callable = getattr(requests, method)
 
-    if method in ['post', 'patch', 'put']:
+    if method in ['post', 'patch', 'put', 'delete']:
         if method != 'put' or file is not None or filecontent is not None:
             import json
             payload = json.dumps(payload)
