@@ -161,12 +161,16 @@ def call(uri,
     return out
 
 
-def login(uri, username, password, endpoint=None):
+def login(uri, username, password, endpoint=None, authscheme='credentials'):
     if endpoint is None:
         endpoint = LOGIN_ENDPOINT
     out = call(
         uri, method='post', endpoint=endpoint,
-        payload={'username': username, 'password': password}
+        payload={
+            'username': username,
+            'password': password,
+            'authscheme': authscheme
+        }
     )
     log.debug("Current iRODS user: %s", out.get('b2safe_user'))
     return out.get('token'), out.get('b2safe_home')
