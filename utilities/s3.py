@@ -35,7 +35,7 @@ class S3(object):
             else:
                 raise
         else:
-            log.info(
+            log.debug(
                 'File "%s": obtained\n\t%s' % (
                     remote_path, local_path
                 )
@@ -44,7 +44,7 @@ class S3(object):
 
     def push(self, local_path, remote_path):
         self.client.upload_file(local_path, self.bucket, remote_path)
-        log.info(
+        log.debug(
             'File "%s": uploaded\n\t%s/%s' % (
                 local_path, self.url, remote_path
             )
