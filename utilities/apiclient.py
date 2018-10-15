@@ -145,7 +145,10 @@ def call(uri,
             # Streaming a file
             arguments['data'] = dict(file=(io.BytesIO(filecontent), filename))
 
-        request = requests_callable(**arguments, verify=False)
+        # Skipping ssl verification
+        arguments['verify'] = False
+
+        request = requests_callable(**arguments)
 
     except requests.exceptions.ConnectionError as e:
         if exit_on_fail:
