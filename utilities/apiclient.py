@@ -146,7 +146,7 @@ def call(uri,
             arguments['data'] = dict(file=(io.BytesIO(filecontent), filename))
 
         # Skipping ssl verification
-        arguments['verify'] = False
+        # arguments['verify'] = False
 
         request = requests_callable(**arguments)
 

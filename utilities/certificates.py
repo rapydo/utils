@@ -312,13 +312,6 @@ class Certificates(object):
             if irods_env is not None:
                 myproxy = myproxy.with_env(**irods_env)
 
-            # output = (myproxy[
-            #     "-s", myproxy_host,
-            #     "-l", irods_user,
-            #     "-k", myproxy_cert_name,
-            #     "-t", str(duration),
-            #     "-o", proxy_cert_file, "-S"] << irods_cert_pwd)()
-            # # log.critical(output)
             (
                 myproxy[
                     "-s", myproxy_host,
