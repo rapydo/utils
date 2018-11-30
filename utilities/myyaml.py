@@ -116,7 +116,7 @@ def load_yaml_file(file, path=None,
                 if len(docs) > 0:
                     return docs[0]
 
-                message = "YAML file is empty %s" % filepath
+                message = "YAML file is empty: %s" % filepath
                 if logger:
                     log.exit(message)
                 else:
