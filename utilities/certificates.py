@@ -247,6 +247,8 @@ class Certificates(object):
 
             self.check_x509_permissions()
 
+            return True
+
     def check_x509_permissions(self):
 
         from utilities import basher
