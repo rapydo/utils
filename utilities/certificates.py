@@ -76,7 +76,8 @@ class Certificates(object):
         self.proxy_write(tmpproxy, destination_path)
         return destination_path
 
-    def encode_csr(self, req):
+    @staticmethod
+    def encode_csr(req):
         enc = crypto.dump_certificate_request(crypto.FILETYPE_PEM, req)
         data = {'certificate_request': enc}
         return data
@@ -96,7 +97,8 @@ class Certificates(object):
         # print("CSR", key, req)
         return key, req
 
-    def write_key_and_cert(self, key, cert):
+    @staticmethod
+    def write_key_and_cert(key, cert):
         proxycertcontent = cert.decode()
         if proxycertcontent is None or proxycertcontent.strip() == '':
             return None
@@ -107,7 +109,8 @@ class Certificates(object):
             f.write(proxycertcontent)
         return tempfile
 
-    def proxy_from_ca(self, ca_client, prod=False):
+    @staticmethod
+    def proxy_from_ca(ca_client, prod=False):
         """
         Request for certificate and save it into a file
 
@@ -122,7 +125,7 @@ class Certificates(object):
             ssl._create_default_https_context = ssl._create_unverified_context  # nopep8 # pylint:disable=protected-access
 
         #######################
-        key, req = self.generate_csr_and_key()
+        key, req = Certificates.generate_csr_and_key()
         # log.debug("Key and Req:\n%s\n%s" % (key, req))
 
         #######################
@@ -130,7 +133,7 @@ class Certificates(object):
         try:
             response = ca_client.post(
                 'ca/o/delegateduser',
-                data=self.encode_csr(req),
+                data=Certificates.encode_csr(req),
                 headers={'Accept-Encoding': 'identity'})
             # Note: token is applied from oauth2 lib using the session content
         except ValueError as e:
@@ -151,7 +154,7 @@ class Certificates(object):
 
         #######################
         # write proxy certificate to a random file name
-        proxyfile = self.write_key_and_cert(key, response.data)
+        proxyfile = Certificates.write_key_and_cert(key, response.data)
         log.debug('Wrote certificate to %s', proxyfile)
 
         return proxyfile
