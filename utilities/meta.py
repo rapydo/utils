@@ -75,7 +75,8 @@ class Meta(object):
         self.set_latest_classes(classes)
         return self.get_latest_classes()
 
-    def get_module_from_string(self, modulestring,
+    @staticmethod
+    def get_module_from_string(modulestring,
                                prefix_package=False,
                                exit_if_not_found=False,
                                exit_on_fail=False,
@@ -116,13 +117,13 @@ class Meta(object):
                                        exit_on_fail=False):
 
         submodules = []
-        package = self.get_module_from_string(package_name)
+        package = Meta.get_module_from_string(package_name)
 
         for module_name in self.get_submodules_from_package(package):
             module_path = package_name + '.' + module_name
             log.debug("Loading module '%s'", module_path)
 
-            submod = self.get_module_from_string(
+            submod = Meta.get_module_from_string(
                 module_path,
                 exit_if_not_found=exit_if_not_found,
                 exit_on_fail=exit_on_fail)
@@ -186,7 +187,7 @@ class Meta(object):
 
     def models_module(self, name, package):
         module_name = "%s.%s.%s" % (package, 'models', name)
-        return self.get_module_from_string(module_name, exit_on_fail=True)
+        return Meta.get_module_from_string(module_name, exit_on_fail=True)
 
     def obj_from_models(self, obj_name, module_name, package):
         module = self.models_module(module_name, package)
@@ -215,7 +216,7 @@ class Meta(object):
 
         module_name = "%s.%s.%s" % ('services', 'authentication', auth_service)
         log.verbose("Loading auth extension: %s" % module_name)
-        module = self.get_module_from_string(
+        module = Meta.get_module_from_string(
             modulestring=module_name, prefix_package=True, exit_on_fail=True)
 
         return module
@@ -252,7 +253,7 @@ class Meta(object):
         abspath = "%s.%s" % (CUSTOM_PACKAGE, module_relpath)
         MyClass = self.get_class_from_string(
             class_name,
-            self.get_module_from_string(abspath, debug_on_fail=False),
+            Meta.get_module_from_string(abspath, debug_on_fail=False),
             skip_error=True
         )
 

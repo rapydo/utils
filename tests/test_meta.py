@@ -17,7 +17,7 @@ def test():
     assert isinstance(sub_modules, list)
     assert len(sub_modules) > 0
 
-    module = meta.get_module_from_string("utilities.meta")
+    module = Meta.get_module_from_string("utilities.meta")
     assert module is not None
     assert hasattr(module, cls_name)
 
@@ -104,11 +104,11 @@ def test_failures():
     else:
         pytest.fail("This call should fail and raise and AttributeError")
 
-    module = meta.get_module_from_string("utilities.metabla")
+    module = Meta.get_module_from_string("utilities.metabla")
     assert module is None
 
     try:
-        module = meta.get_module_from_string(
+        module = Meta.get_module_from_string(
             "utilities.metabla", exit_if_not_found=True)
     except SystemExit:
         pass
@@ -116,7 +116,7 @@ def test_failures():
         pytest.fail("This call should fail and exit")
 
     try:
-        module = meta.get_module_from_string(
+        module = Meta.get_module_from_string(
             "utilities.metabla", exit_if_not_found=True, exit_on_fail=True)
     except SystemExit:
         pass
@@ -124,7 +124,7 @@ def test_failures():
         pytest.fail("This call should fail and exit")
 
     try:
-        module = meta.get_module_from_string(
+        module = Meta.get_module_from_string(
             "utilities.metabla",
             exit_if_not_found=True, exit_on_fail=True, debug_on_fail=True)
     except SystemExit:
@@ -133,11 +133,11 @@ def test_failures():
         pytest.fail("This call should fail and exit")
 
     # FIXME: unable to test exit_on_fail... we need a moule with import errors?
-    module = meta.get_module_from_string(
+    module = Meta.get_module_from_string(
         "utilities.metabla", exit_on_fail=True)
     assert module is None
 
-    module = meta.get_module_from_string(
+    module = Meta.get_module_from_string(
         "utilities.metabla", debug_on_fail=True)
     assert module is None
 
