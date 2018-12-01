@@ -185,12 +185,13 @@ class Meta(object):
                 return args[0]
         return None
 
-    def models_module(self, name, package):
+    @staticmethod
+    def models_module(name, package):
         module_name = "%s.%s.%s" % (package, 'models', name)
         return Meta.get_module_from_string(module_name, exit_on_fail=True)
 
-    def obj_from_models(self, obj_name, module_name, package):
-        module = self.models_module(module_name, package)
+    def obj_from_models(obj_name, module_name, package):
+        module = Meta.models_module(module_name, package)
         obj = getattr(module, obj_name, None)
         return obj
 
@@ -202,7 +203,7 @@ class Meta(object):
             # exit_on_fail = False
         else:
             package = BACKEND_PACKAGE
-        module = self.models_module(name, package)
+        module = Meta.models_module(name, package)
 
         if module is not None:
             models = self.get_new_classes_from_module(module)
