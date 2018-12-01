@@ -8,9 +8,9 @@ we developed and used while creating the `RAPyDo framework`.
 
 The official documentation is hosted here at github:
 
--  [Quick start](docs/quickstart.md)
--  [Logger utility](docs/logs.md)
--  more to come
+  - [Quick start](docs/quickstart.md)
+  - [Logger utility](docs/logs.md)
+  - more to come
 
 ---
 
