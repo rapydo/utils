@@ -229,7 +229,8 @@ class Meta(object):
             attributes_and_methods = {}
         return type(name, parents, attributes_and_methods)
 
-    def get_celery_tasks_from_module(self, submodule):
+    @staticmethod
+    def get_celery_tasks_from_module(submodule):
         """
             Extract all celery tasks from a module.
             Celery tasks are functions decorated by @celery_app.task(...)

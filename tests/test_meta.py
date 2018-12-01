@@ -66,7 +66,7 @@ def test():
     # meta.import_models
     # meta.get_authentication_module
     # meta.class_factory
-    # meta.get_celery_tasks_from_module
+    # Meta.get_celery_tasks_from_module
 
 
 # def test_failures(capfd):
