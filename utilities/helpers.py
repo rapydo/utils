@@ -140,7 +140,6 @@ def ask_yes_or_no(question, error='Unknown', print_function=None):
                 break
             else:
                 print('USER INTERRUPT:\t' + error)
-                import sys
                 sys.exit(1)
 
 
