@@ -212,7 +212,8 @@ class Meta(object):
 
         return models
 
-    def get_authentication_module(self, auth_service):
+    @staticmethod
+    def get_authentication_module(auth_service):
 
         module_name = "%s.%s.%s" % ('services', 'authentication', auth_service)
         log.verbose("Loading auth extension: %s" % module_name)
