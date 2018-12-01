@@ -3,7 +3,7 @@ import random
 import string
 
 
-def get_random_name(len=12, prefix=""):
+def get_random_name(lenght=12, prefix=""):
     rand = random.SystemRandom()
     charset = string.ascii_uppercase + string.digits
 
