@@ -1,9 +1,9 @@
-Hello user, 
+Hello user,
 
-this repo is a collection of `python` utilities 
+this repo is a collection of `python` utilities
 we developed and used while creating the `RAPyDo framework`.
 
-## documentation
+## documentation ##
 
 The official documentation is hosted here at github:
 *   [Quick start](docs/quickstart.md)
@@ -12,7 +12,7 @@ The official documentation is hosted here at github:
 
 ---
 
-## badges
+## badges ##
 
 | pypi | quality | travis | coveralls |
 | ---- | ------- | ------ | --------- |
