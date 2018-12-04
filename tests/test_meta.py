@@ -41,9 +41,9 @@ def test():
         meta, private_methods=True)
     assert methods is not None
     assert isinstance(methods, dict)
-    # it is a static method
+    # both are static methods
     assert "get_methods_inside_instance" not in methods
-    assert "get_authentication_module" in methods
+    assert "get_authentication_module" not in methods
 
     metacls = meta.metaclassing(Meta, "Test")
     assert metacls is not None
