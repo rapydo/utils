@@ -18,12 +18,16 @@ def root():
     return os.path.abspath(os.sep)
 
 
+def current_dir():
+    return os.getcwd()
+
+
 @contextmanager
 def cd(newdir):
     """
     https://stackoverflow.com/a/24176022
     """
-    prevdir = os.getcwd()
+    prevdir = current_dir()
     os.chdir(os.path.expanduser(str(newdir)))
     try:
         yield

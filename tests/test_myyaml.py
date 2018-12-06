@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-import yaml
+# import yaml
 from utilities.myyaml import load_yaml_file
-from utilities.basher import BashCommands
+# from utilities.basher import BashCommands
 
 
 def test_missing_files(capfd):

@@ -75,7 +75,8 @@ class Meta(object):
         self.set_latest_classes(classes)
         return self.get_latest_classes()
 
-    def get_module_from_string(self, modulestring,
+    @staticmethod
+    def get_module_from_string(modulestring,
                                prefix_package=False,
                                exit_if_not_found=False,
                                exit_on_fail=False,
@@ -116,13 +117,13 @@ class Meta(object):
                                        exit_on_fail=False):
 
         submodules = []
-        package = self.get_module_from_string(package_name)
+        package = Meta.get_module_from_string(package_name)
 
         for module_name in self.get_submodules_from_package(package):
             module_path = package_name + '.' + module_name
             log.debug("Loading module '%s'", module_path)
 
-            submod = self.get_module_from_string(
+            submod = Meta.get_module_from_string(
                 module_path,
                 exit_if_not_found=exit_if_not_found,
                 exit_on_fail=exit_on_fail)
@@ -184,12 +185,13 @@ class Meta(object):
                 return args[0]
         return None
 
-    def models_module(self, name, package):
+    @staticmethod
+    def models_module(name, package):
         module_name = "%s.%s.%s" % (package, 'models', name)
-        return self.get_module_from_string(module_name, exit_on_fail=True)
+        return Meta.get_module_from_string(module_name, exit_on_fail=True)
 
-    def obj_from_models(self, obj_name, module_name, package):
-        module = self.models_module(module_name, package)
+    def obj_from_models(obj_name, module_name, package):
+        module = Meta.models_module(module_name, package)
         obj = getattr(module, obj_name, None)
         return obj
 
@@ -201,7 +203,7 @@ class Meta(object):
             # exit_on_fail = False
         else:
             package = BACKEND_PACKAGE
-        module = self.models_module(name, package)
+        module = Meta.models_module(name, package)
 
         if module is not None:
             models = self.get_new_classes_from_module(module)
@@ -211,11 +213,12 @@ class Meta(object):
 
         return models
 
-    def get_authentication_module(self, auth_service):
+    @staticmethod
+    def get_authentication_module(auth_service):
 
         module_name = "%s.%s.%s" % ('services', 'authentication', auth_service)
         log.verbose("Loading auth extension: %s" % module_name)
-        module = self.get_module_from_string(
+        module = Meta.get_module_from_string(
             modulestring=module_name, prefix_package=True, exit_on_fail=True)
 
         return module
@@ -228,7 +231,8 @@ class Meta(object):
             attributes_and_methods = {}
         return type(name, parents, attributes_and_methods)
 
-    def get_celery_tasks_from_module(self, submodule):
+    @staticmethod
+    def get_celery_tasks_from_module(submodule):
         """
             Extract all celery tasks from a module.
             Celery tasks are functions decorated by @celery_app.task(...)
@@ -246,3 +250,27 @@ class Meta(object):
 
             tasks[func[0]] = func[1]
         return tasks
+
+    def get_customizer_class(self, module_relpath, class_name, args=None):
+
+        abspath = "%s.%s" % (CUSTOM_PACKAGE, module_relpath)
+        MyClass = self.get_class_from_string(
+            class_name,
+            Meta.get_module_from_string(abspath, debug_on_fail=False),
+            skip_error=True
+        )
+
+        instance = None
+        if args is None:
+            args = {}
+
+        if MyClass is None:
+            log.debug("No customizer available for %s", class_name)
+        else:
+            try:
+                instance = MyClass(**args)
+            except BaseException as e:
+                log.error("Errors during customizer: %s", e)
+            else:
+                log.debug("Customizer called: %s", class_name)
+        return instance

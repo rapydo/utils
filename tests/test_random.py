@@ -10,8 +10,8 @@ def test():
 
     assert s1 != s2
 
-    s1 = get_random_name(len=10)
-    s2 = get_random_name(len=20)
+    s1 = get_random_name(lenght=10)
+    s2 = get_random_name(lenght=20)
 
     assert len(s1) == 10
     assert len(s2) == 20
@@ -20,8 +20,8 @@ def test():
 
     assert s1.startswith('TEST_')
 
-    s1 = get_random_name(len=0)
+    s1 = get_random_name(lenght=0)
     assert s1 == ""
 
-    s1 = get_random_name(len=0, prefix='TEST')
+    s1 = get_random_name(lenght=0, prefix='TEST')
     assert s1 == "TEST"

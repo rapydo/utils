@@ -46,32 +46,24 @@ def test(capfd):
     out, err = capfd.readouterr()
     out = out.split("\n")
     err = err.split("\n")
-    # log.pp(err)
 
     log.warning("PRINT TRAVIS LOGGER LEVEL: %s", log)
-
-    # FIXME: travis doesn't use the right level here. why?
 
     # assert ("VERY_VERBOSE %s" % TESTING_MESSAGE) in err
     # assert ("VERBOSE %s" % TESTING_MESSAGE) in err
     # assert ("DEBUG %s" % TESTING_MESSAGE) in err
-    # assert ("INFO %s" % TESTING_MESSAGE) in err
-
+    assert ("INFO %s" % TESTING_MESSAGE) in err
     assert ("WARNING %s" % TESTING_MESSAGE) in err
     assert ("ERROR %s" % TESTING_MESSAGE) in err
     assert ("ERROR %s" % TESTING_MESSAGE) in err
 
     # assert ("VERBOSE (CHECKED)\t%s" % TESTING_MESSAGE) in err
     # assert ("VERBOSE \u2713 %s" % TESTING_MESSAGE) in err
-    # assert ("INFO (CHECKED)\t%s" % TESTING_MESSAGE) in err
-    # assert ("INFO \u2713 %s" % TESTING_MESSAGE) in err
-
+    assert ("INFO (CHECKED)\t%s" % TESTING_MESSAGE) in err
+    assert ("INFO \u2713 %s" % TESTING_MESSAGE) in err
     assert ("PRINT_STACK %s" % TESTING_MESSAGE) in err
     assert ("ERROR (FAIL)\t%s" % TESTING_MESSAGE) in err
     assert ("EXIT %s" % TESTING_MESSAGE) in err
-
-    # This syntax should be preferable:
-    # Specify string format arguments as logging function parameters
 
     log.very_verbose("%s", TESTING_MESSAGE)
     log.verbose("%s", TESTING_MESSAGE)
@@ -83,8 +75,7 @@ def test(capfd):
     # assert ("VERY_VERBOSE %s" % TESTING_MESSAGE) in err
     # assert ("VERBOSE %s" % TESTING_MESSAGE) in err
     # assert ("DEBUG %s" % TESTING_MESSAGE) in err
-    # assert ("INFO %s" % TESTING_MESSAGE) in err
-
+    assert ("INFO %s" % TESTING_MESSAGE) in err
     assert ("WARNING %s" % TESTING_MESSAGE) in err
     assert ("ERROR %s" % TESTING_MESSAGE) in err
 

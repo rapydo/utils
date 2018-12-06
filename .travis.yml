@@ -1,33 +1,34 @@
 language: python
-
 script:
-  - pip install --upgrade setuptools
-  # bug fix: https://github.com/pypa/setuptools/issues/1101
-  - pip install --upgrade -r requirements.txt
-  - pip install --upgrade -r dev-requirements.txt
-  - pip3 install --upgrade --no-cache-dir --editable .
-  - export TESTING=1
-  - export DEBUG_LEVEL='VERY_VERBOSE'
-  - py.test --cov=utilities -s -x
-
+- pip install --upgrade setuptools
+- pip install --upgrade -r requirements.txt
+- pip install --upgrade -r dev-requirements.txt
+- pip3 install --upgrade --no-cache-dir --editable .
+- export TESTING=1
+- export DEBUG_LEVEL='VERY_VERBOSE'
+- py.test --cov=utilities -s -x
 after_success:
-  - coveralls
-
+- coveralls
 jobs:
   include:
-    - stage: test
-      python: 3.4
-    - python: 3.5
-    - python: 3.6.2
-
-    - stage: deploy
-      python: 3.6.2
-      script: skip
-      deploy:
-        provider: pypi
-        user: pdonorio
-        password:
-          secure: pAsXVY1/+gmjlmz8KkhJN6GRYAnStRQOtMz4pqB59tWCfnGrYQf3S/Qpe6QQ6ZpxgGq+ItZUvZYILUFWDa1synsjrBu7xea2LRYNnc2AeIQqc3X5seCER5DwZRjAw77R2kfx52NyGHIgT5c3xyqRBCdrx/u6pYGd6k0qHaCO9xcNq5gFMsJdzj5ySCsHEMX+K5o7TGl4WkuYftQt0La+r2MA0/ELrdbBFD/TZWw7YyjVAECnmtDNIe9fsRO5yZj2f/GwGOqDjKT2coy7E1sqE4G3W7RVOZqV654+2WZWjXBqQB3V+ENolSPUfQ6qI7VnohV7/CrGxbBmSN3foBEoXf9B55iSgPyU+1ScigWR56Xeaba2Ea0o+g7+rcTyOTFOtizX7SJnktCiObjYamGNUsWM3Avvr0POMOKfty75+VRVcLaSO96Sym2Yb5rA8M9PCxc0mgQXzsAxtZw7c74lz5YUytmtqeIem9te9L8J923ZP6crk3epPaRF/B3x2m4EJcCd7jStXe0Qb0EjSt1hnArxT+ybwb87PzMhuMpCrq6WS17lMZn3DmV5fN/cxgzwKnqeBV0tRZNT3m67VwDo5wF54M/vWVcj4sn3I6NkmAWMQMaNh1uaSFXzfoY3oMnAX+wjZGaMjGFeNg7dlPQ90j15Erf2nL5CrsW4zRA4rhM=
-        on:
-          # all_branches: true
-          tags: true
+  - stage: test
+    python: 3.4
+  - python: 3.5
+  - python: 3.6.2
+  - stage: deploy
+    python: 3.6.2
+    script: skip
+    deploy:
+      provider: pypi
+      user: pdonorio
+      password:
+        secure: pAsXVY1/+gmjlmz8KkhJN6GRYAnStRQOtMz4pqB59tWCfnGrYQf3S/Qpe6QQ6ZpxgGq+ItZUvZYILUFWDa1synsjrBu7xea2LRYNnc2AeIQqc3X5seCER5DwZRjAw77R2kfx52NyGHIgT5c3xyqRBCdrx/u6pYGd6k0qHaCO9xcNq5gFMsJdzj5ySCsHEMX+K5o7TGl4WkuYftQt0La+r2MA0/ELrdbBFD/TZWw7YyjVAECnmtDNIe9fsRO5yZj2f/GwGOqDjKT2coy7E1sqE4G3W7RVOZqV654+2WZWjXBqQB3V+ENolSPUfQ6qI7VnohV7/CrGxbBmSN3foBEoXf9B55iSgPyU+1ScigWR56Xeaba2Ea0o+g7+rcTyOTFOtizX7SJnktCiObjYamGNUsWM3Avvr0POMOKfty75+VRVcLaSO96Sym2Yb5rA8M9PCxc0mgQXzsAxtZw7c74lz5YUytmtqeIem9te9L8J923ZP6crk3epPaRF/B3x2m4EJcCd7jStXe0Qb0EjSt1hnArxT+ybwb87PzMhuMpCrq6WS17lMZn3DmV5fN/cxgzwKnqeBV0tRZNT3m67VwDo5wF54M/vWVcj4sn3I6NkmAWMQMaNh1uaSFXzfoY3oMnAX+wjZGaMjGFeNg7dlPQ90j15Erf2nL5CrsW4zRA4rhM=
+      on:
+        tags: true
+notifications:
+  email: false
+  slack:
+    rooms:
+      secure: lj6xjRhC2x1/Hy9Ocdwc7A4/c0BF4/0OwWyKPBq+/9Z/3IEZCngjzeLYv2dU+g7aHCy0J4k+u2YpHF6JssGHkiZRogTCyCbfZhcJFXFrak/VaPZxq5Z/e9nPsaQ3Hoeav/Br+EJLs+en3yuuBhMB7jAvw8N8ITLc6S6/HUgQ7LSK6cT1Yb1ixHwXrNKX7JXdngXIuQItn+sstIp27vLFlRFDBwSBAJW/DOLxNzfDgUKAZvSv9AUYS2XDAyh5PV0zKRapcXpTyXtT0tE5vl9Z6NoepjdhXdS3IRZA2Y3jq0CFdpiJzSMx96xGR8ZYSm+4pb7vAPh3e1sNdkAb/d3exDj0fXAmsU4cqoV8RltcCo2qgSyU4kBMx1nYo0h2+XSxNamNJBnMIhpZWjQAV2uXBU06JO/m4UIQYtKk6ncMLUN3eVfOUxIXMYBUalT1TTVPKnEJ5YWaawerYy/ZnpWeC7Iz2ekg6CPMNRw4NVesyKceevyJs39t9RTxY5eKbYiYWmXiq17HAUrtDdkxWPW6/lMCwvBANIuK5inqc2dDdEGxuZZaTWtuZQY9uK+f6JW5CHY4iOBgmj7tLSm1+i5dMjCO80F9r6tYdcKX0lCWd535P07/EhF+I05fYgIbxKptSTCCBBL3G3nTh1vDtXyx7dktnSkXPMRMZWBMGcypwdw=
+    on_success: change # default: always
+    on_failure: always # default: always

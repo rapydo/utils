@@ -103,7 +103,7 @@ def call(uri,
     method = method.lower()
     requests_callable = getattr(requests, method)
 
-    if method in ['post', 'patch', 'put']:
+    if method in ['post', 'patch', 'put', 'delete']:
         if method != 'put' or file is not None or filecontent is not None:
             import json
             payload = json.dumps(payload)
@@ -145,6 +145,9 @@ def call(uri,
             # Streaming a file
             arguments['data'] = dict(file=(io.BytesIO(filecontent), filename))
 
+        # Skipping ssl verification
+        # arguments['verify'] = False
+
         request = requests_callable(**arguments)
 
     except requests.exceptions.ConnectionError as e:
@@ -161,12 +164,16 @@ def call(uri,
     return out
 
 
-def login(uri, username, password, endpoint=None):
+def login(uri, username, password, endpoint=None, authscheme='credentials'):
     if endpoint is None:
         endpoint = LOGIN_ENDPOINT
     out = call(
         uri, method='post', endpoint=endpoint,
-        payload={'username': username, 'password': password}
+        payload={
+            'username': username,
+            'password': password,
+            'authscheme': authscheme
+        }
     )
     log.debug("Current iRODS user: %s", out.get('b2safe_user'))
     return out.get('token'), out.get('b2safe_home')

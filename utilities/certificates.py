@@ -29,6 +29,10 @@ class Certificates(object):
     _dir = os.environ.get('CERTDIR')
     _proxyfile = 'userproxy.crt'
 
+    def __init__(self):
+        log.warning(
+            "All methods of this class are static, no need to create an instance")
+
     @classmethod
     def get_dn_from_cert(cls, certdir, certfilename, ext='pem'):
 
@@ -59,9 +63,10 @@ class Certificates(object):
         # NOTE: use the octave from the UNIX 'mode'
         os.chmod(destination_path, 0o600)
 
-    def save_proxy_cert(self, tmpproxy, unityid='guest', user=None):
+    @staticmethod
+    def save_proxy_cert(tmpproxy, unityid='guest', user=None):
 
-        destination_path = self.get_proxy_filename(unityid)
+        destination_path = Certificates.get_proxy_filename(unityid)
 
         from utilities.helpers import parent_dir
         destination_dir = parent_dir(destination_path)
@@ -73,10 +78,11 @@ class Certificates(object):
             with open(os.path.join(destination_dir, '.username'), 'w') as f:
                 f.write(user)
 
-        self.proxy_write(tmpproxy, destination_path)
+        Certificates.proxy_write(tmpproxy, destination_path)
         return destination_path
 
-    def encode_csr(self, req):
+    @staticmethod
+    def encode_csr(req):
         enc = crypto.dump_certificate_request(crypto.FILETYPE_PEM, req)
         data = {'certificate_request': enc}
         return data
@@ -96,7 +102,8 @@ class Certificates(object):
         # print("CSR", key, req)
         return key, req
 
-    def write_key_and_cert(self, key, cert):
+    @staticmethod
+    def write_key_and_cert(key, cert):
         proxycertcontent = cert.decode()
         if proxycertcontent is None or proxycertcontent.strip() == '':
             return None
@@ -107,7 +114,8 @@ class Certificates(object):
             f.write(proxycertcontent)
         return tempfile
 
-    def proxy_from_ca(self, ca_client, prod=False):
+    @staticmethod
+    def proxy_from_ca(ca_client, prod=False):
         """
         Request for certificate and save it into a file
 
@@ -122,7 +130,7 @@ class Certificates(object):
             ssl._create_default_https_context = ssl._create_unverified_context  # nopep8 # pylint:disable=protected-access
 
         #######################
-        key, req = self.generate_csr_and_key()
+        key, req = Certificates.generate_csr_and_key()
         # log.debug("Key and Req:\n%s\n%s" % (key, req))
 
         #######################
@@ -130,7 +138,7 @@ class Certificates(object):
         try:
             response = ca_client.post(
                 'ca/o/delegateduser',
-                data=self.encode_csr(req),
+                data=Certificates.encode_csr(req),
                 headers={'Accept-Encoding': 'identity'})
             # Note: token is applied from oauth2 lib using the session content
         except ValueError as e:
@@ -151,19 +159,13 @@ class Certificates(object):
 
         #######################
         # write proxy certificate to a random file name
-        proxyfile = self.write_key_and_cert(key, response.data)
+        proxyfile = Certificates.write_key_and_cert(key, response.data)
         log.debug('Wrote certificate to %s', proxyfile)
 
         return proxyfile
 
-    def set_globus_ca_dir(self, xcdir):
-        # CA CERTIFICATES DIR
-        if xcdir is None:
-            os.environ['X509_CERT_DIR'] = os.path.join(self._dir, 'simple_ca')
-        else:
-            os.environ['X509_CERT_DIR'] = xcdir
-
-    def set_globus_proxy_cert(self, key, cert):  # , proxy=None):
+    @staticmethod
+    def set_globus_proxy_cert(key, cert):  # , proxy=None):
 
         os.environ['X509_USER_KEY'] = key
         os.environ['X509_USER_CERT'] = cert
@@ -172,25 +174,29 @@ class Certificates(object):
         # check in the future why the right variable doesn't work anymore
         # os.environ['X509_USER_PROXY'] = proxy
 
-    def globus_proxy(self,
+    @classmethod
+    def globus_proxy(cls,
                      proxy_file=None, user_proxy=None,
                      cert_dir=None, myproxy_host=None,
                      cert_name=None, cert_pwd=None):
 
-        # Compute paths for certificates
-        self.set_globus_ca_dir(cert_dir)
-        cpath = os.path.join(self._dir, user_proxy)
+        if cert_dir is None:
+            os.environ['X509_CERT_DIR'] = os.path.join(cls._dir, 'simple_ca')
+        else:
+            os.environ['X509_CERT_DIR'] = cert_dir
+
+        cpath = os.path.join(cls._dir, user_proxy)
 
         ################
         # 1. b2access
         if proxy_file is not None:
             log.debug("Certificate path: %s", proxy_file)
-            self.set_globus_proxy_cert(key=proxy_file, cert=proxy_file)
+            Certificates.set_globus_proxy_cert(key=proxy_file, cert=proxy_file)
 
         ################
         # 2. normal certificates (e.g. 'guest')
         elif os.path.isdir(cpath):
-            self.set_globus_proxy_cert(
+            Certificates.set_globus_proxy_cert(
                 key=os.path.join(cpath, 'userkey.pem'),
                 cert=os.path.join(cpath, 'usercert.pem'))
 
@@ -204,7 +210,7 @@ class Certificates(object):
                 valid = False
             else:
                 valid, not_before, not_after = \
-                    self.check_cert_validity(proxy_cert_file)
+                    Certificates.check_cert_validity(proxy_cert_file)
                 if not valid:
                     log.warning(
                         "Invalid proxy certificate for %s." +
@@ -239,15 +245,18 @@ class Certificates(object):
 
             ##################
             if valid:
-                self.set_globus_proxy_cert(
+                Certificates.set_globus_proxy_cert(
                     key=proxy_cert_file, cert=proxy_cert_file)
             else:
                 log.critical("Cannot find a valid certificate file")
                 return False
 
-        self.check_x509_permissions()
+            Certificates.check_x509_permissions()
 
-    def check_x509_permissions(self):
+        return True
+
+    @staticmethod
+    def check_x509_permissions():
 
         from utilities import basher
         os_user = basher.current_os_user()
@@ -300,8 +309,8 @@ class Certificates(object):
 
         return valid, not_before, not_after
 
-    @classmethod
-    def get_myproxy_certificate(cls, irods_env,
+    @staticmethod
+    def get_myproxy_certificate(irods_env,
                                 irods_user, myproxy_cert_name, irods_cert_pwd,
                                 proxy_cert_file,
                                 duration=168,
@@ -312,13 +321,6 @@ class Certificates(object):
             if irods_env is not None:
                 myproxy = myproxy.with_env(**irods_env)
 
-            # output = (myproxy[
-            #     "-s", myproxy_host,
-            #     "-l", irods_user,
-            #     "-k", myproxy_cert_name,
-            #     "-t", str(duration),
-            #     "-o", proxy_cert_file, "-S"] << irods_cert_pwd)()
-            # # log.critical(output)
             (
                 myproxy[
                     "-s", myproxy_host,
