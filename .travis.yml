@@ -1,4 +1,6 @@
 language: python
+sudo: required
+dist: xenial
 script:
 - pip install --upgrade setuptools
 - pip install --upgrade -r requirements.txt
@@ -14,9 +16,10 @@ jobs:
   - stage: test
     python: 3.4
   - python: 3.5
-  - python: 3.6.2
+  - python: 3.6.5
+  - python: 3.7.1
   - stage: deploy
-    python: 3.6.2
+    python: 3.7.1
     script: skip
     deploy:
       provider: pypi
