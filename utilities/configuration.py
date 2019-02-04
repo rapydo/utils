@@ -32,7 +32,7 @@ def load_project_configuration(path, file=None, do_exit=True):
 
 def read(default_file_path, base_project_path,
          projects_path, submodules_path,
-         from_configuration_prefix="",
+         extended_configuration_prefix="",
          is_template=False,
          do_exit=True,
          ):
@@ -67,28 +67,28 @@ def read(default_file_path, base_project_path,
     base_configuration = load_project_configuration(
         default_file_path, file=PROJECTS_DEFAULTS_FILE, do_exit=do_exit)
 
-    from_project = project.get('extends')
-    if from_project is None:
+    extended_project = project.get('extends')
+    if extended_project is None:
         # Mix default and custom configuration
         return mix(base_configuration, custom_configuration), None, None
 
     extends_from = project.get('extends-from', 'projects')
 
     if extends_from == "submodules":
-        from_path = os.path.join(submodules_path, from_project)
+        extend_path = os.path.join(submodules_path, extended_project)
     else:
-        from_path = os.path.join(projects_path, from_project)
+        extend_path = os.path.join(projects_path, extended_project)
 
-    if not os.path.exists(from_path):
-        log.critical_exit("From project not found: %s", from_path)
+    if not os.path.exists(extend_path):
+        log.critical_exit("From project not found: %s", extend_path)
 
-    # on backend is mounted with `from_` prefix
-    from_file = "%s%s" % (from_configuration_prefix, PROJECT_CONF_FILENAME)
-    from_configuration = load_project_configuration(
-        from_path, file=from_file, do_exit=do_exit)
+    # on backend is mounted with `extended` prefix
+    extend_file = "%s%s" % (extended_configuration_prefix, PROJECT_CONF_FILENAME)
+    extended_configuration = load_project_configuration(
+        extend_path, file=extend_file, do_exit=do_exit)
 
-    m1 = mix(base_configuration, from_configuration)
-    return mix(m1, custom_configuration), from_project, from_path
+    m1 = mix(base_configuration, extended_configuration)
+    return mix(m1, custom_configuration), extended_project, extend_path
 
 
 def mix(base, custom):
