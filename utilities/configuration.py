@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 from utilities import PROJECT_CONF_FILENAME, PROJECTS_DEFAULTS_FILE
 from utilities.myyaml import load_yaml_file
 from utilities.logs import get_logger
@@ -29,23 +30,22 @@ def load_project_configuration(path, file=None, do_exit=True):
             raise AttributeError(e)
 
 
-def read(base_path, project_path=None, is_template=False, do_exit=True):
+def read(default_file_path, base_project_path,
+         projects_path, submodules_path,
+         from_configuration_prefix="",
+         is_template=False,
+         do_exit=True,
+         ):
     """
     Read default configuration
     """
 
-    base_configuration = load_project_configuration(
-        base_path, file=PROJECTS_DEFAULTS_FILE, do_exit=do_exit)
-
-    if project_path is None:
-        return base_configuration
-
     custom_configuration = load_project_configuration(
-        project_path, file=PROJECT_CONF_FILENAME, do_exit=do_exit)
+        base_project_path, file=PROJECT_CONF_FILENAME, do_exit=do_exit)
 
     # Verify custom project configuration
-    prj = custom_configuration.get('project')
-    if prj is None:
+    project = custom_configuration.get('project')
+    if project is None:
         raise AttributeError("Missing project configuration")
 
     if not is_template:
@@ -57,15 +57,38 @@ def read(base_path, project_path=None, is_template=False, do_exit=True):
             'name': 'rapydo'
         }
         for key, value in checks.items():
-            if prj.get(key, '') == value:
+            if project.get(key, '') == value:
 
                 log.critical_exit(
                     "Project not configured, mising key '%s' in file %s/%s.yaml",
-                    key, project_path, PROJECT_CONF_FILENAME
+                    key, base_project_path, PROJECT_CONF_FILENAME
                 )
 
-    # Mix default and custom configuration
-    return mix(base_configuration, custom_configuration)
+    base_configuration = load_project_configuration(
+        default_file_path, file=PROJECTS_DEFAULTS_FILE, do_exit=do_exit)
+
+    from_project = project.get('extends')
+    if from_project is None:
+        # Mix default and custom configuration
+        return mix(base_configuration, custom_configuration), None, None
+
+    extends_from = project.get('extends-from', 'projects')
+
+    if extends_from == "submodules":
+        from_path = os.path.join(submodules_path, from_project)
+    else:
+        from_path = os.path.join(projects_path, from_project)
+
+    if not os.path.exists(from_path):
+        log.critical_exit("From project not found: %s", from_path)
+
+    # on backend is mounted with `from_` prefix
+    from_file = "%s%s" % (from_configuration_prefix, PROJECT_CONF_FILENAME)
+    from_configuration = load_project_configuration(
+        from_path, file=from_file, do_exit=do_exit)
+
+    m1 = mix(base_configuration, from_configuration)
+    return mix(m1, custom_configuration), from_project, from_path
 
 
 def mix(base, custom):
