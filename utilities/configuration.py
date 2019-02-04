@@ -32,7 +32,7 @@ def load_project_configuration(path, file=None, do_exit=True):
 
 def read(default_file_path, base_project_path,
          projects_path, submodules_path,
-         extended_configuration_prefix="",
+         from_container=False,
          is_template=False,
          do_exit=True,
          ):
@@ -75,15 +75,23 @@ def read(default_file_path, base_project_path,
     extends_from = project.get('extends-from', 'projects')
 
     if extends_from == "submodules":
-        extend_path = os.path.join(submodules_path, extended_project)
+        extend_path = submodules_path
     else:
-        extend_path = os.path.join(projects_path, extended_project)
+        extend_path = projects_path
+
+    # in container the file is mounted in the confs folder
+    # otherwise will be in projects/projectname or submodules/projectname
+    if not from_container:
+        extend_path = os.path.join(extend_path, extended_project)
 
     if not os.path.exists(extend_path):
         log.critical_exit("From project not found: %s", extend_path)
 
-    # on backend is mounted with `extended` prefix
-    extend_file = "%s%s" % (extended_configuration_prefix, PROJECT_CONF_FILENAME)
+    # on backend is mounted with `extended_` prefix
+    if from_container:
+        extend_file = "extended_%s" % (PROJECT_CONF_FILENAME)
+    else:
+        extend_file = PROJECT_CONF_FILENAME
     extended_configuration = load_project_configuration(
         extend_path, file=extend_file, do_exit=do_exit)
 
