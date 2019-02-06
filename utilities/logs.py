@@ -436,7 +436,7 @@ def handle_log_output(original_parameters_string):
     except JSONDecodeError as j:
 
         try:
-            parameters = json.dumps(urllib.parse.parse_qs(mystr))
+            parameters = urllib.parse.parse_qs(mystr)
         except BaseException:
 
             return original_parameters_string
