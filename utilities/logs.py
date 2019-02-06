@@ -455,9 +455,7 @@ def handle_log_output(original_parameters_string):
 
         if key in OBSCURED_FIELDS:
             value = OBSCURE_VALUE
-        elif not isinstance(value, str):
-            continue
-        else:
+        elif isinstance(value, str):
             try:
                 if len(value) > MAX_CHAR_LEN:
                     value = value[:MAX_CHAR_LEN] + "..."
