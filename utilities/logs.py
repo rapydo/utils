@@ -436,7 +436,8 @@ def handle_log_output(original_parameters_string):
     except JSONDecodeError:
         try:
             parameters = json.dumps(urllib.parse.parse_qs(mystr))
-        except BaseException:
+        except BaseException as e:
+            print(str(e))
             return original_parameters_string
 
     # # PEP 274 -- Dict Comprehensions (Python 3)
