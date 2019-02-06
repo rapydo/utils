@@ -431,12 +431,14 @@ def handle_log_output(original_parameters_string):
     if mystr.strip() == '':
         return {}
 
+    urlencoded = False
     try:
         parameters = json.loads(mystr)
     except JSONDecodeError as j:
 
         try:
             parameters = urllib.parse.parse_qs(mystr)
+            urlencoded = True
         except BaseException:
 
             return original_parameters_string
@@ -461,6 +463,11 @@ def handle_log_output(original_parameters_string):
                     value = value[:MAX_CHAR_LEN] + "..."
             except IndexError:
                 pass
+        elif urlencoded and isinstance(value, list):
+            # urllib.parse.parse_qs converts all elements in single-elements lists...
+            # converting back to the original element
+            if len(value) == 1:
+                value = value[0]
         output[key] = value
 
     return output
