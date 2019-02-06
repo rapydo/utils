@@ -451,7 +451,10 @@ def handle_log_output(original_parameters_string):
     #     for key, value in parameters.items()
     # }
     #
+    return obfuscate_dict(parameters, urlencoded=urlencoded)
 
+
+def obfuscate_dict(parameters, urlencoded=False):
     output = {}
     for key, value in parameters.items():
 
