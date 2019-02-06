@@ -4,6 +4,7 @@ import os
 import re
 import sys
 import json
+import urllib
 import logging
 import traceback
 from contextlib import contextmanager
@@ -433,8 +434,12 @@ def handle_log_output(original_parameters_string):
     try:
         parameters = json.loads(mystr)
     except JSONDecodeError as j:
-        print(str(j))
-        return original_parameters_string
+
+        try:
+            parameters = json.dumps(urllib.parse.parse_qs(mystr))
+        except BaseException:
+
+            return original_parameters_string
 
     # # PEP 274 -- Dict Comprehensions (Python 3)
     # # and clarification on conditionals:
