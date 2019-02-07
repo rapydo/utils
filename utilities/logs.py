@@ -30,7 +30,7 @@ DEFAULT_LOGLEVEL_NAME = 'info'
 
 MAX_CHAR_LEN = 200
 OBSCURE_VALUE = '****'
-OBSCURED_FIELDS = ['password', 'pwd', 'token', 'file', 'filename']
+OBSCURED_FIELDS = ['password', 'pwd', 'token', 'access_token', 'file', 'filename']
 
 AVOID_COLORS_ENV_LABEL = "IDONTWANTCOLORS"
 LOG_INI_FILE = os.path.join(helpers.script_abspath(__file__), 'logging.ini')
@@ -427,7 +427,13 @@ def handle_log_output(original_parameters_string):
     if (original_parameters_string is None):
         return {}
 
-    mystr = original_parameters_string.decode("utf-8")
+    if isinstance(original_parameters_string, bytes):
+        mystr = original_parameters_string.decode("utf-8")
+    elif isinstance(original_parameters_string, str):
+        mystr = original_parameters_string
+    else:
+        mystr = str(original_parameters_string)
+
     if mystr.strip() == '':
         return {}
 
