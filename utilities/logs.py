@@ -440,7 +440,7 @@ def handle_log_output(original_parameters_string):
     urlencoded = False
     try:
         parameters = json.loads(mystr)
-    except JSONDecodeError as j:
+    except JSONDecodeError:
 
         try:
             parameters = urllib.parse.parse_qs(mystr)
