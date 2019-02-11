@@ -1,78 +1,54 @@
 # -*- coding: utf-8 -*-
 
-# import os
+import os
 from utilities import PROJECT_CONF_FILENAME, PROJECTS_DEFAULTS_FILE
 from utilities.myyaml import load_yaml_file
 from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
-# SCRIPT_PATH = helpers.script_abspath(__file__)
 
+def load_project_configuration(path, file=None, do_exit=True):
 
-def load_project_configuration(project_path):
+    if file is None:
+        file = PROJECT_CONF_FILENAME
+
     args = {
-        'path': project_path,
+        'path': path,
         'skip_error': False,
         'logger': False,
-        'file': PROJECT_CONF_FILENAME,
+        'file': file,
         'keep_order': True
     }
-    return load_yaml_file(**args)
+    try:
+        log.checked("Found '%s/%s' configuration", path, file)
+        return load_yaml_file(**args)
+    except AttributeError as e:
+        if do_exit:
+            log.exit(e)
+        else:
+            raise AttributeError(e)
 
 
-def read(base_path, project_path=None, is_template=False, do_exit=True):
+def read(default_file_path, base_project_path,
+         projects_path, submodules_path,
+         from_container=False,
+         is_template=False,
+         do_exit=True,
+         ):
     """
     Read default configuration
     """
 
-    project_configuration_files = [
-        # DEFAULT
-        {
-            # 'path': SCRIPT_PATH,
-            'path': base_path,
-            'skip_error': False,
-            'logger': False,
-            'file': PROJECTS_DEFAULTS_FILE
-        }
-    ]
-
-    if project_path is not None:
-        project_configuration_files.append(
-            # CUSTOM FROM THE USER
-            {
-                'path': project_path,
-                'skip_error': False,
-                'logger': False,
-                'file': PROJECT_CONF_FILENAME
-            }
-        )
-
-    confs = {}
-
-    for args in project_configuration_files:
-        try:
-            args['keep_order'] = True
-            f = args['file']
-            confs[f] = load_yaml_file(**args)
-            log.checked("Found '%s' rapydo configuration" % f)
-        except AttributeError as e:
-            if do_exit:
-                log.exit(e)
-            else:
-                raise AttributeError(e)
-
-    # Recover the two options
-    base_configuration = confs.get(PROJECTS_DEFAULTS_FILE)
-    if project_path is None:
-        return base_configuration
-    custom_configuration = confs.get(PROJECT_CONF_FILENAME, {})
+    custom_configuration = load_project_configuration(
+        base_project_path, file=PROJECT_CONF_FILENAME, do_exit=do_exit)
 
     # Verify custom project configuration
-    prj = custom_configuration.get('project')
-    if prj is None:
+    project = custom_configuration.get('project')
+    if project is None:
         raise AttributeError("Missing project configuration")
-    elif not is_template:
+
+    if not is_template:
 
         # Check if these three variables were changed from the initial template
         checks = {
@@ -81,21 +57,56 @@ def read(base_path, project_path=None, is_template=False, do_exit=True):
             'name': 'rapydo'
         }
         for key, value in checks.items():
-            if prj.get(key, '') == value:
-
-                # get file name with the load file utility
-                args = {}
-                kwargs = project_configuration_files.pop()
-                filepath = load_yaml_file(
-                    *args, return_path=True, **kwargs)
+            if project.get(key, '') == value:
 
                 log.critical_exit(
-                    "\n\nYour project is not yet configured:\n" +
-                    "Please edit key '%s' in file %s" % (key, filepath)
+                    "Project not configured, mising key '%s' in file %s/%s.yaml",
+                    key, base_project_path, PROJECT_CONF_FILENAME
                 )
 
-    # Mix default and custom configuration
-    return mix(base_configuration, custom_configuration)
+    base_configuration = load_project_configuration(
+        default_file_path, file=PROJECTS_DEFAULTS_FILE, do_exit=do_exit)
+
+    extended_project = project.get('extends')
+    if extended_project is None:
+        # Mix default and custom configuration
+        return mix(base_configuration, custom_configuration), None, None
+
+    extends_from = project.get('extends-from', 'projects')
+
+    if extends_from == "projects":
+        extend_path = projects_path
+    elif extends_from.startswith("submodules/"):
+        repository_name = (extends_from.split("/")[1]).strip()
+        if repository_name == '':
+            log.exit('Invalid repository name in extends-from, name is empty')
+
+        if from_container:
+            extend_path = submodules_path
+        else:
+            extend_path = os.path.join(submodules_path, repository_name, projects_path)
+    else:
+        suggest = "Expected values: 'projects' or 'submodules/${REPOSITORY_NAME}'"
+        log.exit("Invalid extends-from parameter: %s.\n%s", extends_from, suggest)
+
+    # in container the file is mounted in the confs folder
+    # otherwise will be in projects/projectname or submodules/projectname
+    if not from_container:
+        extend_path = os.path.join(extend_path, extended_project)
+
+    if not os.path.exists(extend_path):
+        log.critical_exit("From project not found: %s", extend_path)
+
+    # on backend is mounted with `extended_` prefix
+    if from_container:
+        extend_file = "extended_%s" % (PROJECT_CONF_FILENAME)
+    else:
+        extend_file = PROJECT_CONF_FILENAME
+    extended_configuration = load_project_configuration(
+        extend_path, file=extend_file, do_exit=do_exit)
+
+    m1 = mix(base_configuration, extended_configuration)
+    return mix(m1, custom_configuration), extended_project, extend_path
 
 
 def mix(base, custom):
@@ -105,6 +116,9 @@ def mix(base, custom):
         if key not in base:
             # log.info("Adding %s to configuration" % key)
             base[key] = custom[key]
+            continue
+
+        if elements is None:
             continue
 
         if isinstance(elements, dict):

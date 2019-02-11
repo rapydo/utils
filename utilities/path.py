@@ -72,11 +72,11 @@ def current():
     return Path.cwd()
 
 
-def create(pathobj, directory=False, force=False):
+def create(pathobj, directory=False, force=False, parents=False):
     if directory:
         # pathobj.mkdir(exist_ok=force)  # does not work with Python 3.4...
         try:
-            pathobj.mkdir()
+            pathobj.mkdir(parents=parents)
         except FileExistsError:
             if force:
                 pass

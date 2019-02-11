@@ -4,6 +4,7 @@ import os
 import re
 import sys
 import json
+import urllib
 import logging
 import traceback
 from contextlib import contextmanager
@@ -29,7 +30,7 @@ DEFAULT_LOGLEVEL_NAME = 'info'
 
 MAX_CHAR_LEN = 200
 OBSCURE_VALUE = '****'
-OBSCURED_FIELDS = ['password', 'pwd', 'token', 'file', 'filename']
+OBSCURED_FIELDS = ['password', 'pwd', 'token', 'access_token', 'file', 'filename']
 
 AVOID_COLORS_ENV_LABEL = "IDONTWANTCOLORS"
 LOG_INI_FILE = os.path.join(helpers.script_abspath(__file__), 'logging.ini')
@@ -426,14 +427,27 @@ def handle_log_output(original_parameters_string):
     if (original_parameters_string is None):
         return {}
 
-    mystr = original_parameters_string.decode("utf-8")
+    if isinstance(original_parameters_string, bytes):
+        mystr = original_parameters_string.decode("utf-8")
+    elif isinstance(original_parameters_string, str):
+        mystr = original_parameters_string
+    else:
+        mystr = str(original_parameters_string)
+
     if mystr.strip() == '':
         return {}
 
+    urlencoded = False
     try:
         parameters = json.loads(mystr)
     except JSONDecodeError:
-        return original_parameters_string
+
+        try:
+            parameters = urllib.parse.parse_qs(mystr)
+            urlencoded = True
+        except BaseException:
+
+            return original_parameters_string
 
     # # PEP 274 -- Dict Comprehensions (Python 3)
     # # and clarification on conditionals:
@@ -443,20 +457,26 @@ def handle_log_output(original_parameters_string):
     #     for key, value in parameters.items()
     # }
     #
+    return obfuscate_dict(parameters, urlencoded=urlencoded)
 
+
+def obfuscate_dict(parameters, urlencoded=False):
     output = {}
     for key, value in parameters.items():
 
         if key in OBSCURED_FIELDS:
             value = OBSCURE_VALUE
-        elif not isinstance(value, str):
-            continue
-        else:
+        elif isinstance(value, str):
             try:
                 if len(value) > MAX_CHAR_LEN:
                     value = value[:MAX_CHAR_LEN] + "..."
             except IndexError:
                 pass
+        elif urlencoded and isinstance(value, list):
+            # urllib.parse.parse_qs converts all elements in single-elements lists...
+            # converting back to the original element
+            if len(value) == 1:
+                value = value[0]
         output[key] = value
 
     return output
