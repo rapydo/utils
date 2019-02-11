@@ -195,14 +195,9 @@ class Meta(object):
         obj = getattr(module, obj_name, None)
         return obj
 
-    def import_models(self, name, custom=False, exit_on_fail=True):
+    def import_models(self, name, package, exit_on_fail=True):
 
         models = {}
-        if custom:
-            package = CUSTOM_PACKAGE
-            # exit_on_fail = False
-        else:
-            package = BACKEND_PACKAGE
         module = Meta.models_module(name, package)
 
         if module is not None:
