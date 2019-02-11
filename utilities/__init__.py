@@ -41,5 +41,6 @@ BACKEND_DIR = 'backend'  # directory outside docker
 MAIN_PACKAGE = 'restapi'
 BACKEND_PACKAGE = MAIN_PACKAGE  # package inside rapydo-http
 CUSTOM_PACKAGE = os.environ.get('VANILLA_PACKAGE', 'custom')
+EXTENDED_PACKAGE = os.environ.get('EXTENDED_PACKAGE', None)
 CORE_CONFIG_PATH = os.path.join(BACKEND_PACKAGE, CONF_PATH)
 ENDPOINTS_CODE_DIR = 'apis'

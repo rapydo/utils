@@ -74,10 +74,20 @@ def read(default_file_path, base_project_path,
 
     extends_from = project.get('extends-from', 'projects')
 
-    if extends_from == "submodules":
-        extend_path = submodules_path
-    else:
+    if extends_from == "projects":
         extend_path = projects_path
+    elif extends_from.startswith("submodules/"):
+        repository_name = (extends_from.split("/")[1]).strip()
+        if repository_name == '':
+            log.exit('Invalid repository name in extends-from, name is empty')
+
+        if from_container:
+            extend_path = submodules_path
+        else:
+            extend_path = os.path.join(submodules_path, repository_name, projects_path)
+    else:
+        suggest = "Expected values: 'projects' or 'submodules/${REPOSITORY_NAME}'"
+        log.exit("Invalid extends-from parameter: %s.\n%s", extends_from, suggest)
 
     # in container the file is mounted in the confs folder
     # otherwise will be in projects/projectname or submodules/projectname
@@ -106,6 +116,9 @@ def mix(base, custom):
         if key not in base:
             # log.info("Adding %s to configuration" % key)
             base[key] = custom[key]
+            continue
+
+        if elements is None:
             continue
 
         if isinstance(elements, dict):
