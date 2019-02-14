@@ -19,22 +19,31 @@ except NameError:
 DEFAULT_BIN_OPTION = '--version'
 
 
-def executable(executable, option=DEFAULT_BIN_OPTION):
+def executable(executable, option=DEFAULT_BIN_OPTION, parse_ver=False):
 
     from subprocess import check_output
     try:
-        stdout = check_output([executable, option])
+        if isinstance(option, list):
+            cmd = [executable]
+            cmd.extend(option)
+        else:
+            cmd = [executable, option]
+        stdout = check_output(cmd)
         output = stdout.decode()
     except OSError:
         return None
     else:
         if option == DEFAULT_BIN_OPTION:
+            parse_ver = True
+        if parse_ver:
             try:
                 # try splitting on comma and/or parenthesis
                 # then last element on spaces
                 output = output \
                     .split('(')[0].split(',')[0] \
                     .split()[::-1][0]
+                output = output.strip()
+                output = output.replace("'", "")
             except BaseException:
                 pass
         return output
