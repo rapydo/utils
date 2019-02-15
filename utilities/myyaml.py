@@ -124,8 +124,7 @@ def load_yaml_file(file, path=None,
 
     # # IF dealing with a strange exception string (escaped)
     # import codecs
-    # mystring, _ = codecs.getdecoder("unicode_escape")(str(error))
-    # message = "Failed to read YAML file [%s]: %s" % (filepath, mystring)
+    # error, _ = codecs.getdecoder("unicode_escape")(str(error))
 
     message = "Failed to read YAML file [%s]: %s" % (filepath, error)
     if logger:

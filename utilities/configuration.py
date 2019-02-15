@@ -64,8 +64,14 @@ def read(default_file_path, base_project_path,
                     key, base_project_path, PROJECT_CONF_FILENAME
                 )
 
-    base_configuration = load_project_configuration(
-        default_file_path, file=PROJECTS_DEFAULTS_FILE, do_exit=do_exit)
+    if default_file_path is None:
+        base_configuration = {}
+    else:
+        base_configuration = load_project_configuration(
+            default_file_path,
+            file=PROJECTS_DEFAULTS_FILE,
+            do_exit=do_exit
+        )
 
     extended_project = project.get('extends')
     if extended_project is None:
