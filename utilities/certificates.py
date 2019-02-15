@@ -64,24 +64,6 @@ class Certificates(object):
         os.chmod(destination_path, 0o600)
 
     @staticmethod
-    def save_proxy_cert(tmpproxy, unityid='guest', user=None):
-
-        destination_path = Certificates.get_proxy_filename(unityid)
-
-        from utilities.helpers import parent_dir
-        destination_dir = parent_dir(destination_path)
-        if not os.path.exists(destination_dir):
-            os.mkdir(destination_dir)
-
-        # write the irods username inside as #/.username
-        if user is not None:
-            with open(os.path.join(destination_dir, '.username'), 'w') as f:
-                f.write(user)
-
-        Certificates.proxy_write(tmpproxy, destination_path)
-        return destination_path
-
-    @staticmethod
     def encode_csr(req):
         enc = crypto.dump_certificate_request(crypto.FILETYPE_PEM, req)
         data = {'certificate_request': enc}
