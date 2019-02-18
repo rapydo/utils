@@ -125,7 +125,9 @@ def mix(base, custom):
             continue
 
         if elements is None:
-            continue
+            if isinstance(base[key], dict):
+                log.warning("Cannot replace %s with empty list", key)
+                continue
 
         if isinstance(elements, dict):
             mix(base[key], custom[key])
