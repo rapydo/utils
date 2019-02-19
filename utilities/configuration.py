@@ -33,6 +33,7 @@ def load_project_configuration(path, file=None, do_exit=True):
 def read(default_file_path, base_project_path,
          projects_path, submodules_path,
          from_container=False,
+         read_extended=True,
          is_template=False,
          do_exit=True,
          ):
@@ -73,7 +74,10 @@ def read(default_file_path, base_project_path,
             do_exit=do_exit
         )
 
-    extended_project = project.get('extends')
+    if read_extended:
+        extended_project = project.get('extends')
+    else:
+        extended_project = None
     if extended_project is None:
         # Mix default and custom configuration
         return mix(base_configuration, custom_configuration), None, None
