@@ -120,6 +120,8 @@ def read(default_file_path, base_project_path,
 
 
 def mix(base, custom):
+    if base is None:
+        base = {}
 
     for key, elements in custom.items():
 
