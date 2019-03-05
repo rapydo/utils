@@ -113,7 +113,7 @@ def very_verbose(self, message, *args, **kws):
         )
 
 
-def old_pretty_print(self, myobject, prefix_line=None):
+def beeprint_print(self, myobject, prefix_line=None):
     """
     Make object(s) and structure(s) clearer to debug
     """
@@ -125,7 +125,7 @@ def old_pretty_print(self, myobject, prefix_line=None):
     return self
 
 
-def new_pretty_print(self, myobject, prefix_line=None):
+def prettyprinter_print(self, myobject, prefix_line=None):
     """
     Make object(s) and structure(s) clearer to debug
     """
@@ -204,8 +204,8 @@ logging.addLevelName(VERY_VERBOSE, "VERY_VERBOSE")
 logging.Logger.very_verbose = very_verbose
 logging.VERY_VERBOSE = VERY_VERBOSE
 
-logging.Logger.app = old_pretty_print
-logging.Logger.pp = new_pretty_print
+logging.Logger.pp = beeprint_print
+logging.Logger.app = prettyprinter_print
 logging.Logger.checked = checked
 logging.Logger.checked_simple = checked_simple
 logging.Logger.clear_screen = clear_screen
