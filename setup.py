@@ -28,7 +28,7 @@ setup(
         "PyYAML==3.13",
         "pytz",
         "python-dateutil",
-        "sultan==0.8.1",
+        "sultan==0.9.0",
     ],
     classifiers=[
         'Programming Language :: Python',
