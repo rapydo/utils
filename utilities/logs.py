@@ -444,18 +444,14 @@ def handle_log_output(original_parameters_string):
 
             return original_parameters_string
 
-    # # PEP 274 -- Dict Comprehensions (Python 3)
-    # # and clarification on conditionals:
-    # # http://stackoverflow.com/a/9442777/2114395
-    # return {
-    #     key: (OBSCURE_VALUE if key in OBSCURED_FIELDS else value)
-    #     for key, value in parameters.items()
-    # }
-    #
     return obfuscate_dict(parameters, urlencoded=urlencoded)
 
 
 def obfuscate_dict(parameters, urlencoded=False):
+
+    if not isinstance(parameters, dict):
+        return parameters
+
     output = {}
     for key, value in parameters.items():
 
