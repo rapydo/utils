@@ -1,7 +1,6 @@
 language: python
 sudo: required
-# dist: xenial
-dist: "trusty" # otherwise 'python3-pip' won't be available
+dist: xenial
 script:
 - pip install --upgrade setuptools
 - pip install --upgrade -r requirements.txt
