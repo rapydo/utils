@@ -28,6 +28,7 @@ setup(
         "PyYAML==3.13",
         "pytz",
         "python-dateutil",
+        "plumbum",
         "sultan==0.8.1",
     ],
     classifiers=[

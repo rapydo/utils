@@ -7,7 +7,9 @@ more info:
 https://pymotw.com/3/smtplib/
 """
 
-from smtplib import SMTP, SMTP_SSL, SMTPException
+import socket
+from smtplib import SMTP, SMTP_SSL
+from smtplib import SMTPException, SMTPAuthenticationError
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import datetime
@@ -18,6 +20,35 @@ from utilities.logs import get_logger
 log = get_logger(__name__)
 
 # TODO: configure HOST with gmail, search example online
+
+
+def get_smtp_client(smtp_host, smtp_port, username=None, password=None):
+    ###################
+    # https://stackabuse.com/how-to-send-emails-with-gmail-using-python/
+    if smtp_port == '465':
+        smtp = SMTP_SSL()
+    else:
+        smtp = SMTP()
+        # if this is 587 we might need also
+        # smtp.starttls()
+
+    ###################
+    smtp.set_debuglevel(0)
+    log.verbose("Connecting to %s:%s" % (smtp_host, smtp_port))
+    try:
+        smtp.connect(smtp_host, smtp_port)
+    except socket.gaierror as e:
+        log.error(str(e))
+        return None
+
+    if username is not None and password is not None:
+        log.verbose("Authenticating SMTP")
+        try:
+            smtp.login(username, password)
+        except SMTPAuthenticationError as e:
+            log.error(str(e))
+            return None
+    return smtp
 
 
 def send_mail(body, subject,
@@ -36,6 +67,12 @@ def send_mail(body, subject,
 
     if to_address is None:
         log.error("Skipping send email: destination address not configured")
+        return False
+
+    smtp = get_smtp_client(smtp_host, smtp_port, username, password)
+
+    if smtp is None:
+        log.error("Unable to send email: client initialization failed")
         return False
 
     try:
@@ -84,23 +121,6 @@ def send_mail(body, subject,
             part2 = MIMEText(body, 'html')
             msg.attach(part1)
             msg.attach(part2)
-
-        ###################
-        # https://stackabuse.com/how-to-send-emails-with-gmail-using-python/
-        if smtp_port == '465':
-            smtp = SMTP_SSL()
-        else:
-            smtp = SMTP()
-            # if this is 587 we might need also
-            # smtp.starttls()
-
-        ###################
-        smtp.set_debuglevel(0)
-        log.verbose("Connecting to %s:%s" % (smtp_host, smtp_port))
-        smtp.connect(smtp_host, smtp_port)
-        if username is not None and password is not None:
-            log.verbose("Authenticating SMTP")
-            smtp.login(username, password)
 
         try:
             log.verbose("Sending email to %s", to_address)

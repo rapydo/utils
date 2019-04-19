@@ -113,7 +113,7 @@ def very_verbose(self, message, *args, **kws):
         )
 
 
-def pretty_print(self, myobject, prefix_line=None):
+def beeprint_print(self, myobject, prefix_line=None):
     """
     Make object(s) and structure(s) clearer to debug
     """
@@ -125,7 +125,7 @@ def pretty_print(self, myobject, prefix_line=None):
     return self
 
 
-def alternative_pretty_print(self, myobject, prefix_line=None):
+def prettyprinter_print(self, myobject, prefix_line=None):
     """
     Make object(s) and structure(s) clearer to debug
     """
@@ -204,17 +204,12 @@ logging.addLevelName(VERY_VERBOSE, "VERY_VERBOSE")
 logging.Logger.very_verbose = very_verbose
 logging.VERY_VERBOSE = VERY_VERBOSE
 
-logging.Logger.pp = pretty_print
-logging.Logger.app = alternative_pretty_print
+logging.Logger.pp = beeprint_print
+logging.Logger.app = prettyprinter_print
 logging.Logger.checked = checked
 logging.Logger.checked_simple = checked_simple
 logging.Logger.clear_screen = clear_screen
 
-
-
-
-################
-# LOGGING internal class
 
 class LogMe(object):
     """ A common logger to be used all around development packages """
@@ -449,18 +444,14 @@ def handle_log_output(original_parameters_string):
 
             return original_parameters_string
 
-    # # PEP 274 -- Dict Comprehensions (Python 3)
-    # # and clarification on conditionals:
-    # # http://stackoverflow.com/a/9442777/2114395
-    # return {
-    #     key: (OBSCURE_VALUE if key in OBSCURED_FIELDS else value)
-    #     for key, value in parameters.items()
-    # }
-    #
     return obfuscate_dict(parameters, urlencoded=urlencoded)
 
 
 def obfuscate_dict(parameters, urlencoded=False):
+
+    if not isinstance(parameters, dict):
+        return parameters
+
     output = {}
     for key, value in parameters.items():
 

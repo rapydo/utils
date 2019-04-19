@@ -10,8 +10,6 @@ import pytz
 from datetime import datetime, timedelta
 
 from utilities.basher import BashCommands
-from utilities import htmlcodes as hcodes
-from utilities.uuid import getUUID
 from utilities.logs import get_logger
 
 log = get_logger(__name__)
@@ -48,45 +46,6 @@ class Certificates(object):
         log.verbose("Host DN computed is %s", dn)
         return dn
 
-    @classmethod
-    def get_proxy_filename(cls, user, dirname=False):
-        if dirname:
-            return "%s/%s" % (cls._dir, user)
-        return "%s/%s/%s" % (cls._dir, user, cls._proxyfile)
-
-    @staticmethod
-    def proxy_write(tmpproxy, destination_path):
-
-        from shutil import copyfile
-        # NOTE: trhows error if files do not exist
-        copyfile(tmpproxy, destination_path)
-        # NOTE: use the octave from the UNIX 'mode'
-        os.chmod(destination_path, 0o600)
-
-    @staticmethod
-    def save_proxy_cert(tmpproxy, unityid='guest', user=None):
-
-        destination_path = Certificates.get_proxy_filename(unityid)
-
-        from utilities.helpers import parent_dir
-        destination_dir = parent_dir(destination_path)
-        if not os.path.exists(destination_dir):
-            os.mkdir(destination_dir)
-
-        # write the irods username inside as #/.username
-        if user is not None:
-            with open(os.path.join(destination_dir, '.username'), 'w') as f:
-                f.write(user)
-
-        Certificates.proxy_write(tmpproxy, destination_path)
-        return destination_path
-
-    @staticmethod
-    def encode_csr(req):
-        enc = crypto.dump_certificate_request(crypto.FILETYPE_PEM, req)
-        data = {'certificate_request': enc}
-        return data
-
     @staticmethod
     def generate_csr_and_key(user='TestUser'):
         """
@@ -101,68 +60,6 @@ class Certificates(object):
         req.sign(key, "sha1")
         # print("CSR", key, req)
         return key, req
-
-    @staticmethod
-    def write_key_and_cert(key, cert):
-        proxycertcontent = cert.decode()
-        if proxycertcontent is None or proxycertcontent.strip() == '':
-            return None
-        tempfile = "/tmp/%s" % getUUID()
-        flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
-        with os.fdopen(os.open(tempfile, flags, 0o600), 'w') as f:
-            f.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key).decode())
-            f.write(proxycertcontent)
-        return tempfile
-
-    @staticmethod
-    def proxy_from_ca(ca_client, prod=False):
-        """
-        Request for certificate and save it into a file
-
-        NOTE: insecure ssl context is required with b2access dev,
-        because they do not have a valid HTTPS certificate for development
-        """
-
-        if not prod:
-            # INSECURE SSL CONTEXT.
-            # source: http://stackoverflow.com/a/28052583/2114395
-            import ssl
-            ssl._create_default_https_context = ssl._create_unverified_context  # nopep8 # pylint:disable=protected-access
-
-        #######################
-        key, req = Certificates.generate_csr_and_key()
-        # log.debug("Key and Req:\n%s\n%s" % (key, req))
-
-        #######################
-        response = None
-        try:
-            response = ca_client.post(
-                'ca/o/delegateduser',
-                data=Certificates.encode_csr(req),
-                headers={'Accept-Encoding': 'identity'})
-            # Note: token is applied from oauth2 lib using the session content
-        except ValueError as e:
-            log.error("Oauthlib call with CA: %s", e)
-            return None
-        except Exception as e:
-            # TODO: expand this case
-            # 1. CA is unreachable (internet)
-            # 2. CA says the token is invalid
-            log.error("CA is probably down... [%s]", e)
-            return None
-
-        if response.status != hcodes.HTTP_OK_BASIC:
-            # print("\nCertificate:"); log.pp(response)
-            log.error("Could not get proxy from CA: %s", response.data)
-            return None
-        # log.pp(response)
-
-        #######################
-        # write proxy certificate to a random file name
-        proxyfile = Certificates.write_key_and_cert(key, response.data)
-        log.debug('Wrote certificate to %s', proxyfile)
-
-        return proxyfile
 
     @staticmethod
     def set_globus_proxy_cert(key, cert):  # , proxy=None):
