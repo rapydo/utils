@@ -27,4 +27,4 @@ def test():
     ver = check_version("rapydo-blabla")
     assert ver is None
 
-    install("docker-compose")
+    # install("docker-compose")

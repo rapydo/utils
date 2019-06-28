@@ -29,7 +29,7 @@ setup(
         "pytz",
         "python-dateutil",
         "plumbum",
-        "sultan==0.8.1",
+        "sultan==0.9.1",
     ],
     classifiers=[
         'Programming Language :: Python',

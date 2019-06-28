@@ -2,7 +2,7 @@
 
 import os
 
-__version__ = '0.6.5'
+__version__ = '0.6.6'
 __authors__ = [
     "Paolo D'Onorio De Meo <p.donorio.demeo@gmail.com>",
     "Mattia D'Antonio",
