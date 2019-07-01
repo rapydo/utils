@@ -133,6 +133,8 @@ def append_compress_extension(base_name):
 
 
 def compress(dir_path, zip_file_path):
+    # backward compatibility with python 3.5
+    dir_path = str(dir_path)
     import shutil
     base_name = str(zip_file_path).replace('.' + COMPRESSION_FORMAT, '')
     shutil.make_archive(
