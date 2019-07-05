@@ -73,11 +73,10 @@ def wait_socket(host, port, service_name, sleep_time=1, timeout=5):
             if counter % 5 == 0:
                 # FIXME: also do something here if the service is external?
                 log.warning(
-                    "'%s' service looks still unavailable after %s seconds",
-                    service_name, sleep_time * timeout * counter
+                    "'%s' service (%s:%s) still unavailable after %s seconds",
+                    service_name, host, port, sleep_time * timeout * counter
                 )
             else:
-                log.debug("Not reachable yet: %s", service_name)
+                log.debug("Not reachable yet: %s (%s:%s)", service_name, host, port)
 
             time.sleep(sleep_time)
-
