@@ -260,7 +260,7 @@ class Meta(object):
             args = {}
 
         if MyClass is None:
-            log.debug("No customizer available for %s", class_name)
+            log.verbose("No customizer available for %s", class_name)
         else:
             try:
                 instance = MyClass(**args)

@@ -30,7 +30,16 @@ DEFAULT_LOGLEVEL_NAME = 'info'
 
 MAX_CHAR_LEN = 200
 OBSCURE_VALUE = '****'
-OBSCURED_FIELDS = ['password', 'pwd', 'token', 'access_token', 'file', 'filename']
+OBSCURED_FIELDS = [
+    'password',
+    'pwd',
+    'token',
+    'access_token',
+    'file',
+    'filename',
+    'new_password',
+    'password_confirm'
+]
 
 AVOID_COLORS_ENV_LABEL = "IDONTWANTCOLORS"
 LOG_INI_FILE = os.path.join(helpers.script_abspath(__file__), 'logging.ini')
