@@ -61,7 +61,7 @@ def read(default_file_path, base_project_path,
             if project.get(key, '') == value:
 
                 log.critical_exit(
-                    "Project not configured, mising key '%s' in file %s/%s.yaml",
+                    "Project not configured, missing key '%s' in file %s/%s.yaml",
                     key, base_project_path, PROJECT_CONF_FILENAME
                 )
 
