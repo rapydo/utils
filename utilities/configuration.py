@@ -34,7 +34,6 @@ def read(default_file_path, base_project_path,
          projects_path, submodules_path,
          from_container=False,
          read_extended=True,
-         is_template=False,
          do_exit=True,
          ):
     """
@@ -49,21 +48,15 @@ def read(default_file_path, base_project_path,
     if project is None:
         raise AttributeError("Missing project configuration")
 
-    if not is_template:
+    variables = ['title', 'description', 'version', 'rapydo']
 
-        # Check if these three variables were changed from the initial template
-        checks = {
-            'title': 'My project',
-            'description': 'Title of my project',
-            'name': 'rapydo'
-        }
-        for key, value in checks.items():
-            if project.get(key, '') == value:
+    for key in variables:
+        if project.get(key) is None:
 
-                log.critical_exit(
-                    "Project not configured, missing key '%s' in file %s/%s.yaml",
-                    key, base_project_path, PROJECT_CONF_FILENAME
-                )
+            log.critical_exit(
+                "Project not configured, missing key '%s' in file %s/%s.yaml",
+                key, base_project_path, PROJECT_CONF_FILENAME
+            )
 
     if default_file_path is None:
         base_configuration = {}
