@@ -99,23 +99,6 @@ def file_exists_and_nonzero(pathobj, accept_link=False):
         return False
 
 
-def existing(path_list, error_msg_base='Failed', do_exit=True):
-
-    filepath = build(path_list)
-
-    if not file_exists_and_nonzero(filepath):
-        if do_exit:
-            log.exit(error_msg_base + ": file %s not found" % filepath)
-        else:
-            return False
-    else:
-        log.verbose('"%s" located' % filepath)
-        if not do_exit:
-            return True
-
-    return str(filepath)
-
-
 def parts(my_path):
     return PurePath(my_path).parts
 
