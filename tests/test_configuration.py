@@ -28,14 +28,18 @@ def test():
     bash.create_directory("projects/template")
     bash.copy(default_conf, project_conf)
 
-    bash.replace_in_file("name: rapydo", "name: myname", project_conf)
+    bash.replace_in_file(
+        "description: No description yet",
+        "description: My description",
+        project_conf
+    )
 
     # project_configuration is ok
     conf = read(default_conf, project_file_path, PROJECT_DIR, SUBMODULES_DIR)
 
     assert "project" in conf
-    assert "name" in conf["project"]
-    assert conf["project"]["name"] == "myname"
+    assert "description" in conf["project"]
+    assert conf["project"]["description"] == "My description"
 
     # project_configuration is missing required info
     bash.replace_in_file("project:", "blabla:", project_conf)
