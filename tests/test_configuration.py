@@ -10,14 +10,15 @@ from utilities.basher import BashCommands
 def test():
 
     SUBMODULES_DIR = 'submodules'
+    DEFAULTS_PATH = 'rapydo-confs'
     project = "template"
     project_file_path = helpers.project_dir(project)
     project_conf = "%s/project_configuration.yaml" % project_file_path
-    default_conf = "rapydo-confs/projects_defaults.yaml"
+    default_conf = "%s/projects_defaults.yaml" % DEFAULTS_PATH
 
     # project_configuration is missing
     try:
-        read(default_conf, project_file_path, PROJECT_DIR, SUBMODULES_DIR)
+        read(DEFAULTS_PATH, project_file_path, PROJECT_DIR, SUBMODULES_DIR)
     except SystemExit:
         pass
     else:
@@ -35,7 +36,7 @@ def test():
     )
 
     # project_configuration is ok
-    conf = read(default_conf, project_file_path, PROJECT_DIR, SUBMODULES_DIR)
+    conf = read(DEFAULTS_PATH, project_file_path, PROJECT_DIR, SUBMODULES_DIR)
 
     assert "project" in conf
     assert "description" in conf["project"]
