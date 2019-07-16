@@ -2,17 +2,22 @@
 
 import pytest
 from utilities.configuration import read
+from utilities import helpers
+from utilities import PROJECT_DIR
 from utilities.basher import BashCommands
 
 
 def test():
 
-    project_conf = "projects/template/project_configuration.yaml"
+    SUBMODULES_DIR = 'submodules'
+    project = "template"
+    project_file_path = helpers.project_dir(project)
+    project_conf = "%s/project_configuration.yaml" % project_file_path
     default_conf = "rapydo-confs/projects_defaults.yaml"
 
     # project_configuration is missing
     try:
-        read("template")
+        read(default_conf, project_file_path, PROJECT_DIR, SUBMODULES_DIR)
     except SystemExit:
         pass
     else:
@@ -26,7 +31,7 @@ def test():
     bash.replace_in_file("name: rapydo", "name: myname", project_conf)
 
     # project_configuration is ok
-    conf = read("template")
+    conf = read(default_conf, project_file_path, PROJECT_DIR, SUBMODULES_DIR)
 
     assert "project" in conf
     assert "name" in conf["project"]
