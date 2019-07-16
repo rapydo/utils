@@ -23,7 +23,7 @@ def test():
     except SystemExit:
         pass
     else:
-        pytest.fail("SystemExit should be raised because file not exists")
+        pytest.fail("SystemExit should be raised because file does not exists")
 
     bash = BashCommands()
     bash.create_directory("projects")
@@ -37,19 +37,6 @@ def test():
     )
 
     # project_configuration is ok
-    conf = read(DEFAULTS_PATH, project_file_path, PROJECT_DIR, SUBMODULES_DIR)
-
-    assert glom(conf, "project") is not None
-    assert glom(conf, "project.description") is not None
-    assert glom(conf, "project.description") == "My description"
-
-    # project_configuration is missing required info
-    bash.replace_in_file("project:", "blabla:", project_conf)
-    try:
-        conf = read(DEFAULTS_PATH, project_file_path, PROJECT_DIR, SUBMODULES_DIR)
-    except AttributeError:
-        pass
-    else:
-        pytest.fail("This call should fail and raise an AttributeError")
+    read(DEFAULTS_PATH, project_file_path, PROJECT_DIR, SUBMODULES_DIR)
 
     bash.remove_directory("projects")
