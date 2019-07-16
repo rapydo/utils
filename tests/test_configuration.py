@@ -8,7 +8,7 @@ from utilities.basher import BashCommands
 def test():
 
     project_conf = "projects/template/project_configuration.yaml"
-    default_conf = "submodules/rapydo-confs/projects_defaults.yaml"
+    default_conf = "rapydo-confs/projects_defaults.yaml"
 
     # project_configuration is missing
     try:
