@@ -117,7 +117,11 @@ class Meta(object):
                                        exit_on_fail=False):
 
         submodules = []
-        package = Meta.get_module_from_string(package_name)
+        package = Meta.get_module_from_string(
+            package_name,
+            exit_if_not_found=exit_if_not_found,
+            exit_on_fail=exit_on_fail
+        )
 
         for module_name in self.get_submodules_from_package(package):
             module_path = package_name + '.' + module_name
@@ -126,7 +130,8 @@ class Meta(object):
             submod = Meta.get_module_from_string(
                 module_path,
                 exit_if_not_found=exit_if_not_found,
-                exit_on_fail=exit_on_fail)
+                exit_on_fail=exit_on_fail
+            )
             submodules.append(submod)
         return submodules
 

@@ -11,20 +11,24 @@ except import_exceptions:
     # from pip 10
     from pip._internal.utils.misc import get_installed_distributions
 from sultan.api import Sultan
-# from pip import main as pip_exec
 from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
 
-def install(package, editable=False):
+def install(package, editable=False, user=False, use_pip3=True):
     with Sultan.load(sudo=True) as sultan:
         command = 'install --upgrade'
         if editable:
             command += " --editable"
+        if user:
+            command += " --user"
         command += ' %s' % package
 
-        result = sultan.pip3(command).run()
+        if use_pip3:
+            result = sultan.pip3(command).run()
+        else:
+            result = sultan.pip(command).run()
 
         for r in result.stdout:
             print(r)
@@ -32,7 +36,6 @@ def install(package, editable=False):
         for r in result.stderr:
             print(r)
         return result.rc == 0
-    # pip_exec(['install', '--upgrade', package])
 
 
 def list_all():
