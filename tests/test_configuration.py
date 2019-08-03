@@ -31,9 +31,7 @@ def test():
     bash.copy(default_conf, project_conf)
 
     bash.replace_in_file(
-        "description: No description yet",
-        "description: My description",
-        project_conf
+        "description: No description yet", "description: My description", project_conf
     )
 
     # project_configuration is ok

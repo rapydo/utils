@@ -1,17 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from utilities.helpers import (
-    list_path,
-    last_dir,
-    parent_dir,
-    root_path,
-    script_abspath,
-    current_dir,
-    module_from_package,
-    project_dir,
-    # get_api_url,
-)
+from utilities.helpers import list_path, last_dir, parent_dir, root_path
+from utilities.helpers import script_abspath, current_dir, module_from_package
+from utilities.helpers import project_dir  # get_api_url,
 
 
 def test():
