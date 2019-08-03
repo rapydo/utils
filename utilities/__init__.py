@@ -3,10 +3,7 @@
 import os
 
 __version__ = '0.6.7'
-__authors__ = [
-    "Paolo D'Onorio De Meo <p.donorio.demeo@gmail.com>",
-    "Mattia D'Antonio",
-]
+__authors__ = ["Paolo D'Onorio De Meo <p.donorio.demeo@gmail.com>", "Mattia D'Antonio"]
 
 ###############
 FRAMEWORK_NAME = 'RAPyDo'

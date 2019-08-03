@@ -12,4 +12,5 @@ class mem:
     https://pythonconquerstheuniverse.wordpress.com/
         2010/10/20/a-globals-class-pattern-for-python/
     """
+
     pass

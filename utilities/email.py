@@ -51,11 +51,20 @@ def get_smtp_client(smtp_host, smtp_port, username=None, password=None):
     return smtp
 
 
-def send_mail(body, subject,
-              to_address, from_address,
-              smtp_host='localhost', smtp_port=587,
-              cc=None, bcc=None,
-              username=None, password=None, html=False, plain_body=None):
+def send_mail(
+    body,
+    subject,
+    to_address,
+    from_address,
+    smtp_host='localhost',
+    smtp_port=587,
+    cc=None,
+    bcc=None,
+    username=None,
+    password=None,
+    html=False,
+    plain_body=None,
+):
 
     if smtp_host is None:
         log.error("Skipping send email: smtp host not configured")
@@ -127,8 +136,9 @@ def send_mail(body, subject,
 
             smtp.sendmail(from_address, dest_addresses, msg.as_string())
 
-            log.info("Successfully sent email to %s [cc=%s], [bcc=%s]",
-                     to_address, cc, bcc)
+            log.info(
+                "Successfully sent email to %s [cc=%s], [bcc=%s]", to_address, cc, bcc
+            )
             smtp.quit()
             return True
         except SMTPException:

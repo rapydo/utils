@@ -30,13 +30,11 @@ class Meta(object):
 
     def get_submodules_from_package(self, package):
         self._submodules = []
-        for _, modname, ispkg \
-                in pkgutil.iter_modules(package.__path__):
+        for _, modname, ispkg in pkgutil.iter_modules(package.__path__):
             if not ispkg:
                 self._submodules.append(modname)
                 pname = package.__name__
-                log.very_verbose(
-                    "Found %s submodule inside %s", modname, pname)
+                log.very_verbose("Found %s submodule inside %s", modname, pname)
         return self._submodules
 
     def get_classes_from_module(self, module):
@@ -76,11 +74,13 @@ class Meta(object):
         return self.get_latest_classes()
 
     @staticmethod
-    def get_module_from_string(modulestring,
-                               prefix_package=False,
-                               exit_if_not_found=False,
-                               exit_on_fail=False,
-                               debug_on_fail=True):
+    def get_module_from_string(
+        modulestring,
+        prefix_package=False,
+        exit_if_not_found=False,
+        exit_on_fail=False,
+        debug_on_fail=True,
+    ):
         """
         Getting a module import
         when your module is stored as a string in a variable
@@ -91,14 +91,12 @@ class Meta(object):
             modulestring = BACKEND_PACKAGE + '.' + modulestring.lstrip('.')
 
         from utilities.checks import import_exceptions
+
         try:
             # Meta language for dinamically import
             module = import_module(modulestring)
         except import_exceptions as e:  # pylint:disable=catching-non-exception
-            args = {
-                'msg': "Failed to load module:\n%s" % e,
-                'exc_info': True
-            }
+            args = {'msg': "Failed to load module:\n%s" % e, 'exc_info': True}
             if exit_if_not_found:
                 log.critical_exit(**args)
             else:
@@ -112,9 +110,9 @@ class Meta(object):
 
         return module
 
-    def import_submodules_from_package(self, package_name,
-                                       exit_if_not_found=False,
-                                       exit_on_fail=False):
+    def import_submodules_from_package(
+        self, package_name, exit_if_not_found=False, exit_on_fail=False
+    ):
 
         submodules = []
         package = Meta.get_module_from_string(package_name)
@@ -126,7 +124,7 @@ class Meta(object):
             submod = Meta.get_module_from_string(
                 module_path,
                 exit_if_not_found=exit_if_not_found,
-                exit_on_fail=exit_on_fail
+                exit_on_fail=exit_on_fail,
             )
             submodules.append(submod)
         return submodules
@@ -215,14 +213,15 @@ class Meta(object):
         module_name = "%s.%s.%s" % ('services', 'authentication', auth_service)
         log.verbose("Loading auth extension: %s" % module_name)
         module = Meta.get_module_from_string(
-            modulestring=module_name, prefix_package=True, exit_on_fail=True)
+            modulestring=module_name, prefix_package=True, exit_on_fail=True
+        )
 
         return module
 
     @staticmethod
     def class_factory(name, parents=object, attributes_and_methods=None):
         if not isinstance(parents, tuple):
-            parents = (parents, )
+            parents = (parents,)
         if attributes_and_methods is None:
             attributes_and_methods = {}
         return type(name, parents, attributes_and_methods)
@@ -253,7 +252,7 @@ class Meta(object):
         MyClass = self.get_class_from_string(
             class_name,
             Meta.get_module_from_string(abspath, debug_on_fail=False),
-            skip_error=True
+            skip_error=True,
         )
 
         instance = None

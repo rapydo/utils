@@ -14,6 +14,7 @@ TODO: also consider switching to this other one https://amoffat.github.io/sh/
 import os
 import pwd
 from utilities.logs import get_logger
+
 log = get_logger(__name__)
 
 try:
@@ -37,15 +38,15 @@ def file_os_owner(filepath):
 
 
 def path_is_readable(filepath):
-    return \
-        (os.path.isfile(filepath) or os.path.isdir(filepath)) \
-        and os.access(filepath, os.R_OK)
+    return (os.path.isfile(filepath) or os.path.isdir(filepath)) and os.access(
+        filepath, os.R_OK
+    )
 
 
 def path_is_writable(filepath):
-    return \
-        (os.path.isfile(filepath) or os.path.isdir(filepath)) \
-        and os.access(filepath, os.W_OK)
+    return (os.path.isfile(filepath) or os.path.isdir(filepath)) and os.access(
+        filepath, os.W_OK
+    )
 
 
 def current_os_uid():
@@ -64,7 +65,7 @@ def detect_vargroup(label):
     for var, value in os.environ.items():
         var = var.lower()
         if var.startswith(label):
-            key = var[len(label):].strip('_')
+            key = var[len(label) :].strip('_')
             value = value.strip('"').strip("'")
             variables[key] = value
     return variables
@@ -80,14 +81,21 @@ class BashCommands(object):
         Load my personal list of commands based on my bash environment
         """
         from plumbum import local as myshell
+
         self._shell = myshell
 
         super(BashCommands, self).__init__()
         log.very_verbose("Internal shell initialized")
 
     def execute_command(
-            self, command, parameters=None, env=None,
-            customException=None, catchException=False, error_max_len=None):
+        self,
+        command,
+        parameters=None,
+        env=None,
+        customException=None,
+        catchException=False,
+        error_max_len=None,
+    ):
         try:
 
             if parameters is None:
@@ -117,10 +125,14 @@ class BashCommands(object):
                     # log.warning("ERROR LEN: %s/%s", error_len, error_max_len)
                     if error_max_len > 0 and error_len > error_max_len:
                         # log.warning("LIMIT")
-                        error = '\n...\n\n' + error[error_len - error_max_len:]
+                        error = '\n...\n\n' + error[error_len - error_max_len :]
 
-                    log.exit('Catched:\n%s(%s)',
-                             e.__class__.__name__, error, error_code=e.retcode)
+                    log.exit(
+                        'Catched:\n%s(%s)',
+                        e.__class__.__name__,
+                        error,
+                        error_code=e.retcode,
+                    )
                 else:
                     # log.pp(e)
                     raise e
@@ -134,8 +146,8 @@ class BashCommands(object):
                 raise customException(stderr)
 
     def execute_command_advanced(
-            self, command, parameters=None, customException=None,
-            retcodes=()):  # pylint:disable=too-many-arguments
+        self, command, parameters=None, customException=None, retcodes=()
+    ):  # pylint:disable=too-many-arguments
         try:
             if parameters is None:
                 parameters = []
@@ -143,15 +155,14 @@ class BashCommands(object):
             # Pattern in plumbum library for executing a shell command
             # e.g. ICOM["list"][irods_dir].run(retcode = (0,4))
             # FIXME: does not work if parameters is bigger than one element
-            comout = \
-                self._shell[command][parameters].run(retcode=retcodes)
+            comout = self._shell[command][parameters].run(retcode=retcodes)
             log.verbose("Executed command %s %s" % (command, parameters))
             # # NOTE: comout is equal to (status, stdin, stdout)
             return comout
 
         except ProcessExecutionError as e:
             if customException is None:
-                raise(e)
+                raise (e)
             else:
                 # argv = e.argv
                 # retcode = e.retcode
@@ -194,18 +205,13 @@ class BashCommands(object):
     ###################
     # DIRECTORIES
     def create_directory(self, directory, ignore_existing=True):
-        self.create_empty(directory,
-                          directory=True, ignore_existing=ignore_existing)
+        self.create_empty(directory, directory=True, ignore_existing=ignore_existing)
 
     def remove_directory(self, directory, ignore=False):
         self.remove(directory, recursive=True, force=ignore)
 
     def replace_in_file(self, target, destination, file):
-        params = [
-            "-i", "--",
-            "s/%s/%s/g" % (target, destination),
-            file
-        ]
+        params = ["-i", "--", "s/%s/%s/g" % (target, destination), file]
         self.execute_command("sed", params)
 
     def copy(self, target, destination):

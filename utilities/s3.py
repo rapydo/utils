@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from utilities.logs import get_logger
+
 log = get_logger(__name__)
 
 try:
@@ -19,9 +20,7 @@ class S3(object):
         self.session = boto3.session.Session()
         self.url = space_url
         self.client = self.session.client(
-            self._space_type,
-            endpoint_url=self.url,
-            region_name=space_region,
+            self._space_type, endpoint_url=self.url, region_name=space_region
         )
         self.bucket = bucket_name
 
@@ -35,20 +34,12 @@ class S3(object):
             else:
                 raise
         else:
-            log.debug(
-                'File "%s": obtained\n\t%s' % (
-                    remote_path, local_path
-                )
-            )
+            log.debug('File "%s": obtained\n\t%s' % (remote_path, local_path))
         return True
 
     def push(self, local_path, remote_path):
         self.client.upload_file(local_path, self.bucket, remote_path)
-        log.debug(
-            'File "%s": uploaded\n\t%s/%s' % (
-                local_path, self.url, remote_path
-            )
-        )
+        log.debug('File "%s": uploaded\n\t%s/%s' % (local_path, self.url, remote_path))
 
     def matching_objects(self, prefix='', suffix=''):
         """

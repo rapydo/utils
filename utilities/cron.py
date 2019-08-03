@@ -8,6 +8,7 @@ http://schedule.readthedocs.io/en/stable/#usage
 """
 
 from utilities.logs import get_logger
+
 log = get_logger(__name__)
 
 try:
@@ -51,7 +52,6 @@ class Schedule(object):
                 etype = e.__class__.__name__
                 if etype == 'KeyboardInterrupt':
                     log.exit("Killed by user")
-                log.warning(
-                    "Failed to execute cron job\n%s(%s)", etype, e)
+                log.warning("Failed to execute cron job\n%s(%s)", etype, e)
 
             time.sleep(1)

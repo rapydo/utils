@@ -5,6 +5,7 @@
 # (we cannot understand why, but it does!)
 
 from utilities.checks import import_exceptions
+
 try:
     from pip.utils import get_installed_distributions
 except import_exceptions:

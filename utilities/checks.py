@@ -22,6 +22,7 @@ DEFAULT_BIN_OPTION = '--version'
 def executable(executable, option=DEFAULT_BIN_OPTION, parse_ver=False):
 
     from subprocess import check_output
+
     try:
         if isinstance(option, list):
             cmd = [executable]
@@ -39,9 +40,7 @@ def executable(executable, option=DEFAULT_BIN_OPTION, parse_ver=False):
             try:
                 # try splitting on comma and/or parenthesis
                 # then last element on spaces
-                output = output \
-                    .split('(')[0].split(',')[0] \
-                    .split()[::-1][0]
+                output = output.split('(')[0].split(',')[0].split()[::-1][0]
                 output = output.strip()
                 output = output.replace("'", "")
             except BaseException:
@@ -52,6 +51,7 @@ def executable(executable, option=DEFAULT_BIN_OPTION, parse_ver=False):
 def import_package(package_name):
 
     from importlib import import_module
+
     try:
         package = import_module(package_name)
     except import_exceptions:  # pylint:disable=catching-non-exception
@@ -71,6 +71,7 @@ def package(package_name):
 def internet_connection_available(test_site='https://www.google.com'):
 
     import requests
+
     try:
         requests.get(test_site)
     except requests.ConnectionError:

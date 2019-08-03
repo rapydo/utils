@@ -63,8 +63,7 @@ def home(relative_path=None):
         return Path.home()
     else:
         if relative_path.startswith(os.sep):
-            log.exit(
-                "Requested abspath '%s' in relative context" % relative_path)
+            log.exit("Requested abspath '%s' in relative context" % relative_path)
         return build('~' + os.sep + relative_path).expanduser()
 
 
@@ -119,6 +118,8 @@ def compress(dir_path, zip_file_path):
     # backward compatibility with python 3.5
     dir_path = str(dir_path)
     import shutil
+
     base_name = str(zip_file_path).replace('.' + COMPRESSION_FORMAT, '')
     shutil.make_archive(
-        base_name=base_name, format=COMPRESSION_FORMAT, root_dir=dir_path)
+        base_name=base_name, format=COMPRESSION_FORMAT, root_dir=dir_path
+    )

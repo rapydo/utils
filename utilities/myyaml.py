@@ -3,6 +3,7 @@
 import os
 import yaml
 from collections import OrderedDict
+
 # from functools import lru_cache
 
 YAML_EXT = 'yaml'
@@ -23,6 +24,7 @@ class OrderedLoader(yaml.SafeLoader):
     Otherwise this option could be considered:
     https://pypi.python.org/pypi/ruamel.yaml
     """
+
     pass
 
 
@@ -43,8 +45,8 @@ def regular_load(stream, loader=yaml.loader.Loader):
 def ordered_load(stream):
 
     OrderedLoader.add_constructor(
-        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG,
-        construct_mapping)
+        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, construct_mapping
+    )
     # return yaml.load(stream, OrderedLoader)
     return regular_load(stream, OrderedLoader)
 
@@ -70,10 +72,16 @@ def get_loader(fh, keep_order):
 
 
 # @lru_cache()
-def load_yaml_file(file, path=None,
-                   get_all=False, skip_error=False,
-                   extension=YAML_EXT, return_path=False,
-                   logger=True, keep_order=False):
+def load_yaml_file(
+    file,
+    path=None,
+    get_all=False,
+    skip_error=False,
+    extension=YAML_EXT,
+    return_path=False,
+    logger=True,
+    keep_order=False,
+):
     """
     Import any data from a YAML file.
 
@@ -88,6 +96,7 @@ def load_yaml_file(file, path=None,
 
     if logger:
         from utilities.logs import get_logger
+
         log = get_logger(__name__)
 
     filepath = get_yaml_path(path, file, extension)

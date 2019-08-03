@@ -29,7 +29,8 @@ class Certificates(object):
 
     def __init__(self):
         log.warning(
-            "All methods of this class are static, no need to create an instance")
+            "All methods of this class are static, no need to create an instance"
+        )
 
     @classmethod
     def get_dn_from_cert(cls, certdir, certfilename, ext='pem'):
@@ -72,10 +73,15 @@ class Certificates(object):
         # os.environ['X509_USER_PROXY'] = proxy
 
     @classmethod
-    def globus_proxy(cls,
-                     proxy_file=None, user_proxy=None,
-                     cert_dir=None, myproxy_host=None,
-                     cert_name=None, cert_pwd=None):
+    def globus_proxy(
+        cls,
+        proxy_file=None,
+        user_proxy=None,
+        cert_dir=None,
+        myproxy_host=None,
+        cert_name=None,
+        cert_pwd=None,
+    ):
 
         if cert_dir is None:
             os.environ['X509_CERT_DIR'] = os.path.join(cls._dir, 'simple_ca')
@@ -95,7 +101,8 @@ class Certificates(object):
         elif os.path.isdir(cpath):
             Certificates.set_globus_proxy_cert(
                 key=os.path.join(cpath, 'userkey.pem'),
-                cert=os.path.join(cpath, 'usercert.pem'))
+                cert=os.path.join(cpath, 'usercert.pem'),
+            )
 
         ################
         # 3. mattia's certificates?
@@ -106,12 +113,15 @@ class Certificates(object):
                 # Proxy file does not exist
                 valid = False
             else:
-                valid, not_before, not_after = \
-                    Certificates.check_cert_validity(proxy_cert_file)
+                valid, not_before, not_after = Certificates.check_cert_validity(
+                    proxy_cert_file
+                )
                 if not valid:
                     log.warning(
-                        "Invalid proxy certificate for %s." +
-                        " Validity: %s - %s", user_proxy, not_before, not_after
+                        "Invalid proxy certificate for %s." + " Validity: %s - %s",
+                        user_proxy,
+                        not_before,
+                        not_after,
                     )
 
             # Proxy file does not exist or expired
@@ -128,7 +138,7 @@ class Certificates(object):
                         myproxy_cert_name=cert_name,
                         irods_cert_pwd=cert_pwd,
                         proxy_cert_file=proxy_cert_file,
-                        myproxy_host=myproxy_host
+                        myproxy_host=myproxy_host,
                     )
 
                     if valid:
@@ -143,7 +153,8 @@ class Certificates(object):
             ##################
             if valid:
                 Certificates.set_globus_proxy_cert(
-                    key=proxy_cert_file, cert=proxy_cert_file)
+                    key=proxy_cert_file, cert=proxy_cert_file
+                )
             else:
                 log.critical("Cannot find a valid certificate file")
                 return False
@@ -156,6 +167,7 @@ class Certificates(object):
     def check_x509_permissions():
 
         from utilities import basher
+
         os_user = basher.current_os_user()
         failed = False
 
@@ -171,14 +183,20 @@ class Certificates(object):
                 # here it has been proven to work even if not readable...
                 if not basher.path_is_readable(filepath):
                     failed = True
-                    log.error("%s variable (%s) not readable by %s",
-                              key, filepath, os_user)
+                    log.error(
+                        "%s variable (%s) not readable by %s", key, filepath, os_user
+                    )
             else:
                 os_owner = basher.file_os_owner(filepath)
                 if os_user != os_owner:
                     failed = True
-                    log.error("%s variable (%s) owned by %s instead of %s",
-                              key, filepath, os_owner, os_user)
+                    log.error(
+                        "%s variable (%s) owned by %s instead of %s",
+                        key,
+                        filepath,
+                        os_owner,
+                        os_user,
+                    )
 
         if failed:
             raise AttributeError('Certificates ownership problem')
@@ -193,26 +211,29 @@ class Certificates(object):
         output = bash.execute_command("openssl", args)
 
         pattern = re.compile(
-            r"Validity.*\n\s*Not Before: (.*)\n" +
-            r"\s*Not After *: (.*)")
+            r"Validity.*\n\s*Not Before: (.*)\n" + r"\s*Not After *: (.*)"
+        )
         validity = pattern.search(output).groups()
 
         not_before = dateutil.parser.parse(validity[0])
         not_after = dateutil.parser.parse(validity[1])
         now = datetime.now(pytz.utc)
-        valid = \
-            (not_before < now) and \
-            (not_after > now - timedelta(hours=validity_interval))
+        valid = (not_before < now) and (
+            not_after > now - timedelta(hours=validity_interval)
+        )
 
         return valid, not_before, not_after
 
     @staticmethod
-    def get_myproxy_certificate(irods_env,
-                                irods_user, myproxy_cert_name, irods_cert_pwd,
-                                proxy_cert_file,
-                                duration=168,
-                                myproxy_host="grid.hpc.cineca.it"
-                                ):
+    def get_myproxy_certificate(
+        irods_env,
+        irods_user,
+        myproxy_cert_name,
+        irods_cert_pwd,
+        proxy_cert_file,
+        duration=168,
+        myproxy_host="grid.hpc.cineca.it",
+    ):
         try:
             myproxy = local["myproxy-logon"]
             if irods_env is not None:
@@ -220,13 +241,19 @@ class Certificates(object):
 
             (
                 myproxy[
-                    "-s", myproxy_host,
-                    "-l", irods_user,
-                    "-k", myproxy_cert_name,
-                    "-t", str(duration),
-                    "-o", proxy_cert_file,
-                    "-S"
-                ] << irods_cert_pwd
+                    "-s",
+                    myproxy_host,
+                    "-l",
+                    irods_user,
+                    "-k",
+                    myproxy_cert_name,
+                    "-t",
+                    str(duration),
+                    "-o",
+                    proxy_cert_file,
+                    "-S",
+                ]
+                << irods_cert_pwd
             )()
 
             return True
