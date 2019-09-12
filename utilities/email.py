@@ -37,6 +37,7 @@ def get_smtp_client(smtp_host, smtp_port, username=None, password=None):
     log.verbose("Connecting to %s:%s" % (smtp_host, smtp_port))
     try:
         smtp.connect(smtp_host, smtp_port)
+        smtp.ehlo()
     except socket.gaierror as e:
         log.error(str(e))
         return None
