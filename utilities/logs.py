@@ -30,12 +30,20 @@ DEFAULT_LOGLEVEL_NAME = 'info'
 
 MAX_CHAR_LEN = 200
 OBSCURE_VALUE = '****'
-OBSCURED_FIELDS = ['password', 'pwd', 'token', 'access_token', 'file', 'filename']
+OBSCURED_FIELDS = [
+    'password',
+    'pwd',
+    'token',
+    'access_token',
+    'file',
+    'filename',
+    'new_password',
+    'password_confirm',
+]
 
 AVOID_COLORS_ENV_LABEL = "IDONTWANTCOLORS"
 LOG_INI_FILE = os.path.join(helpers.script_abspath(__file__), 'logging.ini')
-LOG_INI_TESTS_FILE = os.path.join(
-    helpers.script_abspath(__file__), 'logging_tests.ini')
+LOG_INI_TESTS_FILE = os.path.join(helpers.script_abspath(__file__), 'logging_tests.ini')
 
 
 #######################
@@ -82,9 +90,7 @@ def fail_exit(self, message, *args, **kws):
 def print_stack(self, message, *args, **kws):
     if self.isEnabledFor(PRINT_STACK):
         print("")
-        self._log(  # pylint:disable=protected-access
-            PRINT_STACK, message, args, **kws
-        )
+        self._log(PRINT_STACK, message, args, **kws)  # pylint:disable=protected-access
         traceback.print_stack()
         print("\n\n")
 
@@ -100,17 +106,13 @@ def myprint(self, message, *args, **kws):
 def verbose(self, message, *args, **kws):
     # Yes, logger takes its '*args' as 'args'.
     if self.isEnabledFor(VERBOSE):
-        self._log(  # pylint:disable=protected-access
-            VERBOSE, message, args, **kws
-        )
+        self._log(VERBOSE, message, args, **kws)  # pylint:disable=protected-access
 
 
 def very_verbose(self, message, *args, **kws):
     if self.isEnabledFor(VERY_VERBOSE):
         # Yes, logger takes its '*args' as 'args'.
-        self._log(  # pylint:disable=protected-access
-            VERY_VERBOSE, message, args, **kws
-        )
+        self._log(VERY_VERBOSE, message, args, **kws)  # pylint:disable=protected-access
 
 
 def beeprint_print(self, myobject, prefix_line=None):
@@ -121,6 +123,7 @@ def beeprint_print(self, myobject, prefix_line=None):
     if prefix_line is not None:
         print("PRETTY PRINT [%s]" % prefix_line)
     from beeprint import pp
+
     pp(myobject)
     return self
 
@@ -133,6 +136,7 @@ def prettyprinter_print(self, myobject, prefix_line=None):
     if prefix_line is not None:
         print("PRETTY PRINT [%s]" % prefix_line)
     from prettyprinter import pprint as pp
+
     pp(myobject)
     return self
 
@@ -156,9 +160,7 @@ def checked(self, message, *args, **kws):
             message = "\033[0;32m\u2713\033[0m %s" % message
         else:
             message = "\u2713 %s" % message
-        self._log(  # pylint:disable=protected-access
-            level, message, args, **kws
-        )
+        self._log(level, message, args, **kws)  # pylint:disable=protected-access
 
 
 def checked_simple(self, message, *args, **kws):
@@ -172,9 +174,7 @@ def checked_simple(self, message, *args, **kws):
 
     if self.isEnabledFor(level):
         message = "(CHECKED)\t%s" % message
-        self._log(  # pylint:disable=protected-access
-            level, message, args, **kws
-        )
+        self._log(level, message, args, **kws)  # pylint:disable=protected-access
 
 
 @staticmethod
@@ -238,8 +238,8 @@ class LogMe(object):
         try:  # Python 2.7+
             from logging import NullHandler
         except ImportError:
-            class NullHandler(logging.Handler):
 
+            class NullHandler(logging.Handler):
                 def emit(self, record):
                     pass
 
@@ -256,32 +256,42 @@ class LogMe(object):
         # modify logging labels colors
         if self.colors_enabled:
             logging.addLevelName(
-                logging.CRITICAL_EXIT, "\033[4;33;41m%s\033[1;0m"
-                % logging.getLevelName(logging.CRITICAL_EXIT))
+                logging.CRITICAL_EXIT,
+                "\033[4;33;41m%s\033[1;0m"
+                % logging.getLevelName(logging.CRITICAL_EXIT),
+            )
             logging.addLevelName(
-                logging.PRINT_STACK, "\033[5;37;41m%s\033[1;0m"
-                % logging.getLevelName(logging.PRINT_STACK))
+                logging.PRINT_STACK,
+                "\033[5;37;41m%s\033[1;0m" % logging.getLevelName(logging.PRINT_STACK),
+            )
             logging.addLevelName(
-                logging.CRITICAL, "\033[5;37;41m%s\033[1;0m"
-                % logging.getLevelName(logging.CRITICAL))
+                logging.CRITICAL,
+                "\033[5;37;41m%s\033[1;0m" % logging.getLevelName(logging.CRITICAL),
+            )
             logging.addLevelName(
-                logging.ERROR, "\033[4;37;41m%s\033[1;0m"
-                % logging.getLevelName(logging.ERROR))
+                logging.ERROR,
+                "\033[4;37;41m%s\033[1;0m" % logging.getLevelName(logging.ERROR),
+            )
             logging.addLevelName(
-                logging.WARNING, "\033[1;30;43m%s\033[1;0m"
-                % logging.getLevelName(logging.WARNING))
+                logging.WARNING,
+                "\033[1;30;43m%s\033[1;0m" % logging.getLevelName(logging.WARNING),
+            )
             logging.addLevelName(
-                logging.INFO, "\033[1;32;49m%s\033[1;0m"
-                % logging.getLevelName(logging.INFO))
+                logging.INFO,
+                "\033[1;32;49m%s\033[1;0m" % logging.getLevelName(logging.INFO),
+            )
             logging.addLevelName(
-                logging.DEBUG, "\033[7;30;46m%s\033[1;0m"
-                % logging.getLevelName(logging.DEBUG))
+                logging.DEBUG,
+                "\033[7;30;46m%s\033[1;0m" % logging.getLevelName(logging.DEBUG),
+            )
             logging.addLevelName(
-                logging.VERBOSE, "\033[1;90;49m%s\033[1;0m"
-                % logging.getLevelName(logging.VERBOSE))
+                logging.VERBOSE,
+                "\033[1;90;49m%s\033[1;0m" % logging.getLevelName(logging.VERBOSE),
+            )
             logging.addLevelName(
-                logging.VERY_VERBOSE, "\033[7;30;47m%s\033[1;0m"
-                % logging.getLevelName(logging.VERY_VERBOSE))
+                logging.VERY_VERBOSE,
+                "\033[7;30;47m%s\033[1;0m" % logging.getLevelName(logging.VERY_VERBOSE),
+            )
 
     def set_debug(self, debug=True, level=None):
         # print("DEBUG IS", debug)
@@ -330,7 +340,7 @@ def set_global_log_level(package=None, app_level=None):
         'utilities',
         # 'develop',
         'controller',
-        'restapi'
+        'restapi',
     ]
 
     # A list of packages that make too much noise inside the logs
@@ -345,7 +355,7 @@ def set_global_log_level(package=None, app_level=None):
         logging.getLogger('schedule'),
         logging.getLogger('googleapiclient'),
         logging.getLogger('oauth2client'),
-        logging.getLogger('mailchimp3')
+        logging.getLogger('mailchimp3'),
     ]
 
     for logger in external_packages:
@@ -403,9 +413,7 @@ def get_logger(name):
 
 def re_obscure_pattern(string):
 
-    patterns = {
-        'http_credentials': r'[^:]+\:([^@:]+)\@[^:]+:[^:]',
-    }
+    patterns = {'http_credentials': r'[^:]+\:([^@:]+)\@[^:]+:[^:]'}
 
     for _, pattern in patterns.items():
         p = re.compile(pattern)
@@ -419,7 +427,7 @@ def re_obscure_pattern(string):
 
 def handle_log_output(original_parameters_string):
     """ Avoid printing passwords! """
-    if (original_parameters_string is None):
+    if original_parameters_string is None:
         return {}
 
     if isinstance(original_parameters_string, bytes):

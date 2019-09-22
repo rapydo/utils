@@ -18,7 +18,7 @@ def load_project_configuration(path, file=None, do_exit=True):
         'skip_error': False,
         'logger': False,
         'file': file,
-        'keep_order': True
+        'keep_order': True,
     }
     try:
         log.checked("Found '%s/%s' configuration", path, file)
@@ -30,48 +30,45 @@ def load_project_configuration(path, file=None, do_exit=True):
             raise AttributeError(e)
 
 
-def read(default_file_path, base_project_path,
-         projects_path, submodules_path,
-         from_container=False,
-         read_extended=True,
-         is_template=False,
-         do_exit=True,
-         ):
+def read(
+    default_file_path,
+    base_project_path,
+    projects_path,
+    submodules_path,
+    from_container=False,
+    read_extended=True,
+    do_exit=True,
+):
     """
     Read default configuration
     """
 
     custom_configuration = load_project_configuration(
-        base_project_path, file=PROJECT_CONF_FILENAME, do_exit=do_exit)
+        base_project_path, file=PROJECT_CONF_FILENAME, do_exit=do_exit
+    )
 
     # Verify custom project configuration
     project = custom_configuration.get('project')
     if project is None:
         raise AttributeError("Missing project configuration")
 
-    if not is_template:
+    variables = ['title', 'description', 'version', 'rapydo']
 
-        # Check if these three variables were changed from the initial template
-        checks = {
-            'title': 'My project',
-            'description': 'Title of my project',
-            'name': 'rapydo'
-        }
-        for key, value in checks.items():
-            if project.get(key, '') == value:
+    for key in variables:
+        if project.get(key) is None:
 
-                log.critical_exit(
-                    "Project not configured, mising key '%s' in file %s/%s.yaml",
-                    key, base_project_path, PROJECT_CONF_FILENAME
-                )
+            log.critical_exit(
+                "Project not configured, missing key '%s' in file %s/%s.yaml",
+                key,
+                base_project_path,
+                PROJECT_CONF_FILENAME,
+            )
 
     if default_file_path is None:
         base_configuration = {}
     else:
         base_configuration = load_project_configuration(
-            default_file_path,
-            file=PROJECTS_DEFAULTS_FILE,
-            do_exit=do_exit
+            default_file_path, file=PROJECTS_DEFAULTS_FILE, do_exit=do_exit
         )
 
     if read_extended:
@@ -113,7 +110,8 @@ def read(default_file_path, base_project_path,
     else:
         extend_file = PROJECT_CONF_FILENAME
     extended_configuration = load_project_configuration(
-        extend_path, file=extend_file, do_exit=do_exit)
+        extend_path, file=extend_file, do_exit=do_exit
+    )
 
     m1 = mix(base_configuration, extended_configuration)
     return mix(m1, custom_configuration), extended_project, extend_path

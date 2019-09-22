@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from utilities.logs import get_logger
+
 log = get_logger(__name__)
 
 try:
@@ -25,10 +26,7 @@ class App(InvokeProgram):
             self.extra_args = extra_arguments
 
         self.extra_args.append(
-            Argument(
-                name='log-level',
-                help="set the application log level"
-            )
+            Argument(name='log-level', help="set the application log level")
         )
 
         super(App, self).__init__(version=version, namespace=namespace)
@@ -38,6 +36,7 @@ class App(InvokeProgram):
         if name is None:
             name = __name__
         from utilities import apiclient
+
         level = apiclient.check_cli_arg('log-level', get=True)
         return apiclient.setup_logger(name, level_name=level)
 

@@ -67,8 +67,11 @@ def random_name(lenght=10):
     return ''.join(
         random.choice(
             # string.ascii_uppercase
-            string.ascii_lowercase + string.digits
-        ) for _ in range(lenght))
+            string.ascii_lowercase
+            + string.digits
+        )
+        for _ in range(lenght)
+    )
 
 
 def random_element(mylist):
@@ -107,9 +110,7 @@ def get_api_url(request_object, production=False):
         parsed = urlparse(api_url)
         if parsed.port is not None and parsed.port == 443:
             removed_port = re.sub(r':[\d]+$', '', parsed.netloc)
-            api_url = parsed._replace(
-                scheme="https", netloc=removed_port
-            ).geturl()
+            api_url = parsed._replace(scheme="https", netloc=removed_port).geturl()
 
     return api_url
 
@@ -150,7 +151,6 @@ def nooutput():
     savestdout = sys.stdout
 
     class Devnull(object):
-
         def write(self, _):
             pass
 

@@ -4,10 +4,10 @@ from utilities.cron import Schedule
 
 
 def test():
-
     def job():
         print("PROVA")
         import sys
+
         sys.exit(1)
 
     my_interval = 15

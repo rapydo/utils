@@ -9,6 +9,7 @@ def test():
     cls_name = "Meta"
 
     import utilities
+
     modules = meta.get_submodules_from_package(utilities)
     assert "meta" in modules
 
@@ -37,8 +38,7 @@ def test():
     assert meta_class is not None
     assert meta_class.__name__ == cls_name
 
-    methods = meta.get_methods_inside_instance(
-        meta, private_methods=True)
+    methods = meta.get_methods_inside_instance(meta, private_methods=True)
     assert methods is not None
     assert isinstance(methods, dict)
     # both are static methods
@@ -81,8 +81,7 @@ def test_failures():
         pytest.fail("This call should fail and raise and AttributeError")
 
     try:
-        meta.import_submodules_from_package(
-            "utilities_bla", exit_if_not_found=True)
+        meta.import_submodules_from_package("utilities_bla", exit_if_not_found=True)
     except AttributeError:
         pass
     else:
@@ -90,15 +89,15 @@ def test_failures():
 
     try:
         meta.import_submodules_from_package(
-            "utilities_bla", exit_if_not_found=True, exit_on_fail=True)
+            "utilities_bla", exit_if_not_found=True, exit_on_fail=True
+        )
     except AttributeError:
         pass
     else:
         pytest.fail("This call should fail and raise and AttributeError")
 
     try:
-        meta.import_submodules_from_package(
-            "utilities_bla", exit_on_fail=True)
+        meta.import_submodules_from_package("utilities_bla", exit_on_fail=True)
     except AttributeError:
         pass
     else:
@@ -109,7 +108,8 @@ def test_failures():
 
     try:
         module = Meta.get_module_from_string(
-            "utilities.metabla", exit_if_not_found=True)
+            "utilities.metabla", exit_if_not_found=True
+        )
     except SystemExit:
         pass
     else:
@@ -117,7 +117,8 @@ def test_failures():
 
     try:
         module = Meta.get_module_from_string(
-            "utilities.metabla", exit_if_not_found=True, exit_on_fail=True)
+            "utilities.metabla", exit_if_not_found=True, exit_on_fail=True
+        )
     except SystemExit:
         pass
     else:
@@ -126,19 +127,20 @@ def test_failures():
     try:
         module = Meta.get_module_from_string(
             "utilities.metabla",
-            exit_if_not_found=True, exit_on_fail=True, debug_on_fail=True)
+            exit_if_not_found=True,
+            exit_on_fail=True,
+            debug_on_fail=True,
+        )
     except SystemExit:
         pass
     else:
         pytest.fail("This call should fail and exit")
 
     # FIXME: unable to test exit_on_fail... we need a moule with import errors?
-    module = Meta.get_module_from_string(
-        "utilities.metabla", exit_on_fail=True)
+    module = Meta.get_module_from_string("utilities.metabla", exit_on_fail=True)
     assert module is None
 
-    module = Meta.get_module_from_string(
-        "utilities.metabla", debug_on_fail=True)
+    module = Meta.get_module_from_string("utilities.metabla", debug_on_fail=True)
     assert module is None
 
     # _, err = capfd.readouterr()

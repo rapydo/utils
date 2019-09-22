@@ -2,11 +2,8 @@
 
 import os
 
-__version__ = '0.6.6'
-__authors__ = [
-    "Paolo D'Onorio De Meo <p.donorio.demeo@gmail.com>",
-    "Mattia D'Antonio",
-]
+__version__ = '0.6.7'
+__authors__ = ["Paolo D'Onorio De Meo <p.donorio.demeo@gmail.com>", "Mattia D'Antonio"]
 
 ###############
 FRAMEWORK_NAME = 'RAPyDo'
@@ -26,7 +23,6 @@ FRAMEWORK_NAME = 'RAPyDo'
 PROJECTS_DEFAULTS_FILE = 'projects_defaults'
 PROJECT_CONF_FILENAME = 'project_configuration'
 PROJECT_DIR = 'projects'
-DEFAULT_TEMPLATE_PROJECT = 'template'
 SWAGGER_DIR = 'swagger'
 MODELS_DIR = 'models'
 SWAGGER_MODELS_FILE = 'models'

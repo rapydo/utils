@@ -7,8 +7,12 @@ to create a client based on Python against our HTTP API
 
 import os
 import io
-from utilities.logs import \
-    get_logger, logging, set_global_log_level, DEFAULT_LOGLEVEL_NAME
+from utilities.logs import (
+    get_logger,
+    logging,
+    set_global_log_level,
+    DEFAULT_LOGLEVEL_NAME,
+)
 
 LOGIN_ENDPOINT = '/auth/b2safeproxy'
 BASIC_ENDPOINT = '/api/registered'
@@ -32,6 +36,7 @@ def setup_logger(name, level_name):
 
 def check_cli_arg(arg='help', reverse=False, do_exit=False, code=0, get=False):
     import sys
+
     arg_prefix = '--'
     real_arg = arg_prefix + arg
     check = real_arg in sys.argv
@@ -84,10 +89,19 @@ def parse_api_output(req):
         return content
 
 
-def call(uri,
-         endpoint=None, method='get', payload=None, headers=None,
-         token=None, file=None, filecontent=None, filename=None,
-         timeout=10, exit_on_fail=True):
+def call(
+    uri,
+    endpoint=None,
+    method='get',
+    payload=None,
+    headers=None,
+    token=None,
+    file=None,
+    filecontent=None,
+    filename=None,
+    timeout=10,
+    exit_on_fail=True,
+):
     """
     Helper function based on 'requests' to easily call our HTTP API in Python
     """
@@ -106,14 +120,11 @@ def call(uri,
     if method in ['post', 'patch', 'put', 'delete']:
         if method != 'put' or file is not None or filecontent is not None:
             import json
+
             payload = json.dumps(payload)
 
     log.very_verbose('Calling %s on %s', method, endpoint)
-    arguments = {
-        'url': uri + endpoint,
-        'headers': headers,
-        'timeout': timeout,
-    }
+    arguments = {'url': uri + endpoint, 'headers': headers, 'timeout': timeout}
 
     if method in ['get']:
         arguments['params'] = payload
@@ -168,12 +179,10 @@ def login(uri, username, password, endpoint=None, authscheme='credentials'):
     if endpoint is None:
         endpoint = LOGIN_ENDPOINT
     out = call(
-        uri, method='post', endpoint=endpoint,
-        payload={
-            'username': username,
-            'password': password,
-            'authscheme': authscheme
-        }
+        uri,
+        method='post',
+        endpoint=endpoint,
+        payload={'username': username, 'password': password, 'authscheme': authscheme},
     )
     log.debug("Current iRODS user: %s", out.get('b2safe_user'))
     return out.get('token'), out.get('b2safe_home')
@@ -184,6 +193,7 @@ def folder_content(folder_path):
         log.exit("%s does not exist", folder_path)
 
     import glob
+
     log.debug("Looking for directory '%s'", folder_path)
     files = glob.glob(os.path.join(folder_path, "*"))
     if len(files) < 1:

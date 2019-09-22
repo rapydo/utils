@@ -6,6 +6,7 @@ from utilities.logs import handle_log_output
 from utilities.logs import re_obscure_pattern
 
 from utilities.logs import get_logger
+
 log = get_logger(__name__)
 
 # from utilities import apiclient
@@ -98,7 +99,9 @@ def test(capfd):
                 "file": "abc",
                 "filename": "abc"
             }
-""".encode("utf-8")
+""".encode(
+        "utf-8"
+    )
     test = handle_log_output(data)
 
     assert "xyz" in test
