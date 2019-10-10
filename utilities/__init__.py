@@ -11,7 +11,6 @@ PROJECT_CONF_FILENAME = 'project_configuration'
 PROJECT_DIR = 'projects'
 SWAGGER_DIR = 'swagger'
 MODELS_DIR = 'models'
-SWAGGER_MODELS_FILE = 'models'
 CONF_PATH = 'confs'
 EXTENDED_PROJECT_DISABLED = "no_extended_project"
 
