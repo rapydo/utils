@@ -157,7 +157,7 @@ def call(
             arguments['data'] = dict(file=(io.BytesIO(filecontent), filename))
 
         # Skipping ssl verification
-        # arguments['verify'] = False
+        arguments['verify'] = os.environ.get('VERIFY_SSL', '1') == '1'
 
         request = requests_callable(**arguments)
 
