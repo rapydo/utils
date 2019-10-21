@@ -350,6 +350,7 @@ def set_global_log_level(package=None, app_level=None):
         logging.getLogger('plumbum'),
         logging.getLogger('neo4j'),
         logging.getLogger('neomodel'),
+        logging.getLogger('neobolt'),
         logging.getLogger('httpstream'),
         logging.getLogger('amqp'),
         logging.getLogger('schedule'),
