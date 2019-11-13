@@ -9,6 +9,10 @@ from utilities.logs import get_logger
 log = get_logger(__name__)
 
 
+log.warning(
+    "Deprecated import of utilities.time, replace with restapi.utilities.time")
+
+
 def timestamp_from_string(timestamp_string):
     """
     Neomodels complains about UTC, this is to fix it.
