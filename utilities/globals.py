@@ -5,6 +5,13 @@ If you need things globally,
 come here and take.
 """
 
+from utilities.logs import get_logger
+
+log = get_logger(__name__)
+
+log.warning(
+    "Deprecated import of utilities.globals, replace with restapi.utilities.globals")
+
 
 class mem:
     """

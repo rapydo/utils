@@ -14,6 +14,10 @@ log = get_logger(__name__)
 COMPRESSION_FORMAT = 'zip'
 
 
+log.warning(
+    "Deprecated import of utilities.path, replace with b2stage.apis.commons.path")
+
+
 def root():
     return os.path.abspath(os.sep)
 

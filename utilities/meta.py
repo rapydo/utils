@@ -15,6 +15,9 @@ from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
+log.warning(
+    "Deprecated import of utilities.meta, replace with restapi.utilities.meta")
+
 
 class Meta(object):
     """Utilities with meta in mind"""

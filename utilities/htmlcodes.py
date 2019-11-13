@@ -10,6 +10,15 @@ http://racksburg.com/choosing-an-http-status-code/
 
 """
 
+
+from utilities.logs import get_logger
+
+log = get_logger(__name__)
+
+log.warning(
+    "Deprecated import of utilities.htmlcodes, replace with restapi.utilities.htmlcodes")
+
+
 # RESPONSE TO BE VERIFIED
 HTTP_CONTINUE = 100
 HTTP_SWITCHING_PROTOCOLS = 101
