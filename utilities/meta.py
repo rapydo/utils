@@ -90,7 +90,12 @@ class Meta(object):
         if prefix_package:
             modulestring = BACKEND_PACKAGE + '.' + modulestring.lstrip('.')
 
-        from utilities.checks import import_exceptions
+        # which version of python is this?
+        # Retrocompatibility for Python < 3.6
+        try:
+            import_exceptions = (ModuleNotFoundError, ImportError)
+        except NameError:
+            import_exceptions = ImportError
 
         try:
             # Meta language for dinamically import
