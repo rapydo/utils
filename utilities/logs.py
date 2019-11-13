@@ -17,7 +17,6 @@ except ImportError:
     JSONDecodeError = ValueError
 
 from utilities import helpers
-from utilities.globals import mem
 
 #######################
 # DEBUG level is 10 (https://docs.python.org/3/howto/logging.html)
@@ -143,12 +142,7 @@ def prettyprinter_print(self, myobject, prefix_line=None):
 
 def checked(self, message, *args, **kws):
 
-    # checked messages have level VERBOSE, but when is requested the command
-    # rapydo check their level is increase to INFO
-    level = logging.VERBOSE
-    if hasattr(mem, 'action'):
-        if mem.action == "check":
-            level = logging.INFO
+    level = logging.INFO
 
     if self.isEnabledFor(level):
         # Yes, logger takes its '*args' as 'args'.
@@ -160,20 +154,6 @@ def checked(self, message, *args, **kws):
             message = "\033[0;32m\u2713\033[0m %s" % message
         else:
             message = "\u2713 %s" % message
-        self._log(level, message, args, **kws)  # pylint:disable=protected-access
-
-
-def checked_simple(self, message, *args, **kws):
-
-    # checked messages have level VERBOSE, but when is requested the command
-    # rapydo check their level is increase to INFO
-    level = logging.VERBOSE
-    if hasattr(mem, 'action'):
-        if mem.action == "check":
-            level = logging.INFO
-
-    if self.isEnabledFor(level):
-        message = "(CHECKED)\t%s" % message
         self._log(level, message, args, **kws)  # pylint:disable=protected-access
 
 
@@ -207,7 +187,6 @@ logging.VERY_VERBOSE = VERY_VERBOSE
 logging.Logger.pp = beeprint_print
 logging.Logger.app = prettyprinter_print
 logging.Logger.checked = checked
-logging.Logger.checked_simple = checked_simple
 logging.Logger.clear_screen = clear_screen
 
 

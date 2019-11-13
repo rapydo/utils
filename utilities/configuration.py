@@ -21,7 +21,7 @@ def load_project_configuration(path, file=None, do_exit=True):
         'keep_order': True,
     }
     try:
-        log.checked("Found '%s/%s' configuration", path, file)
+        log.verbose("Found '%s/%s' configuration", path, file)
         return load_yaml_file(**args)
     except AttributeError as e:
         if do_exit:

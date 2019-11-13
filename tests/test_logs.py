@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from utilities.globals import mem
 from utilities.logs import handle_log_output
 from utilities.logs import re_obscure_pattern
 
@@ -25,11 +24,6 @@ def test(capfd):
     log.warning(TESTING_MESSAGE)
     log.error(TESTING_MESSAGE)
 
-    log.checked_simple(TESTING_MESSAGE)
-    log.checked(TESTING_MESSAGE)
-    # FIXME: this kind of setting should be tested
-    mem.action = "check"
-    log.checked_simple(TESTING_MESSAGE)
     log.checked(TESTING_MESSAGE)
 
     log.print_stack(TESTING_MESSAGE)
