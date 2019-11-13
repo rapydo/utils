@@ -9,10 +9,21 @@ from utilities.basher import current_os_uid
 from utilities.basher import current_os_user
 from utilities.basher import detect_vargroup
 
-from utilities.random import get_random_name
+import random
+import string
 import plumbum
 import pytest
 import os
+
+
+def get_random_name(lenght=12, prefix=""):
+    rand = random.SystemRandom()
+    charset = string.ascii_uppercase + string.digits
+
+    tmp_name = prefix
+    for _ in range(lenght):
+        tmp_name += rand.choice(charset)
+    return tmp_name
 
 
 class MyException(BaseException):
