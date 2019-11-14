@@ -29,6 +29,7 @@ setup(
         "pytz",
         "python-dateutil",
         "plumbum",
+        "jinja2",
         "sultan==0.9.1",
     ],
     classifiers=[
