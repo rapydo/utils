@@ -6,9 +6,6 @@ from collections import OrderedDict
 
 # from functools import lru_cache
 
-YAML_EXT = 'yaml'
-SHORT_YAML_EXT = 'yml'
-
 # Test the library as soon as possible
 yaml.dump({})
 
@@ -77,7 +74,7 @@ def load_yaml_file(
     path=None,
     get_all=False,
     skip_error=False,
-    extension=YAML_EXT,
+    extension='yaml',
     return_path=False,
     logger=True,
     keep_order=False,
