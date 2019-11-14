@@ -4,10 +4,16 @@ import os
 import yaml
 from collections import OrderedDict
 
-# from functools import lru_cache
+from utilities.logs import get_logger
+
+log = get_logger(__name__)
 
 # Test the library as soon as possible
 yaml.dump({})
+
+
+log.warning(
+    "Deprecated import of utilities.myyaml, replace with utilities.configuration")
 
 
 #####################
