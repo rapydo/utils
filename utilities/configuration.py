@@ -3,11 +3,13 @@
 import os
 import yaml
 from collections import OrderedDict
-from utilities import PROJECT_CONF_FILENAME, PROJECTS_DEFAULTS_FILE
 from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
+
+PROJECTS_DEFAULTS_FILE = 'projects_defaults'
+PROJECT_CONF_FILENAME = 'project_configuration'
 
 def load_project_configuration(path, file=None, do_exit=True):
 

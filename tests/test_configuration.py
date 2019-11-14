@@ -3,8 +3,10 @@
 import pytest
 import os
 from utilities.configuration import read
-from utilities import PROJECT_DIR
 from utilities.basher import BashCommands
+
+
+PROJECT_DIR = 'projects'
 
 
 def test():

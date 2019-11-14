@@ -6,14 +6,16 @@ Meta thinking: python objects & introspection
 usefull documentation:
 http://python-3-patterns-idioms-test.readthedocs.org/en/latest/Metaprogramming.html
 """
-
+import os
 import pkgutil
 import inspect
 from importlib import import_module
-from utilities import BACKEND_PACKAGE, CUSTOM_PACKAGE
 from utilities.logs import get_logger
 
 log = get_logger(__name__)
+
+BACKEND_PACKAGE = 'restapi'
+CUSTOM_PACKAGE = os.environ.get('VANILLA_PACKAGE', 'custom')
 
 log.warning(
     "Deprecated import of utilities.meta, replace with restapi.utilities.meta")
