@@ -17,6 +17,9 @@ from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
+log.warning(
+    "Deprecated import of utilities.basher, replace with restapi.utilities.basher")
+
 try:
     from plumbum.commands.processes import ProcessExecutionError
 except ImportError as e:
