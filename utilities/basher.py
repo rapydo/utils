@@ -17,6 +17,7 @@ from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
+log.print_stack("")
 log.warning(
     "Deprecated import of utilities.basher, replace with b2stage.apis.commons.basher")
 

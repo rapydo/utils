@@ -13,7 +13,7 @@ from utilities.logs import get_logger
 log = get_logger(__name__)
 COMPRESSION_FORMAT = 'zip'
 
-
+log.print_stack("")
 log.warning(
     "Deprecated import of utilities.path, replace with b2stage.apis.commons.path")
 

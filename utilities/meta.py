@@ -17,6 +17,7 @@ log = get_logger(__name__)
 BACKEND_PACKAGE = 'restapi'
 CUSTOM_PACKAGE = os.environ.get('VANILLA_PACKAGE', 'custom')
 
+log.print_stack("")
 log.warning(
     "Deprecated import of utilities.meta, replace with restapi.utilities.meta")
 
