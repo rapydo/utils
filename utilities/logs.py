@@ -16,7 +16,6 @@ except ImportError:
     # fix for Python 3.4+
     JSONDecodeError = ValueError
 
-from utilities import helpers
 
 #######################
 # DEBUG level is 10 (https://docs.python.org/3/howto/logging.html)
@@ -40,9 +39,14 @@ OBSCURED_FIELDS = [
     'password_confirm',
 ]
 
+
+def script_abspath(file, *suffixes):
+    return os.path.join(os.path.dirname(os.path.realpath(file)), *suffixes)
+
+
 AVOID_COLORS_ENV_LABEL = "IDONTWANTCOLORS"
-LOG_INI_FILE = os.path.join(helpers.script_abspath(__file__), 'logging.ini')
-LOG_INI_TESTS_FILE = os.path.join(helpers.script_abspath(__file__), 'logging_tests.ini')
+LOG_INI_FILE = os.path.join(script_abspath(__file__), 'logging.ini')
+LOG_INI_TESTS_FILE = os.path.join(script_abspath(__file__), 'logging_tests.ini')
 
 
 #######################

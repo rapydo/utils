@@ -8,10 +8,6 @@ from utilities.logs import get_logger
 
 log = get_logger(__name__)
 
-# from utilities import apiclient
-# log = apiclient.setup_logger(name=__name__, level_name='very_verbose')
-# # log.warning("DEBUG TRAVIS", log)
-
 
 def test(capfd):
 
