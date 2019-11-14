@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from glom import glom
+import os
 from utilities.configuration import read
-from utilities import helpers
 from utilities import PROJECT_DIR
 from utilities.basher import BashCommands
 
@@ -13,7 +12,7 @@ def test():
     SUBMODULES_DIR = 'submodules'
     DEFAULTS_PATH = 'rapydo-confs'
     project = "template"
-    project_file_path = helpers.project_dir(project)
+    project_file_path = os.path.join(os.curdir, PROJECT_DIR, project)
     project_conf = "%s/project_configuration.yaml" % project_file_path
     default_conf = "%s/projects_defaults.yaml" % DEFAULTS_PATH
 
