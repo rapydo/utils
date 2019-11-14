@@ -7,7 +7,6 @@ from utilities.basher import path_is_readable
 from utilities.basher import path_is_writable
 from utilities.basher import current_os_uid
 from utilities.basher import current_os_user
-from utilities.basher import detect_vargroup
 
 import random
 import string
@@ -116,6 +115,3 @@ def test():
 
     assert not path_is_readable("/do/not/exists")
     assert not path_is_writable("/do/not/exists")
-
-    v = detect_vargroup('SDVOJSDOFJSV')
-    assert len(v) == 0
