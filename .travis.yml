@@ -10,7 +10,7 @@ script:
 - BRANCH=`[  -z "$TRAVIS_PULL_REQUEST_BRANCH" ] && echo "$TRAVIS_BRANCH" || echo "$TRAVIS_PULL_REQUEST_BRANCH"`
 - echo "BRANCH = ${BRANCH}"
 - cd rapydo-confs
-- git checkout $BRANCH
+- git checkout 0.7.0
 - cd -
 - export TESTING=1
 - export DEBUG_LEVEL='VERY_VERBOSE'
