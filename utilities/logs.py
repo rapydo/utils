@@ -385,6 +385,7 @@ please_logme = LogMe()
 
 
 def get_logger(name):
+
     """ Recover the right logger + set a proper specific level """
 
     # read from os DEBUG_LEVEL (level of verbosity)
@@ -392,7 +393,13 @@ def get_logger(name):
     USER_DEBUG_LEVEL = os.environ.get('DEBUG_LEVEL', 'VERY_VERBOSE')
     VERBOSITY_REQUESTED = getattr(logging, USER_DEBUG_LEVEL.upper())
 
-    return please_logme.get_new_logger(name, verbosity=VERBOSITY_REQUESTED)
+    log = please_logme.get_new_logger(name, verbosity=VERBOSITY_REQUESTED)
+
+    log.print_stack("")
+    log.warning(
+        "Deprecated import of utilities.logs, replace with restapi.utilities.logs")
+
+    return log
 
 
 def re_obscure_pattern(string):
