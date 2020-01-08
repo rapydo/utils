@@ -29,6 +29,7 @@ setup(
         "pytz",
         "python-dateutil",
         "sultan==0.8.1",
+        "plumbum",
         "invoke",
         "markdown",
         "html2text",
