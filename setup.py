@@ -29,6 +29,10 @@ setup(
         "pytz",
         "python-dateutil",
         "sultan==0.8.1",
+        "invoke",
+        "markdown",
+        "html2text",
+        "schedule"
     ],
     classifiers=[
         'Programming Language :: Python',
