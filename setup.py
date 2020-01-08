@@ -30,6 +30,10 @@ setup(
         "python-dateutil",
         "plumbum",
         "sultan==0.9.1",
+        "invoke",
+        "markdown",
+        "html2text",
+        "schedule"
     ],
     classifiers=[
         'Programming Language :: Python',
