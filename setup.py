@@ -32,7 +32,8 @@ setup(
         "jinja2",
         "sultan==0.9.1",
         "invoke",
-        "markdown"
+        "markdown",
+        "html2text"
     ],
     classifiers=[
         'Programming Language :: Python',
