@@ -33,7 +33,8 @@ setup(
         "sultan==0.9.1",
         "invoke",
         "markdown",
-        "html2text"
+        "html2text",
+        "schedule"
     ],
     classifiers=[
         'Programming Language :: Python',
