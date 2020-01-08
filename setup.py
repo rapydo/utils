@@ -31,6 +31,7 @@ setup(
         "plumbum",
         "jinja2",
         "sultan==0.9.1",
+        "invoke"
     ],
     classifiers=[
         'Programming Language :: Python',
